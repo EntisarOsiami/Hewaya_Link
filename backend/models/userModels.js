@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import passwordValidator from "password-validator";
-import bcrypt from "bcrypt.js";
+import bcrypt from 'bcryptjs';
 
 const passwordSchema = new passwordValidator();
 passwordSchema
@@ -40,17 +40,13 @@ const userSchema = mongoose.Schema(
     birthDate: {
       type: Date,
       required: true,
-      dateFormat: "yyyy-MM-dd",
     },
-  
-  role: {
-    type: String,
-    enum: ["admin", "user", "moderator"],
-    default: "user", 
+    role: {
+      type: String,
+      enum: ["admin", "user", "moderator"],
+      default: "user",
+    },
   },
-},
-
-
   {
     timestamps: true,
   }
@@ -62,7 +58,7 @@ userSchema.pre("save", async function (next) {
       return next();
     }
     const salt = await bcrypt.genSalt(10);
-    this.password = bcrypt.hash(this.password, salt);
+    this.password = await bcrypt.hash(this.password, salt);
     return next();
   } catch (error) {
     return next(error);
