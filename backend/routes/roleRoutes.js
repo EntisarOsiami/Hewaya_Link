@@ -4,8 +4,8 @@ import { adminMiddleware } from '../middleware/AuthMiddleware.js';
 
 const router = express.Router();
 
-router.get('/:userId', getUserRole); // Check user role
-router.put('/:userId', adminMiddleware, updateUserRole); // Update user role (admin only)
-router.get('/byRole/:role', adminMiddleware, getUsersByRole); // List users by role (admin only)
+router.get('/:userId', getUserRole); 
+router.put('/:userId', adminMiddleware, updateUserRole); 
+router.get('/byRole/:role', adminMiddleware, getUsersByRole); 
 
 export default router;

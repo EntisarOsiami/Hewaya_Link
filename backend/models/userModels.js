@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
 import passwordValidator from "password-validator";
+import bcrypt from "bcrypt.js";
 
 const passwordSchema = new passwordValidator();
 passwordSchema

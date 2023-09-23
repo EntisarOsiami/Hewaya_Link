@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Form, Button, Row,Col, Container } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import Loader from '../Components/Loader.js';
+import Loader from '../Components/Loader.jsx';
 import FormContainer from '../Components/FormContainer.jsx';
 import { toast } from 'react-toastify';
 import { useUpdateUserMutation } from '../slices/usersApiSlice';
