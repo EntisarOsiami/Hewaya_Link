@@ -52,7 +52,7 @@ const UpdateProfileScreen = () => {
     // display current user name and email
     <FormContainer>
       <h1>{name}&apos;s Profile</h1>
-     <Container className='my-auto'>
+     <Container>
      <Row>
   <Col>
     <Row>
