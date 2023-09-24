@@ -17,6 +17,7 @@ const UpdateProfileScreen = () => {
   const dispatch = useDispatch();
 
   const { userInfo } = useSelector((state) => state.auth);
+  
 
   const [updateProfile, { isLoading }] = useUpdateUserMutation();
   
@@ -24,7 +25,8 @@ const UpdateProfileScreen = () => {
   useEffect(() => {
     setName(userInfo.name);
     setEmail(userInfo.email);
-  }, [userInfo.email, userInfo.name]);
+    
+  }, [userInfo.name, userInfo.email]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -47,23 +49,24 @@ const UpdateProfileScreen = () => {
     }
   };
   return (
-    
+    // display current user name and email
     <FormContainer>
       <h1>{name}&apos;s Profile</h1>
-     <Container>
-            <Row>
-              <Col >
-                <Row>
-                Username: {name} 
-                </Row>
-              <Row>
-              Email: {email} 
-              </Row>          
-              </Col>
-              <Col>
-              <Image src="assets/60111.jpg" thumbnail />
-              </Col>
-            </Row>
+     <Container className='my-auto'>
+     <Row>
+  <Col>
+    <Row>
+      <span style={{ fontWeight: 'bold' }}>Username:</span> {name}
+    </Row>
+    <Row>
+      <span style={{ fontWeight: 'bold' }}>Email:</span> {email}
+    </Row>
+  </Col>
+  <Col>
+    <Image src="assets/60111.jpg" thumbnail />
+  </Col>
+</Row>
+
      </Container>
      
 
