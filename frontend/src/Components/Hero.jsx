@@ -1,16 +1,15 @@
-import {  Card, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import FormContainer from './FormContainer';
 
 const Hero = () => {
   return (
-    <div className='hero-section'>
+    <div className='hero-section d-flex align-items-center justify-content-center'>
       <FormContainer>
-        <Card className='p-5 text-center hero-card'>
+        <div className='text-center'>
           <h1 className='mb-4'>Hewaya Link</h1>
           <p className='mb-4'>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua.
+            Your gateway to exploring the world of hobbies
           </p>
           <div className='d-flex justify-content-center'>
             <LinkContainer to='/login'>
@@ -22,7 +21,7 @@ const Hero = () => {
               <Button variant='secondary'>Sign Up</Button>
             </LinkContainer>
           </div>
-        </Card>
+        </div>
       </FormContainer>
     </div>
   );

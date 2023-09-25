@@ -1,27 +1,35 @@
 import { Container, Row, Col } from 'react-bootstrap';
+import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 const Footer = () => {
   return (
-    <footer className="bg-dark text-white mt-auto py-4 footer">
+    <footer className="bg-dark text-white py-3 footer">
       <Container>
         <Row>
           <Col md={6}>
-            <h4>Contact Us</h4>
+            <h5>Contact Us</h5>
             <p>
-              You can reach us at <a href="mailto:contact@example.com">contact@example.com</a>
+              You can reach us at{' '}
+              <a href="mailto:contact@example.com">contact@HewayaLink.com</a>
             </p>
           </Col>
           <Col md={6}>
-            <h4>Follow Us</h4>
+            <h5>Follow Us</h5>
             <ul className="list-unstyled">
               <li>
-                <a href="#">Facebook</a>
+                <a href="#" className="text-white">
+                  <FaFacebook /> Facebook
+                </a>
               </li>
               <li>
-                <a href="#">Twitter</a>
+                <a href="#" className="text-white">
+                  <FaTwitter /> Twitter
+                </a>
               </li>
               <li>
-                <a href="#">Instagram</a>
+                <a href="#" className="text-white">
+                  <FaInstagram /> Instagram
+                </a>
               </li>
             </ul>
           </Col>
@@ -35,4 +43,3 @@ const Footer = () => {
 };
 
 export default Footer;
-
