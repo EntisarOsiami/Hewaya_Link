@@ -11,14 +11,10 @@ import Loader from '../Components/Loader.jsx';
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const [login, { isLoading }] = useLoginMutation();
-
   const { userInfo } = useSelector((state) => state.auth);
-
   useEffect(() => {
     if (userInfo) {
       navigate('/');
