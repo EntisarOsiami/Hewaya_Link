@@ -3,8 +3,8 @@ import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
 import {BsPersonFill} from 'react-icons/bs'; 
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useLogoutMutation } from '../slices/usersApiSlice';
-import { logout } from '../slices/authSlice';
+import { useLogoutMutation } from '../slices/userApiSlice';
+import { logout } from '../slices/authenticateSlice';
 import { Link } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap';
 

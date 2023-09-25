@@ -3,8 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import FormContainer from '../Components/FormContainer.jsx';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLoginMutation } from '../slices/usersApiSlice';
-import { setCredentials } from '../slices/authSlice';
+import { useLoginMutation } from '../slices/userApiSlice.js';
+import { setCredentials } from '../slices/authenticateSlice.js';
 import { toast } from 'react-toastify';
 import Loader from '../Components/Loader.jsx';
 

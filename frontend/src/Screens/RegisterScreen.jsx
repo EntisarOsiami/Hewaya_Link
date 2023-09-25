@@ -3,8 +3,8 @@ import { Form, Button, Row, Col } from 'react-bootstrap';
 import FormContainer from '../Components/FormContainer.jsx';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRegisterMutation } from '../slices/usersApiSlice';
-import { setCredentials } from '../slices/authSlice';
+import { useRegisterMutation } from '../slices/userApiSlice.js';
+import { setCredentials } from '../slices/authenticateSlice.js';
 import { toast } from 'react-toastify';
 import Loader from '../Components/Loader.jsx';
 

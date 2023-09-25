@@ -12,7 +12,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
     const user = await User.findOne({ email });
 
     if (user && (await user.matchPassword(password))) {
-      const token = generateToken(user._id);
+      const token = generateToken(res, user._id); 
 
       res.json({
         success: true,
@@ -58,8 +58,8 @@ const registerUser = asyncHandler(async (req, res, next) => {
         birthDate,
       });
 
-      if (user) {
-        const token = generateToken(user._id);
+        if (user) {
+          const token = generateToken(res, user._id);
 
         res.status(201).json({
           success: true,

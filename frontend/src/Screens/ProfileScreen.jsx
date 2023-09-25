@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../Components/Loader.jsx';
 import FormContainer from '../Components/FormContainer.jsx';
 import { toast } from 'react-toastify';
-import { useUpdateUserMutation } from '../slices/usersApiSlice';
-import { setCredentials } from '../slices/authSlice';
+import { useUpdateUserMutation } from '../slices/userApiSlice.js';
+import { setCredentials } from '../slices/authenticateSlice.js';
 import Image from "react-bootstrap/Image";
 
 const UpdateProfileScreen = () => {
@@ -25,7 +25,6 @@ const UpdateProfileScreen = () => {
   useEffect(() => {
     setName(userInfo.name);
     setEmail(userInfo.email);
-    
   }, [userInfo.name, userInfo.email]);
 
   const submitHandler = async (e) => {
@@ -49,17 +48,17 @@ const UpdateProfileScreen = () => {
     }
   };
   return (
-    // display current user name and email
+
     <FormContainer>
       <h1>{name}&apos;s Profile</h1>
      <Container>
      <Row>
   <Col>
     <Row>
-      <span style={{ fontWeight: 'bold' }}>Username:</span> {name}
+      Username: {name}
     </Row>
     <Row>
-      <span style={{ fontWeight: 'bold' }}>Email:</span> {email}
+      Email: {email}
     </Row>
   </Col>
   <Col>
@@ -70,21 +69,23 @@ const UpdateProfileScreen = () => {
      </Container>
      
 
-      <Form onSubmit={submitHandler}>
+      
+     <Form onSubmit={submitHandler}>
         <Form.Group className='my-2' controlId='name'>
           <Form.Label>Update Username</Form.Label>
           <Form.Control
-            type='name'
+            type='text'
             placeholder='Username'
+            value={name} // Display the current name
             onChange={(e) => setName(e.target.value)}
           ></Form.Control>
-          
         </Form.Group>
         <Form.Group className='my-2' controlId='email'>
-          <Form.Label>Update Email Address </Form.Label>
+          <Form.Label>Update Email Address</Form.Label>
           <Form.Control
             type='email'
             placeholder='Email'
+            value={email} // Display the current email
             onChange={(e) => setEmail(e.target.value)}
           ></Form.Control>
         </Form.Group>
@@ -97,7 +98,6 @@ const UpdateProfileScreen = () => {
             onChange={(e) => setPassword(e.target.value)}
           ></Form.Control>
         </Form.Group>
-
         <Form.Group className='my-2' controlId='confirmPassword'>
           <Form.Label>Confirm Password</Form.Label>
           <Form.Control
@@ -107,15 +107,12 @@ const UpdateProfileScreen = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
           ></Form.Control>
         </Form.Group>
-
         <Button type='submit' variant='primary' className='mt-3'>
           Update
         </Button>
-
         {isLoading && <Loader />}
       </Form>
     </FormContainer>
-
   );
 };
 
