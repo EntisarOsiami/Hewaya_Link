@@ -1,11 +1,12 @@
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
-import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Navbar, Nav, Container, NavDropdown} from 'react-bootstrap';
+import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa'; 
+import {BsPersonFill} from 'react-icons/bs'; 
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useLogoutMutation } from '../slices/usersApiSlice';
 import { logout } from '../slices/authSlice';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
+import { LinkContainer } from 'react-router-bootstrap';
 
 const Header = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -45,31 +46,30 @@ const Header = () => {
               <Link to='/about' className='nav-link'>
                 About
               </Link>
-              
+            </Nav>
+            <Nav className='ms-auto'> {/* Use ms-auto to align to the right */}
               {userInfo ? (
-                <NavDropdown title={userInfo.name} id='username'>
+                <NavDropdown title={<><BsPersonFill className='me-2' />{userInfo.name}</>} id='username'>
                   <LinkContainer to='/profile'>
                     <NavDropdown.Item>Profile</NavDropdown.Item>
                   </LinkContainer>
                   <NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
                 </NavDropdown>
               ) : (
-                
-                  <><LinkContainer to='/login'>
+                <>
+                  <LinkContainer to='/login'>
                     <Nav.Link>
                       <FaSignInAlt /> Sign In
                     </Nav.Link>
-                  </LinkContainer><LinkContainer to='/register'>
-                      <Nav.Link>
-                        <FaSignOutAlt /> Sign Up
-                      </Nav.Link>
-                    </LinkContainer></>
-                
+                  </LinkContainer>
+                  <LinkContainer to='/register'>
+                    <Nav.Link>
+                      <FaSignOutAlt /> Sign Up
+                    </Nav.Link>
+                  </LinkContainer>
+                </>
               )}
             </Nav>
-            
-           
-           
           </Navbar.Collapse>
         </Container>
       </Navbar>
