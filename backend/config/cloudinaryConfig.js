@@ -2,9 +2,9 @@
 import { v2 as cloudinary } from 'cloudinary';
 
 cloudinary.config({
-  cloud_name: 'hewaya-link',
-  api_key: '394465281295285',
-  api_secret: 'PbvLobUwAMEeLgRvZfJRMN4U9cM',
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.API_KEY_CLOUDINARY,
+  api_secret: process.env.CLOUDINARY_SECRET,
 });
 
 export default cloudinary;
