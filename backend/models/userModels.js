@@ -18,7 +18,11 @@ passwordSchema
 
 const userSchema = mongoose.Schema(
   {
-    name: {
+    fileName:{
+      
+
+    },
+    Username: {
       type: String,
       required: true,
     },
