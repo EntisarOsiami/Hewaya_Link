@@ -19,7 +19,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
         token,
         user: {
           _id: user._id,
-          name: user.name,
+          username: user.username,
           email: user.email,
         },
       });
@@ -39,34 +39,40 @@ const loginUser = asyncHandler(async (req, res, next) => {
 // @desc    Register a new user
 // @route   POST /api/user/register
 // @access  Public
-
 const registerUser = asyncHandler(async (req, res, next) => {
   try {
-    const { name, email, password, birthDate } = req.body;
-    const userExists = await User.findOne({ email });
+    const { firstName, lastName, username, email, password, birthDate } = req.body;
+
+   
+    const userExists = await User.findOne({ $or: [{ email }, { username }] });
 
     if (userExists) {
       res.status(400).json({
         success: false,
-        message: "User already exists",
+        message: "User with the same email or username already exists",
       });
     } else {
       const user = await User.create({
-        name,
+        Name: {
+          firstName,
+          lastName,
+        },
+        username,
         email,
         password,
         birthDate,
       });
 
-        if (user) {
-          const token = generateToken(res, user._id);
+      if (user) {
+        const token = generateToken(res, user._id);
 
         res.status(201).json({
           success: true,
           token,
           user: {
             _id: user._id,
-            name: user.name,
+            name: user.Name, 
+            username: user.username, 
             email: user.email,
             birthDate: user.birthDate,
             role: user.role,
@@ -84,13 +90,12 @@ const registerUser = asyncHandler(async (req, res, next) => {
   }
 });
 
-
 // @desc    Logout user / clear cookie
 // @route   POST /api/user/logout
 // @access  Public
 const logoutUser = (req, res) => {
   try {
-    // Clear the JWT cookie
+    
     res.cookie("jwt", "", {
       httpOnly: true,
       expires: new Date(0),
@@ -118,9 +123,9 @@ const getUserProfile = asyncHandler(async (req, res, next) => {
         success: true,
         user: {
           _id: user._id,
-          name: user.name,
+          name: user.Name, 
+          username: user.username, 
           email: user.email,
-          dateOfBirth: user.dateOfBirth,
         },
       });
     } else {
@@ -134,13 +139,12 @@ const getUserProfile = asyncHandler(async (req, res, next) => {
   }
 });
 
-
 // @desc    Update user profile
 // @route   PUT /api/user/profile
 // @access  Private
 const updateUserProfile = asyncHandler(async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { firstName, lastName, username, email, password } = req.body;
     const user = await User.findById(req.user._id);
 
     if (!user) {
@@ -151,13 +155,24 @@ const updateUserProfile = asyncHandler(async (req, res, next) => {
       return;
     }
 
-    user.name = name || user.name;
-    user.email = email || user.email;
+  
+    user.Name.firstName = firstName || user.Name.firstName;
+    user.Name.lastName = lastName || user.Name.lastName;
 
-    if (password) {
-       user.password = await bcrypt.hash(password, 10);
+    
+    if (username && user.username !== username) {
+      const userExists = await User.findOne({ username });
+      if (userExists) {
+        res.status(400).json({
+          success: false,
+          message: "Username already exists",
+        });
+        return;
+      }
+      user.username = username;
     }
 
+    
     if (email && user.email !== email) {
       const userExists = await User.findOne({ email });
       if (userExists) {
@@ -170,15 +185,20 @@ const updateUserProfile = asyncHandler(async (req, res, next) => {
       user.email = email;
     }
 
+    
+    if (password) {
+      user.password = await bcrypt.hash(password, 10);
+    }
+
     const updatedUser = await user.save();
 
     res.status(200).json({
       success: true,
       user: {
         _id: updatedUser._id,
-        name: updatedUser.name,
+        name: updatedUser.Name, 
+        username: updatedUser.username, 
         email: updatedUser.email,
-        dateOfBirth: updatedUser.dateOfBirth,
       },
     });
   } catch (error) {

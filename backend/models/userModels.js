@@ -12,19 +12,27 @@ passwordSchema
   .letters() // Must have at least one letter
   .has()
   .digits() // Must have at least one digit
-  .has().uppercase() // Must have at least one
+  .has()
+  .uppercase() // Must have at least one
   .not()
   .spaces(); // Cannot contain spaces
 
 const userSchema = mongoose.Schema(
   {
-    fileName:{
-      
-
+    Name: {
+      firstName: {
+        type: String,
+        required: true,
+      },
+      lastName: {
+        type: String,
+        required: true,
+      },
     },
-    Username: {
+    username: {
       type: String,
       required: true,
+      unique: true,
     },
     email: {
       type: String,
@@ -36,9 +44,18 @@ const userSchema = mongoose.Schema(
       required: true,
       validate: {
         validator: function (value) {
-          return passwordSchema.validate(value);
+          
+          const validationResult = passwordSchema.validate(value, { list: true });
+
+          
+          if (validationResult.length > 0) {
+            const failedCriteria = validationResult.join(', ');
+            return false; 
+          }
+          
+          return true;
         },
-        message: (props) => `${props.value} is not a valid password!`,
+        message: (props) => 'Password does not meet the validation criteria. Failed criteria: ' + props.value,
       },
     },
     birthDate: {
@@ -60,7 +77,7 @@ userSchema.pre("save", async function (next) {
   try {
     if (!this.isModified("password")) {
       return next();
-    }
+    }  
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
     return next();
