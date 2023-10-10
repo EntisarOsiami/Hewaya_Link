@@ -10,6 +10,8 @@ import LoginScreen from './Screens/LoginScreen.jsx';
 import RegisterScreen from './Screens/RegisterScreen.jsx';
 import PrivateRoute from './Components/PrivateRoute.jsx';
 import ProfileScreen from './Screens/ProfileScreen.jsx';
+import BlogScreen from './Screens/BlogScreen.jsx';
+import CreateBlogScreen from './Screens/CreateBlogScreen.jsx';
 import { createRoot } from 'react-dom/client';
 
 createRoot(document.getElementById('root')).render(
@@ -22,7 +24,9 @@ createRoot(document.getElementById('root')).render(
             <Route path="/login" element={<LoginScreen />} />
             <Route path="/register" element={<RegisterScreen />} />
             <Route element={<PrivateRoute />}>
-              <Route path="/profile" element={<ProfileScreen />} />
+            <Route path="/profile" element={<ProfileScreen />} />
+            <Route path="/Blog" element={<BlogScreen />} />
+            <Route path="/create-Blog" element={<CreateBlogScreen />} />
             </Route>
           </Route>
         </Routes>

@@ -7,27 +7,30 @@ const createBlog = async (req, res) => {
     await blog.save();
     res.status(201).json(blog);
   } catch (error) {
+    console.error(error); 
     res.status(500).json({ error: 'Server error' });
   }
 };
 
 const getAllBlogs = async (req, res) => {
   try {
-    const blogs = await find().sort({ createdAt: -1 });
+    const blogs = await Blog.find().sort({ createdAt: -1 }); 
     res.json(blogs);
   } catch (error) {
+    console.error(error); 
     res.status(500).json({ error: 'Server error' });
   }
 };
 
 const getBlogById = async (req, res) => {
   try {
-    const blog = await findById(req.params.id);
+    const blog = await Blog.findById(req.params.id);
     if (!blog) {
       return res.status(404).json({ error: 'Blog not found' });
     }
     res.json(blog);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Server error' });
   }
 };
@@ -35,33 +38,35 @@ const getBlogById = async (req, res) => {
 const updateBlog = async (req, res) => {
   try {
     const { title, content } = req.body;
-    const blog = await findByIdAndUpdate(
+    const updatedBlog = await Blog.findByIdAndUpdate(
       req.params.id,
       { title, content },
       { new: true }
     );
-    if (!blog) {
+    if (!updatedBlog) {
       return res.status(404).json({ error: 'Blog not found' });
     }
-    res.json(blog);
+    res.json(updatedBlog);
   } catch (error) {
+    console.error(error); 
     res.status(500).json({ error: 'Server error' });
   }
 };
 
 const deleteBlog = async (req, res) => {
   try {
-    const blog = await findByIdAndDelete(req.params.id);
-    if (!blog) {
+    const deletedBlog = await Blog.findByIdAndDelete(req.params.id);
+    if (!deletedBlog) {
       return res.status(404).json({ error: 'Blog not found' });
     }
     res.json({ message: 'Blog deleted' });
   } catch (error) {
+    console.error(error); 
     res.status(500).json({ error: 'Server error' });
   }
 };
 
-export  {
+export {
   createBlog,
   getAllBlogs,
   getBlogById,

@@ -40,14 +40,16 @@ const Header = () => {
               <Link to='/explore' className='nav-link'>
                 Explore
               </Link>
-              <Link to='/blog' className='nav-link'>
-                Blog
-              </Link>
+              <LinkContainer to='/blog'>
+                <Nav.Link>
+                  Blog
+                </Nav.Link>
+              </LinkContainer>
               <Link to='/about' className='nav-link'>
                 About
               </Link>
             </Nav>
-            <Nav className='ms-auto'> {/* Use ms-auto to align to the right */}
+            <Nav className='ms-auto'>
               {userInfo ? (
                 <NavDropdown title={<><BsPersonFill className='me-2' />{userInfo.name}</>} id='username'>
                   <LinkContainer to='/profile'>
