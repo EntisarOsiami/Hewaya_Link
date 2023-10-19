@@ -10,24 +10,26 @@ const Footer = () => {
             <h5>Contact Us</h5>
             <p>
               You can reach us at{' '}
-              <a href="mailto:contact@example.com">contact@HewayaLink.com</a>
+              <a href="mailto:contact@example.com" rel="noopener noreferrer">
+                contact@HewayaLink.com
+              </a>
             </p>
           </Col>
           <Col md={6}>
             <h5>Follow Us</h5>
             <ul className="list-unstyled">
               <li>
-                <a href="#" className="text-white">
+                <a href="https://www.facebook.com/" className="text-white" rel="noopener noreferrer">
                   <FaFacebook /> Facebook
                 </a>
               </li>
               <li>
-                <a href="#" className="text-white">
+                <a href="https://twitter.com/" className="text-white" rel="noopener noreferrer">
                   <FaTwitter /> Twitter
                 </a>
               </li>
               <li>
-                <a href="#" className="text-white">
+                <a href="https://www.instagram.com/" className="text-white" rel="noopener noreferrer">
                   <FaInstagram /> Instagram
                 </a>
               </li>
