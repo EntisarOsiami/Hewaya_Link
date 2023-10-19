@@ -4,30 +4,31 @@ import FormContainer from '../Components/FormContainer.jsx';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRegisterMutation } from '../slices/userApiSlice.js';
-import { setCredentials } from '../slices/authenticateSlice.js';
+import { loginRedux } from '../slices/authSlice.js';
 import { toast } from 'react-toastify';
 import Loader from '../Components/Loader.jsx';
-
+import{updateUserProfile} from '../slices/profileSlice.js';
 
 const RegisterScreen = () => {
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [birthDate, setBirthDate] = useState(new Date());
-
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const [register, { isLoading }] = useRegisterMutation();
 
-  const { userInfo } = useSelector((state) => state.auth);
+
 
   useEffect(() => {
-    if (userInfo) {
+    if (isAuthenticated) {
       navigate('/');
     }
-  }, [navigate, userInfo]);
+  }, [navigate, isAuthenticated]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -36,30 +37,59 @@ const RegisterScreen = () => {
       toast.error('Passwords do not match');
     } else {
       try {
-        const res = await register({ name, email, password,birthDate }).unwrap();
-        dispatch(setCredentials({ ...res }));
+        const res = await register({ firstName, lastName, email, username, password, birthDate }).unwrap();
+        dispatch(loginRedux({ ...res }));
+        dispatch(updateUserProfile({ ...res }));
+
         navigate('/');
-        toast.success('Registration successful'); 
+        toast.success('Registration successful');
       } catch (err) {
+        console.error('Register error:',err);
         toast.error(err?.data?.message || err.error);
       }
     }
   };
+
   return (
     <FormContainer>
-      <h1>Register</h1>
+      <h1 className='text-center'>Create an Account</h1>
       <Form onSubmit={submitHandler}>
-        <Form.Group className='my-2' controlId='name'>
-          <Form.Label>Name</Form.Label>
+        <Row>
+          <Col md={6}>
+            <Form.Group controlId='firstName'>
+              <Form.Label>First Name</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter first name'
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group controlId='lastName'>
+              <Form.Label>Last Name</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter last name'
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Form.Group controlId='username'>
+          <Form.Label>Username</Form.Label>
           <Form.Control
-            type='name'
-            placeholder='Enter name'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            type='text'
+            placeholder='Enter username'
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           ></Form.Control>
         </Form.Group>
 
-        <Form.Group className='my-2' controlId='email'>
+        <Form.Group controlId='email'>
           <Form.Label>Email Address</Form.Label>
           <Form.Control
             type='email'
@@ -67,21 +97,9 @@ const RegisterScreen = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           ></Form.Control>
-          </Form.Group>
+        </Form.Group>
 
-         
-          <Form.Group className='my-2' controlId='date'>
-          <Form.Label>Enter your birth date</Form.Label>
-          <Form.Control
-            type='date'
-            placeholder=''
-            value={birthDate}
-            onChange={(e) => setBirthDate(e.target.value)}
-          ></Form.Control>
-          </Form.Group>
-       
-
-        <Form.Group className='my-2' controlId='password'>
+        <Form.Group controlId='password'>
           <Form.Label>Password</Form.Label>
           <Form.Control
             type='password'
@@ -90,7 +108,8 @@ const RegisterScreen = () => {
             onChange={(e) => setPassword(e.target.value)}
           ></Form.Control>
         </Form.Group>
-        <Form.Group className='my-2' controlId='confirmPassword'>
+
+        <Form.Group controlId='confirmPassword'>
           <Form.Label>Confirm Password</Form.Label>
           <Form.Control
             type='password'
@@ -100,8 +119,26 @@ const RegisterScreen = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Button type='submit' variant='primary' className='mt-3'>
-          Register
+        <Form.Group controlId='date'>
+          <Form.Label>Date of Birth</Form.Label>
+          <Form.Control
+            type='date'
+            placeholder=''
+            value={birthDate}
+            onChange={(e) => setBirthDate(e.target.value)}
+            style={{
+              padding: '10px',
+              border: 'none',
+              borderRadius: '5px',
+              backgroundColor: '#f2f2f2',
+              fontSize: '16px',
+              color: '#333',
+            }}
+          ></Form.Control>
+        </Form.Group>
+
+        <Button type='submit' variant='primary' className='mt-3 w-100'>
+          Create Account
         </Button>
 
         {isLoading && <Loader />}
@@ -109,7 +146,7 @@ const RegisterScreen = () => {
 
       <Row className='py-3'>
         <Col>
-          Already have an account? <Link to={`/login`}>Login</Link>
+          Already have an account? <Link to={`/login`}>Sign In</Link>
         </Col>
       </Row>
     </FormContainer>

@@ -7,7 +7,7 @@ passwordSchema
   .is()
   .min(8) // Minimum length of 8 characters
   .is()
-  .max(30) // Maximum length of 30 characters
+  .max(50) // Maximum length of 30 characters
   .has()
   .letters() // Must have at least one letter
   .has()
@@ -50,12 +50,12 @@ const userSchema = mongoose.Schema(
           
           if (validationResult.length > 0) {
             const failedCriteria = validationResult.join(', ');
+            sendResponse(res, null, "New password does not meet the validation criteria. Failed criteria: " + failedCriteria, false);
             return false; 
           }
           
           return true;
         },
-        message: (props) => 'Password does not meet the validation criteria. Failed criteria: ' + props.value,
       },
     },
     birthDate: {

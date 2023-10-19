@@ -8,14 +8,14 @@ import './styles.css';
 
 const App = () => {
   return (
-    <>
-      <Header />
-      <ToastContainer />
-      <Container className='my-1'>
-        <Outlet />
-      </Container>
-      <Footer />
-    </>
+      <>
+        <Header />
+        <ToastContainer />
+        <Container className='my-1'>
+          <Outlet />
+        </Container>
+        <Footer />
+      </>
   );
 };
 
