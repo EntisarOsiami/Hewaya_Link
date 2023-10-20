@@ -5,22 +5,34 @@ import bcrypt from 'bcryptjs';
 const passwordSchema = new passwordValidator();
 passwordSchema
   .is()
-  .min(8) // Minimum length of 8 characters
+  .min(8,"your password should have at least 8 characters") // Minimum length of 8 characters
   .is()
-  .max(30) // Maximum length of 30 characters
+  .max(100,"your password should not have more then 100 characters") // Maximum length of 100 characters
   .has()
-  .letters() // Must have at least one letter
+  .letters(1,'your password should have at least one letter') // Must have at least one letter
   .has()
-  .digits() // Must have at least one digit
-  .has().uppercase() // Must have at least one
+  .digits(1,'your password should have at least one digit') // Must have at least one digit
+  .has()
+  .uppercase(1,'your password should have at least one uppercase letter') // Must have at least one
   .not()
-  .spaces(); // Cannot contain spaces
+  .spaces(0,'your password can not have empty space'); // Cannot contain spaces
 
 const userSchema = mongoose.Schema(
   {
-    name: {
+    Name: {
+      firstName: {
+        type: String,
+        required: true,
+      },
+      lastName: {
+        type: String,
+        required: true,
+      },
+    },
+    username: {
       type: String,
       required: true,
+      unique: true,
     },
     email: {
       type: String,
@@ -32,9 +44,16 @@ const userSchema = mongoose.Schema(
       required: true,
       validate: {
         validator: function (value) {
-          return passwordSchema.validate(value);
+          const trimmedPassword = value.trim();
+          const validationResult = passwordSchema.validate(trimmedPassword, { list: true });
+          if (validationResult.length > 0) {
+            const failedCriteria = validationResult.join(', ');
+            console.log(`Password validation failed: ${failedCriteria}`);
+            return false; 
+          }
+
+          return true; 
         },
-        message: (props) => `${props.value} is not a valid password!`,
       },
     },
     birthDate: {
@@ -56,7 +75,7 @@ userSchema.pre("save", async function (next) {
   try {
     if (!this.isModified("password")) {
       return next();
-    }
+    }  
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
     return next();

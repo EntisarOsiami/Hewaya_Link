@@ -1,4 +1,5 @@
 import Rating from '../models/blogModels/rating.js';
+import Blog from '../models/blogModels/blog.js';
 
 const createRating = async (req, res) => {
   try {

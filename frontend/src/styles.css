@@ -1,0 +1,47 @@
+
+.footer {
+  position: absolute;
+  margin-top: auto;
+  bottom: 0;
+  width: 100%;
+  background-color: #343a40;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+  
+  
+  .footer a {
+    color: white;
+    text-decoration: none; 
+  }
+  
+  
+.carousel-image {
+  max-height: 400px; 
+  object-fit: cover; }
+
+
+.carousel-caption {
+  background-color: rgba(0, 0, 0, 0); 
+  padding: 20px;
+  border-radius: 10px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+
+.carousel-title {
+  font-size: 24px;
+  color: #fff; 
+}
+
+
+.carousel-description {
+  font-size: 16px;
+  color: #fff; 
+}
