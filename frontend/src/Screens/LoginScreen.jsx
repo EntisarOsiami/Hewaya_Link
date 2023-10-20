@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLoginMutation } from "../slices/userApiSlice.js";
 import { toast } from "react-toastify";
 import Loader from "../Components/Loader.jsx";
-import { updateUserProfile } from "../slices/profileSlice.js";
+// import { updateUserProfile } from "../slices/profileSlice.js";
 import { loginRedux } from "../slices/authSlice.js";
 
 const LoginScreen = () => {
@@ -27,15 +27,17 @@ const LoginScreen = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
+      
       const res = await loginDatabase({
         emailOrUsername: userInput,
         password,
-      }).unwrap();
-   
-      dispatch(loginRedux({  ...res }));
+      }).unwrap()
+      dispatch(loginRedux({...res }));
       console.log("Login function dispatched");
 
-      dispatch(updateUserProfile({ ...res }));
+      // dispatch(updateUserProfile({...res }));
+   
+    
       navigate('/');
     } catch (err) {
       toast.error(err?.data?.message || err.error);
