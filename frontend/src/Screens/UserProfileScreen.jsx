@@ -1,56 +1,56 @@
-import { useState, useEffect } from 'react';
-import { Form, Button, Row, Col, Container } from 'react-bootstrap';
-import Loader from '../Components/Loader.jsx';
-import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
-import { useUpdateUserMutation } from '../slices/userApiSlice.js';
+import { useState, useEffect } from "react";
+import { Form, Button, Row, Col, Container } from "react-bootstrap";
+import Loader from "../Components/Loader.jsx";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { useUpdateUserMutation } from "../slices/userApiSlice.js";
 import Image from "react-bootstrap/Image";
-import { updateUserProfile } from '../slices/profileSlice.js';
+import { updateUserProfile } from "../slices/profileSlice.js";
 
 const UserProfileScreen = () => {
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState({ firstName: '', lastName: '' });
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState({ firstName: "", lastName: "" });
+  const [username, setUsername] = useState("");
   const [showUpdateFields, setShowUpdateFields] = useState(false);
   const dispatch = useDispatch();
-  const [ updateUserInfo, {isLoading} ] = useUpdateUserMutation();
-  const { user } = useSelector((state) => state.profile.user);
+  const { user } = useSelector((state) => state.profile);
+  const [updateUserInfo, { isLoading }] = useUpdateUserMutation();
 
   useEffect(() => {
     if (user) {
+      console.log('User data:', user);
       setName(user.name);
       setUsername(user.username);
       setEmail(user.email);
     }
   }, [user]);
+  
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      toast.error('Passwords do not match');
-    } else {
-      try {
-        const res = await updateUserInfo({
-          username,
-          email,
-          password,
-          name: { firstName: name.firstName, lastName: name.lastName }
-        }).unwrap();
-        
-        dispatch(updateUserProfile({ ...res }));
-        toast.success('Profile updated successfully');
-        setShowUpdateFields(false);
-      } catch (err) {
-        toast.error(err?.data?.message || err.error);
-      }
+    try {
+      const res = await updateUserInfo({
+        username,
+        email,
+        name: { firstName: name.firstName, lastName: name.lastName },
+      }).unwrap();
+
+      console.log("res:", res);
+
+      dispatch(updateUserProfile({ ...res }));
+      console.log("updateUserProfile function dispatched");
+      toast.success("Profile updated successfully");
+      setShowUpdateFields(false);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
     }
   };
 
   return (
     <div>
-      <h1>{name.firstName} {name.lastName}&rsquo;s Profile</h1>
+      <h1>
+        {name.firstName} {name.lastName}&rsquo;s Profile
+      </h1>
       <Container>
         <Row>
           <Col>
@@ -68,7 +68,9 @@ const UserProfileScreen = () => {
             </Row>
             <Row>
               {showUpdateFields ? null : (
-                <Button onClick={() => setShowUpdateFields(true)}>Update</Button>
+                <Button onClick={() => setShowUpdateFields(true)}>
+                  Update
+                </Button>
               )}
             </Row>
           </Col>
@@ -76,46 +78,54 @@ const UserProfileScreen = () => {
             <Col>
               <h3>Update Information</h3>
               <Form onSubmit={submitHandler}>
-                <Form.Group className='my-2' controlId='name'>
+                <Form.Group className="my-2" controlId="name">
+                  <Form.Label>Update First Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="First Name"
+                    value={name.firstName}
+                    onChange={(e) =>
+                      setName({ ...name, firstName: e.target.value })
+                    }
+                  />
+                </Form.Group>
+                <Form.Group className="my-2" controlId="lastName">
+                  <Form.Label>Update Last Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Last Name"
+                    value={name.lastName}
+                    onChange={(e) =>
+                      setName({ ...name, lastName: e.target.value })
+                    }
+                  />
+                </Form.Group>
+
+                <Form.Group className="my-2" controlId="username">
                   <Form.Label>Update Username</Form.Label>
                   <Form.Control
-                    type='text'
-                    placeholder='Username'
-                    value={user.username}
+                    type="text"
+                    placeholder="Username"
+                    value={username}
                     onChange={(e) => setUsername(e.target.value)}
                   />
                 </Form.Group>
-                <Form.Group className='my-2' controlId='email'>
+                <Form.Group className="my-2" controlId="email">
                   <Form.Label>Update Email Address</Form.Label>
                   <Form.Control
-                    type='email'
-                    placeholder='Email'
-                    value={user.email}
+                    type="email"
+                    placeholder="Email"
+                    value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </Form.Group>
-                <Form.Group className='my-2' controlId='password'>
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control
-                    type='password'
-                    placeholder='Enter new password'
-                    value={user.password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group className='my-2' controlId='confirmPassword'>
-                  <Form.Label>Confirm Password</Form.Label>
-                  <Form.Control
-                    type='password'
-                    placeholder='Confirm new password'
-                    value={user.confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
-                </Form.Group>
-                <Button type='submit' className='mr-2'>
+                <Button type="submit" className="mr-2">
                   Update
                 </Button>
-                <Button variant='secondary' onClick={() => setShowUpdateFields(false)}>
+                <Button
+                  variant="secondary"
+                  onClick={() => setShowUpdateFields(false)}
+                >
                   Cancel
                 </Button>
                 {isLoading && <Loader />}

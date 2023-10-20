@@ -5,17 +5,17 @@ import bcrypt from 'bcryptjs';
 const passwordSchema = new passwordValidator();
 passwordSchema
   .is()
-  .min(8) // Minimum length of 8 characters
+  .min(8,"your password should have at least 8 characters") // Minimum length of 8 characters
   .is()
-  .max(50) // Maximum length of 30 characters
+  .max(100,"your password should not have more then 100 characters") // Maximum length of 100 characters
   .has()
-  .letters() // Must have at least one letter
+  .letters(1,'your password should have at least one letter') // Must have at least one letter
   .has()
-  .digits() // Must have at least one digit
+  .digits(1,'your password should have at least one digit') // Must have at least one digit
   .has()
-  .uppercase() // Must have at least one
+  .uppercase(1,'your password should have at least one uppercase letter') // Must have at least one
   .not()
-  .spaces(); // Cannot contain spaces
+  .spaces(0,'your password can not have empty space'); // Cannot contain spaces
 
 const userSchema = mongoose.Schema(
   {
@@ -44,17 +44,15 @@ const userSchema = mongoose.Schema(
       required: true,
       validate: {
         validator: function (value) {
-          
-          const validationResult = passwordSchema.validate(value, { list: true });
-
-          
+          const trimmedPassword = value.trim();
+          const validationResult = passwordSchema.validate(trimmedPassword, { list: true });
           if (validationResult.length > 0) {
             const failedCriteria = validationResult.join(', ');
-            sendResponse(res, null, "New password does not meet the validation criteria. Failed criteria: " + failedCriteria, false);
+            console.log(`Password validation failed: ${failedCriteria}`);
             return false; 
           }
-          
-          return true;
+
+          return true; 
         },
       },
     },
