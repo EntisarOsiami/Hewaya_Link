@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLoginMutation } from "../slices/userApiSlice.js";
 import { toast } from "react-toastify";
 import Loader from "../Components/Loader.jsx";
-// import { updateUserProfile } from "../slices/profileSlice.js";
+import { updateUserProfile } from "../slices/profileSlice.js";
 import { loginRedux } from "../slices/authSlice.js";
 
 const LoginScreen = () => {
@@ -16,13 +16,13 @@ const LoginScreen = () => {
   const navigate = useNavigate();
   const [loginDatabase, { isLoading }] = useLoginMutation();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  // const {user} = useSelector ((state) => state.profile.user);
 
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/');
     }
   }, [navigate, isAuthenticated]);
+  
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -32,13 +32,14 @@ const LoginScreen = () => {
         emailOrUsername: userInput,
         password,
       }).unwrap()
+      
       dispatch(loginRedux({...res }));
       console.log("Login function dispatched");
 
-      // dispatch(updateUserProfile({...res }));
+      dispatch(updateUserProfile({...res }));
+      console.log("updateUserProfile function dispatched");
    
     
-      navigate('/');
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }

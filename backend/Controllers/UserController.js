@@ -145,7 +145,7 @@ const getUserProfile = asyncHandler(async (req, res, next) => {
 
 const updateUserProfile = asyncHandler(async (req, res, next) => {
   try {
-    const { firstName, lastName, username, email, password } = req.body;
+    const { firstName, lastName, username, email } = req.body;
     const user = await User.findById(req.user._id);
 
     if (!user) {
@@ -169,17 +169,17 @@ const updateUserProfile = asyncHandler(async (req, res, next) => {
         sendResponse(res, null, "User Email Already Exists", false);
         return;
       }
-      user.email = email;
-    }
+      user.email = email;   }
 
-    if (password) {user.password = password; }
 
     const updatedUser = await user.save();
 
     sendResponse(res, {
-      _id: updatedUser._id,
-      username: updatedUser.username,
-      email: updatedUser.email,
+        user:{_id: updatedUser._id,
+        username: updatedUser.username,
+        name: updatedUser.Name,
+        email: updatedUser.email}
+     
     }, "User profile updated successfully");
   } catch (error) {
     next(error);
