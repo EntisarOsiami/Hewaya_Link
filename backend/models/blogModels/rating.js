@@ -17,7 +17,7 @@ const ratingSchema = new Schema({
   },
   blog: {
     type: Schema.Types.ObjectId,
-    ref: 'BlogPost', 
+    ref: 'Blog', 
   },
 });
 

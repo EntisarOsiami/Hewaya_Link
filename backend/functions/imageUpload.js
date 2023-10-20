@@ -11,7 +11,7 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     }
 
     const result = await uploader.upload(req.file.buffer, {
-      folder: '{$User}_gallery_folder', 
+      folder: `${User}_gallery_folder`, 
     });
 
     const newImage = new ImageGallery({

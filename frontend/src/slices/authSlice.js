@@ -1,27 +1,33 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
-  userInfo: localStorage.getItem('userInfo')
-    ? JSON.parse(localStorage.getItem('userInfo'))
-    : null,
+const initializeStateFromLocalStorage = () => {
+  const savedUserId = localStorage.getItem('userId');
+
+  return {
+    isAuthenticated: !!savedUserId,
+    userId: savedUserId || null,
+  };
 };
 
+const initialState = initializeStateFromLocalStorage(); 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setCredentials: (state, action) => {
-      state.userInfo = action.payload;
-      localStorage.setItem('userInfo', JSON.stringify(action.payload));
+    loginRedux: (state, action) => {
+      const { data } = action.payload;
+      state.isAuthenticated = true;
+      state.userId = data.user._id;
+      localStorage.setItem('userId', data.user._id);
     },
-    // eslint-disable-next-line no-unused-vars
-    logout: (state, action) => {
-      state.userInfo = null;
-      localStorage.removeItem('userInfo');
+    logoutRedux: (state) => {
+      state.isAuthenticated = false;
+      state.userId = null;
+      localStorage.removeItem('userId');
     },
   },
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { loginRedux, logoutRedux } = authSlice.actions;
 
 export default authSlice.reducer;

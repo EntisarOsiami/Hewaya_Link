@@ -1,6 +1,7 @@
 import mongoose, {Schema,model} from 'mongoose';
 
 const blogPostSchema = new Schema({
+  id : mongoose.Types.ObjectId,
   title: String,
   content: String,
   author: String,
@@ -13,6 +14,6 @@ const blogPostSchema = new Schema({
 });
 
 
-const Blog = model('Blog', blogPostSchema);
 
+const Blog = model('Blog', blogPostSchema);
 export default Blog;

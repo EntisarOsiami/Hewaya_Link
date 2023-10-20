@@ -1,15 +1,15 @@
-import { Navbar, Nav, Container, NavDropdown} from 'react-bootstrap';
-import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa'; 
-import {BsPersonFill} from 'react-icons/bs'; 
+import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
+import { BsPersonFill } from 'react-icons/bs';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useLogoutMutation } from '../slices/usersApiSlice';
-import { logout } from '../slices/authSlice';
-import { Link } from 'react-router-dom'
+import { useLogoutMutation } from '../slices/userApiSlice';
+import { logoutRedux } from '../slices/authSlice';
 import { LinkContainer } from 'react-router-bootstrap';
 
 const Header = () => {
-  const { userInfo } = useSelector((state) => state.auth);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const { user } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [logoutApiCall] = useLogoutMutation();
@@ -17,7 +17,7 @@ const Header = () => {
   const logoutHandler = async () => {
     try {
       await logoutApiCall().unwrap();
-      dispatch(logout());
+      dispatch(logoutRedux());
       navigate('/login');
     } catch (err) {
       console.error(err);
@@ -34,22 +34,22 @@ const Header = () => {
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='ms-4'>
-              <Link to='/' className='nav-link'>
-                Home
-              </Link>
-              <Link to='/explore' className='nav-link'>
-                Explore
-              </Link>
-              <Link to='/blog' className='nav-link'>
-                Blog
-              </Link>
-              <Link to='/about' className='nav-link'>
-                About
-              </Link>
+              <LinkContainer to='/'>
+                <Nav.Link>Home</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to='/explore'>
+                <Nav.Link>Explore</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to='/blog'>
+                <Nav.Link>Blog</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to='/about'>
+                <Nav.Link>About</Nav.Link>
+              </LinkContainer>
             </Nav>
-            <Nav className='ms-auto'> {/* Use ms-auto to align to the right */}
-              {userInfo ? (
-                <NavDropdown title={<><BsPersonFill className='me-2' />{userInfo.name}</>} id='username'>
+            <Nav className='ms-auto'>
+              {isAuthenticated ? (
+                <NavDropdown title={<><BsPersonFill className='me-2' />{user.username}</>} id='username'>
                   <LinkContainer to='/profile'>
                     <NavDropdown.Item>Profile</NavDropdown.Item>
                   </LinkContainer>
