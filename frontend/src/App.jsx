@@ -2,20 +2,19 @@ import { Container } from 'react-bootstrap';
 import { Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Header from './Components/Header';
-import Footer from './Components/Footer';
-import './styles.css'; 
+import UniversalLayout from './Layouts/UniversalLayout.jsx';
+import './styles.css';
+import 'quill/dist/quill.core.css'; 
+import 'quill/dist/quill.snow.css';
 
 const App = () => {
   return (
-      <>
-        <Header />
-        <ToastContainer />
-        <Container className='my-1'>
-          <Outlet />
-        </Container>
-        <Footer />
-      </>
+    <UniversalLayout> 
+      <ToastContainer />
+      <Container className="my-1">
+        <Outlet />
+      </Container>
+    </UniversalLayout>
   );
 };
 

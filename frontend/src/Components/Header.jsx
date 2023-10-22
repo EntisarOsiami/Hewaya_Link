@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLogoutMutation } from '../slices/userApiSlice';
 import { logoutRedux } from '../slices/authSlice';
 import { LinkContainer } from 'react-router-bootstrap';
+import ThemeToggle from './ThemeToggle';
 
 const Header = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -48,6 +49,7 @@ const Header = () => {
               </LinkContainer>
             </Nav>
             <Nav className='ms-auto'>
+            
               {isAuthenticated ? (
                 <NavDropdown title={<><BsPersonFill className='me-2' />{user.username}</>} id='username'>
                   <LinkContainer to='/profile'>
@@ -69,6 +71,7 @@ const Header = () => {
                   </LinkContainer>
                 </>
               )}
+              <ThemeToggle />
             </Nav>
           </Navbar.Collapse>
         </Container>

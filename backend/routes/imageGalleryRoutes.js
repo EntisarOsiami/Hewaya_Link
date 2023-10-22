@@ -1,9 +1,11 @@
 import { Router } from 'express';
-const router = Router();
-import { uploadImage, getAllImages,deleteImage } from '../Controllers/imageGalleryController.js';
+import { uploadImageToCloudinary, getAllImages, deleteImageFromCloudinary } from '../Controllers/imageGalleryController.js';
+import { multerUploads } from '../config/multerConfig.js';
 
-router.post('/upload', uploadImage);
+const router = Router();
+
+router.post('/upload', multerUploads, uploadImageToCloudinary);
 router.get('/images', getAllImages);
-router.delete('/images/:id', deleteImage)
+router.delete('/images/:id', deleteImageFromCloudinary);
 
 export default router;
