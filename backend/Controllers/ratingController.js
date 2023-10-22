@@ -1,54 +1,78 @@
 import Rating from '../models/blogModels/rating.js';
 import Blog from '../models/blogModels/blog.js';
+import Joi from 'joi';
+
+const createRatingSchema = Joi.object({
+  value: Joi.number().min(1).max(5).required(), 
+  author: Joi.string().required(),
+  blogId: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required() 
+});
+
+function sendResponse(res, data, message, success = true) {
+  res.status(success ? 200 : 400).json({
+    success,
+    data,
+    message,
+  });
+}
 
 const createRating = async (req, res) => {
   try {
+    const { error } = createRatingSchema.validate(req.body);
+
+    if (error) {
+      return sendResponse(res, null, error.details[0].message, false);
+    }
+
     const { value, author, blogId } = req.body;
     const rating = new Rating({ value, author, blog: blogId });
     await rating.save();
 
     const blog = await Blog.findById(blogId);
     if (!blog) {
-      return res.status(404).json({ error: 'Blog not found' });
+      return sendResponse(res, null, "Blog not found.", false);
     }
     blog.ratings.push(rating);
     await blog.save();
 
-    res.status(201).json(rating);
+    sendResponse(res, rating, "Rating added successfully.");
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    console.error(error);
+    sendResponse(res, null, "Server error.", false);
   }
 };
 
 const getRatingsByBlogId = async (req, res) => {
   try {
     const blogId = req.params.blogId;
-    const ratings = await find({ blog: blogId }).sort({ createdAt: -1 });
-    res.json(ratings);
+    const ratings = await Rating.find({ blog: blogId }).sort({ createdAt: -1 });
+    sendResponse(res, ratings, "Ratings retrieved successfully.");
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    console.error(error);
+    sendResponse(res, null, "Server error.", false);
   }
 };
 
 const deleteRating = async (req, res) => {
   try {
     const ratingId = req.params.id;
-    const rating = await findByIdAndDelete(ratingId);
+    const rating = await Rating.findByIdAndDelete(ratingId);
 
     const blog = await Blog.findById(rating.blog);
     if (!blog) {
-      return res.status(404).json({ error: 'Blog not found' });
+      return sendResponse(res, null, "Blog not found.", false);
     }
     blog.ratings = blog.ratings.filter((r) => r.toString() !== ratingId);
     await blog.save();
 
-    res.json({ message: 'Rating deleted' });
+    sendResponse(res, null, "Rating deleted successfully.");
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    console.error(error);
+    sendResponse(res, null, "Server error.", false);
   }
 };
 
-export  {
+export {
   createRating,
   getRatingsByBlogId,
   deleteRating,

@@ -1,4 +1,4 @@
-
+/* Footer */
 .footer {
   position: absolute;
   margin-top: auto;
@@ -10,23 +10,34 @@
   text-align: center;
 }
 
-  
-  
-  .footer a {
-    color: white;
-    text-decoration: none; 
-  }
-  
-  
+.footer a {
+  color: white;
+  text-decoration: none;
+}
+
+
+.generic-card {
+  background-color: #fff; 
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 20px; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+ 
 .carousel-image {
-  max-height: 400px; 
-  object-fit: cover; }
+  max-width: 100%;   
+  max-height: 600px;  
+  width:fit-content;       
+  height: auto;      
+  object-fit: cover; 
+  border-radius: 20px; 
+}
+
 
 
 .carousel-caption {
-  background-color: rgba(0, 0, 0, 0); 
+  background-color: rgba(0, 0, 0, 0);
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 20px; 
   position: absolute;
   bottom: 0;
   left: 0;
@@ -37,11 +48,233 @@
 
 .carousel-title {
   font-size: 24px;
-  color: #fff; 
+  color: #fff;
 }
-
 
 .carousel-description {
   font-size: 16px;
+  color: #fff;
+}
+
+/* Animation */
+.card-animation {
+  animation: fade-in 1s;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Colorful Card */
+.colorful-card {
+  background: linear-gradient(45deg, #f33c889c, hsl(192, 38%, 87%));
+  color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  transition: transform 0.3s;
+}
+
+.colorful-card:hover {
+  transform: scale(1.05);
+}
+
+/* Header */
+.header {
+  background-color: #333; 
   color: #fff; 
+  padding: 20px; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  transition: background-color 0.3s;
+}
+.explore-subscribe-input {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.explore-subscribe-button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #ff8c00;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.explore-subscribe-button:hover {
+  background-color: #f60;
+}
+
+.explore-container {
+  background-color: #EDE5E2;
+  min-height: 100vh;  /* this ensures full vertical coverage */
+}
+
+.explore-intro {
+  background: linear-gradient(45deg, #f33c889c, hsl(192, 38%, 87%));
+  color: #fff;
+  padding: 20px 0;
+}
+
+
+.header a {
+  color: #fff; 
+  text-decoration: none; 
+  margin-right: 20px; 
+}
+
+.header a:hover {
+  color: #ff8c00; 
+}
+
+.header h1 {
+  font-size: 24px;
+  margin: 0; 
+  padding: 0; 
+}
+
+.header .logo {
+  font-weight: bold; 
+}
+
+.header .menu {
+  display: flex;
+  align-items: center;
+}
+
+.header .menu li {
+  list-style: none; 
+  margin-right: 20px; 
+}
+
+.header .menu .active {
+  font-weight: bold; 
+}
+
+.header .search {
+  display: flex;
+  align-items: center;
+}
+
+.header .search input {
+  padding: 10px;
+  border: none;
+  border-radius: 5px; 
+}
+
+.header .search button {
+  background-color: #ff8c00; 
+  color: #fff; 
+  border-radius: 5px; 
+  padding: 10px; 
+  cursor: pointer;
+}
+
+.header .search button:hover {
+  background-color: #f60; 
+}
+
+.header .user {
+  display: flex;
+  align-items: center;
+  margin-left: auto; 
+}
+
+.header .user .avatar {
+  width: 40px; 
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px; 
+}
+
+.header .user .username {
+  font-weight: bold; 
+}
+
+.header .user .logout {
+  background-color: #ff8c00; 
+  color: #fff; 
+  border: none; 
+  padding: 10px; 
+  cursor: pointer; 
+}
+
+.header .user .logout:hover {
+  background-color: #f60;
+}
+
+.background-color {
+  background-color: #EDE5E2; 
+
+  
+}
+:root {
+  --text-color-light: #333;
+  --bg-color-light: #fff;
+  --text-color-dark: #eee;
+  --bg-color-dark: #111;
+}
+
+.light-background {
+  background-color: var(--bg-color-light);
+  color: var(--text-color-light);
+}
+
+.dark-background {
+  background-color: var(--bg-color-dark);
+  color: var(--text-color-dark);
+}
+
+
+
+/* Explore Screen CSS */
+
+.explore-container {
+  padding: 4% 0;
+}
+
+.explore-intro {
+  background: linear-gradient(45deg, #f33c889c, hsl(192, 38%, 87%));
+  padding: 40px 0;
+  margin-bottom: 40px;
+}
+
+.explore-subscribe-input {
+  width: 70%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.explore-subscribe-button {
+  padding: 10px 15px;
+  border: none;
+  background-color: #ff8c00;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.explore-subscribe-button:hover {
+  background-color: #f60;
 }

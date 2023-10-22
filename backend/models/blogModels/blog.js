@@ -1,7 +1,6 @@
 import mongoose, {Schema,model} from 'mongoose';
 
-const blogPostSchema = new Schema({
-  id : mongoose.Types.ObjectId,
+const blogPostSchema = new Schema({  
   title: String,
   content: String,
   author: String,
