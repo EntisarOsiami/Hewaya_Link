@@ -1,38 +1,40 @@
 import Blog from '../models/blogModels/blog.js';
 import Joi from 'joi';
 
-
-// Create a new blog post.
-
+function sendResponse(res, data, message, success = true) {
+  res.status(success ? 200 : 400).json({
+    success,
+    data,
+    message,
+  });
+}
 const createBlogSchema = Joi.object({
   title: Joi.string().required(),
   content: Joi.string().required(),
   author: Joi.string().required(),
-  tags: Joi.array().items(Joi.string())
+  tags: Joi.string().required()
 });
 
 const createBlog = async (req, res) => {
   try {
     const { error } = createBlogSchema.validate(req.body);
-
     if (error) {
-      return res.status(400).json({ error: error.details[0].message });
+      return sendResponse(res, null, error.details[0].message, false);
     }
 
     const { title, content, author, tags } = req.body;
-    
-    const blog = new Blog({ title, content, author, tags });
+    const parsedTags = tags.split(',').map((tag) => tag.trim());
+    const blog = new Blog({ title, content, author, tags: parsedTags });
     
     await blog.save();
-    
-    res.status(201).json(blog);
+
+    sendResponse(res, blog, "Blog created successfully.");
   } catch (error) {
     console.error(error); 
-    res.status(500).json({ error: 'Server error' });
+    sendResponse(res, null, "Server error.", false);
   }
 };
 
-// Retrieve a list of all blog posts, sorted by creation date.
 const getAllBlogs = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -41,7 +43,6 @@ const getAllBlogs = async (req, res) => {
     const endIndex = page * limit;
 
     const blogs = await Blog.find().sort({ createdAt: -1 }).skip(startIndex).limit(limit);
-    
     const total = await Blog.countDocuments();
 
     const pagination = {
@@ -50,65 +51,67 @@ const getAllBlogs = async (req, res) => {
       totalItems: total
     };
 
-    res.json({ blogs, pagination });
+    sendResponse(res, { blogs, pagination }, "Blogs retrieved successfully.");
   } catch (error) {
-    console.error(error); 
-    res.status(500).json({ error: 'Server error' });
+    console.error(error);
+    sendResponse(res, null, "Server error.", false);
   }
 };
 
-// Update an existing blog post.
 const updateBlog = async (req, res) => {
   try {
     const { title, content, tags } = req.body;
     
+    const parsedTags = tags ? tags.split(',').map(tag => tag.trim()) : undefined;
+
+    const updateObject = { title, content, tags: parsedTags }.filter(item => item !== undefined);
+
     const updatedBlog = await Blog.findByIdAndUpdate(
       req.params.id,
-      { title, content, tags },
+      updateObject,
       { new: true }
     );
-    
+
     if (!updatedBlog) {
-      return res.status(404).json({ error: 'Blog not found' });
+      return sendResponse(res, null, "Blog not found.", false);
     }
     
-    res.json(updatedBlog);
+    sendResponse(res, updatedBlog, "Blog updated successfully.");
   } catch (error) {
-    console.error(error); 
-    res.status(500).json({ error: 'Server error' });
+    console.error(error);
+    sendResponse(res, null, "Server error.", false);
   }
 };
 
-// Retrieve a specific blog post by its ID.
+
 const getBlogById = async (req, res) => {
   try {
-    const blogId = req.params.id; 
+    const blogId = req.params.id;
     const blog = await Blog.findById(blogId);
 
     if (!blog) {
-      return res.status(404).json({ error: 'Blog not found' });
+      return sendResponse(res, null, "Blog not found.", false);
     }
 
-    res.json(blog);
+    sendResponse(res, blog, "Blog retrieved successfully.");
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Server error' });
+    sendResponse(res, null, "Server error.", false);
   }
 };
 
-// Delete a blog post by its ID.
 const deleteBlog = async (req, res) => {
   try {
     const deletedBlog = await Blog.findByIdAndDelete(req.params.id);
-    
+
     if (!deletedBlog) {
-      return res.status(404).json({ error: 'Blog not found' });
+      return sendResponse(res, null, "Blog not found.", false);
     }
-    
-    res.json({ message: 'Blog deleted' });
+
+    sendResponse(res, null, "Blog deleted successfully.");
   } catch (error) {
-    console.error(error); 
-    res.status(500).json({ error: 'Server error' });
+    console.error(error);
+    sendResponse(res, null, "Server error.", false);
   }
 };
 

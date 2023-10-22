@@ -11,12 +11,12 @@ import RegisterScreen from './Screens/RegisterScreen.jsx';
 import PrivateRoute from './Components/PrivateRoute.jsx';
 import UserProfileScreen from './Screens/UserProfileScreen.jsx';
 import BlogScreen from './Screens/BlogScreen.jsx';
+import ExploreScreen from './Screens/ExploreScreen.jsx';
 import { createRoot } from 'react-dom/client';
 
 
 createRoot(document.getElementById('root')).render(
   <Provider store={store}>
-
     <React.StrictMode>
       <Router>
         <Routes>
@@ -24,15 +24,14 @@ createRoot(document.getElementById('root')).render(
             <Route index={true} element={<HomeScreen />} />
             <Route path="/login" element={<LoginScreen />} />
             <Route path="/register" element={<RegisterScreen />} />
+            <Route path="/explore" element={<ExploreScreen />} />
             <Route element={<PrivateRoute />}>
-            <Route path="/profile" element={<UserProfileScreen />} />
-            <Route path="/Blog" element={<BlogScreen />} />
-           
+              <Route path="/profile" element={<UserProfileScreen />} />
+              <Route path="/blog" element={<BlogScreen />} />
             </Route>
           </Route>
         </Routes>
       </Router>
     </React.StrictMode>
-    
   </Provider>,
 );

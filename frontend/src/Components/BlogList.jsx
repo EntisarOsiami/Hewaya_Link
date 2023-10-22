@@ -1,21 +1,25 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
-const BlogList = () => {
+const BlogList = ({ shouldRefetch, onRefetch }) => {
   const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
         const response = await axios.get('/api/blogs');
-        setBlogs(response.data);
+        console.log("Blogs received:", response.data.blogs);
+        setBlogs(response.data.blogs);
       } catch (error) {
         console.error(error);
       }
-    };
-
+   };
+   
     fetchBlogs();
-  }, []);
+
+    if (shouldRefetch) onRefetch(); 
+  }, [shouldRefetch, onRefetch]);
 
   return (
     <ul>
@@ -31,4 +35,8 @@ const BlogList = () => {
   );
 };
 
+BlogList.propTypes = {
+  shouldRefetch: PropTypes.bool.isRequired,
+  onRefetch: PropTypes.func.isRequired,
+};
 export default BlogList;

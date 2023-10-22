@@ -22,6 +22,11 @@ const imageGallerySchema = new Schema({
     type: Number,
     default: 0,
   },
+  
+  cloudinaryId: {
+    type: String,
+    required: true,
+}
  
 },
 
