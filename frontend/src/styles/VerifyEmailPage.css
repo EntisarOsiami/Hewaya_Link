@@ -1,0 +1,28 @@
+.verify-email-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.verify-email-card {
+    width: 70%;
+    max-width: 600px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.verify-email-card h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.verify-email-card p {
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}

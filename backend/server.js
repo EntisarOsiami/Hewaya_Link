@@ -3,15 +3,15 @@ import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes.js';
 import roleRoutes from './routes/roleRoutes.js';
 import blogRoutes from "./routes/blogRoutes.js";
-import commentRoutes from './routes/commentRoutes.js';
-import ratingRoutes from './routes/ratingRoutes.js'
+import commentRoutes from './routes/blogCommentRoutes.js';
+import ratingRoutes from './routes/blogRatingRoutes.js'
 import imageGalleryRoutes from './routes/imageGalleryRoutes.js'
 import { notFound,errorHandler } from "./middleware/errorMiddleware.js";
 import connectDB from "./config/db.js";
 import cookieParser from "cookie-parser";
 
 
-dotenv.config();
+dotenv.config({ path: './backend/.env' });
 
 const app = express ();
 const port = process.env.PORT || 5000;
@@ -20,7 +20,7 @@ connectDB();
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({extended: true}));
-app.use('/api/user', userRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/roles', roleRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/comments', commentRoutes);

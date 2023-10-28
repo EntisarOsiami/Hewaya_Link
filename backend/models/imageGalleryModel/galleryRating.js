@@ -4,21 +4,20 @@ const ratingSchema = new Schema({
   value: {
     type: Number,
     required: true,
-    min: 1, 
-    max: 5, 
+    min: 1,
+    max: 5,
   },
   author: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: 'User',
     required: true,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  blog: {
+  image: {
     type: Schema.Types.ObjectId,
-    ref: 'Blog', 
+    ref: 'ImageGallery',
   },
+}, {
+  timestamps: true,
 });
 
 const Rating = model('Rating', ratingSchema);

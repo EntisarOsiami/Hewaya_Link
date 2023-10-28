@@ -1,5 +1,4 @@
-import Rating from '../models/blogModels/rating.js';
-import Blog from '../models/blogModels/blog.js';
+import { Blog, Rating } from '../models/blogModels/index.js';
 import Joi from 'joi';
 
 const createRatingSchema = Joi.object({

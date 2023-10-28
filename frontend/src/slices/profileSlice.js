@@ -35,8 +35,20 @@ const profileSlice = createSlice({
 
       localStorage.setItem('userProfile', JSON.stringify(state.user));
     },
+    clearUserProfile: (state) => {
+      state.user = {
+        name: {
+          firstName: '',
+          lastName: '',
+        },
+        username: '',
+        email: '',
+      };
+      
+      localStorage.removeItem('userProfile');
+    },
   },
 });
 
-export const { updateUserProfile } = profileSlice.actions;
+export const { updateUserProfile, clearUserProfile } = profileSlice.actions;
 export default profileSlice.reducer;

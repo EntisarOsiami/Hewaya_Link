@@ -1,18 +1,19 @@
-import mongoose, {Schema,model} from 'mongoose';
+import { Schema, model } from 'mongoose';
 
-const blogPostSchema = new Schema({  
+const blogPostSchema = new Schema({
   title: String,
   content: String,
-  author: String,
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
   createdAt: { type: Date, default: Date.now },
   tags: [String],
-  comments: [
-    { type: mongoose.Schema.Types.ObjectId,ref: 'Comment',},],
-  ratings: [ {
-    type: mongoose.Schema.Types.ObjectId, ref: 'Rating', },],
+  comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
+  ratings: [{ type: Schema.Types.ObjectId, ref: 'Rating' }],
 });
 
-
-
 const Blog = model('Blog', blogPostSchema);
+
 export default Blog;

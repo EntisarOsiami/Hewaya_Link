@@ -1,0 +1,39 @@
+/* Hero Section */
+.hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(45deg, #276168, #76e2e6);
+    padding: 5rem 0;
+  }
+  
+  .hero-section h1 {
+    font-size: 5rem;
+    color: #fff;
+    margin-bottom: 4rem;
+    animation: fade-in 5s;
+  }
+  
+  .hero-section p {
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 4rem;
+    animation: fade-in 5s;
+  }
+  
+  .hero-section .d-flex {
+    justify-content: center;
+  }
+  
+  .hero-section button {
+    animation: fade-in 5s;
+  }
+  
+  .Quotes {
+    align-items: center;
+    justify-content: center;
+   
+   
+    padding: 5rem 0;
+
+  }
