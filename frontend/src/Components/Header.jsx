@@ -7,6 +7,7 @@ import { useLogoutMutation } from '../slices/userApiSlice';
 import { logoutRedux } from '../slices/authSlice';
 import { LinkContainer } from 'react-router-bootstrap';
 import ThemeToggle from './ThemeToggle';
+import {clearUserProfile} from '../slices/profileSlice';
 
 const Header = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -19,6 +20,7 @@ const Header = () => {
     try {
       await logoutApiCall().unwrap();
       dispatch(logoutRedux());
+      dispatch(clearUserProfile());
       navigate('/login');
     } catch (err) {
       console.error(err);

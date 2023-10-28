@@ -1,93 +1,77 @@
-import mongoose from "mongoose";
+import { Schema, model } from 'mongoose';
 import passwordValidator from "password-validator";
 import bcrypt from 'bcryptjs';
 
 const passwordSchema = new passwordValidator();
 passwordSchema
-  .is()
-  .min(8,"your password should have at least 8 characters") // Minimum length of 8 characters
-  .is()
-  .max(100,"your password should not have more then 100 characters") // Maximum length of 100 characters
-  .has()
-  .letters(1,'your password should have at least one letter') // Must have at least one letter
-  .has()
-  .digits(1,'your password should have at least one digit') // Must have at least one digit
-  .has()
-  .uppercase(1,'your password should have at least one uppercase letter') // Must have at least one
-  .not()
-  .spaces(0,'your password can not have empty space'); // Cannot contain spaces
+  .is().min(8)
+  .is().max(100)
+  .has().letters(1)
+  .has().digits(1)
+  .has().uppercase(1)
+  .not().spaces();
 
-const userSchema = mongoose.Schema(
-  {
-    Name: {
-      firstName: {
-        type: String,
-        required: true,
-      },
-      lastName: {
-        type: String,
-        required: true,
-      },
-    },
-    username: {
+const userSchema = new Schema({
+  name: {
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+  },
+  username: { type: String, required: true, unique: true },
+  email: {
+    address: {
       type: String,
       required: true,
       unique: true,
+      validate: {
+        validator: function(v) {
+          return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
+        },
+        message: props => `${props.value} is not a valid email address!`
+      },
     },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    password: {
+    verified: { type: Boolean, default: false },
+    verificationToken: String,
+    verificationTokenExpiresAt: Date,
+  },
+  password: {
+    value: {
       type: String,
       required: true,
       validate: {
-        validator: function (value) {
-          const trimmedPassword = value.trim();
-          const validationResult = passwordSchema.validate(trimmedPassword, { list: true });
-          if (validationResult.length > 0) {
-            const failedCriteria = validationResult.join(', ');
-            console.log(`Password validation failed: ${failedCriteria}`);
-            return false; 
-          }
-
-          return true; 
+        validator: function(value) {
+          return passwordSchema.validate(value.trim());
         },
+        message: 'Password validation failed'
       },
     },
-    birthDate: {
-      type: Date,
-      required: true,
-    },
-    role: {
-      type: String,
-      enum: ["admin", "user", "moderator"],
-      default: "user",
-    },
+    resetToken: String,
+    resetTokenExpires: Date,
   },
-  {
-    timestamps: true,
+  birthDate: { type: Date, required: true },
+  role: {
+    type: String,
+    enum: ["admin", "user", "moderator"],
+    default: "user",
+  },
+  profilePicture: {
+    url: { type: String, default: 'default_avatar_url_here' },
   }
-);
-
-userSchema.pre("save", async function (next) {
-  try {
-    if (!this.isModified("password")) {
-      return next();
-    }  
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-    return next();
-  } catch (error) {
-    return next(error);
-  }
+}, {
+  timestamps: true,
 });
 
-userSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
+userSchema.pre("save", async function(next) {
+  if (!this.isModified("password.value")) return next();
+
+  const salt = await bcrypt.genSalt(10);
+  this.password.value = await bcrypt.hash(this.password.value, salt);
+  next();
+});
+
+userSchema.methods.matchPassword = async function(enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password.value);
 };
 
-const User = mongoose.model("User", userSchema);
+const User = model("User", userSchema);
 
 export default User;

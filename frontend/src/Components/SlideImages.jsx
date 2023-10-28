@@ -1,5 +1,4 @@
 import { Carousel } from 'react-bootstrap';
-import '../styles.css';
 
 
 const MyCarousel = () => {

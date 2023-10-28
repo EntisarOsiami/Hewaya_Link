@@ -4,6 +4,8 @@ import generateToken from "../Utils/generateToken.js";
 import { validationResult } from "express-validator";
 import rateLimit from "express-rate-limit";
 import nodemailer from "nodemailer";
+import smtpTransport from "nodemailer-smtp-transport";
+import crypto from "crypto";
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -18,75 +20,128 @@ function sendResponse(res, data, message, success = true) {
   });
 }
 
-// @desc    login user & get token
-// @route   POST /api/user/login
-// @access  Public
 const loginUser = asyncHandler(async (req, res, next) => {
-  try {
-    const { emailOrUsername, password } = req.body;
+  const { email, password } = req.body;
 
-    const user = await User.findOne({
-      $or: [{ email: emailOrUsername }, { username: emailOrUsername }],
-    });
+  const user = await User.findOne({ email });
 
-    if (user && (await user.matchPassword(password))) {
-      const token = generateToken(res, user._id);
+  if (user && (await user.matchPassword(password))) {
+    const token = generateToken(res, user._id);
 
-      sendResponse(res, {
-        token,
-        user: {
-          _id: user._id,
-          name: user.Name,
-          username: user.username,
-          email: user.email,
-        },
-      }, "Login successful");
-    } else {
-      sendResponse(res, null, "Invalid email or password", false);
-    }
-  } catch (error) {
-    next(error);
+    sendResponse(res, {
+      token,
+      user: {
+        _id: user._id,
+        name: user.name,
+        username: user.username,
+        email: user.email.address,
+      },
+    }, "Login successful");
+  } else {
+    sendResponse(res, null, "Invalid email or password", false);
   }
 });
 
 // @desc    Register a new user
 // @route   POST /api/user/register
 // @access  Public
+
+
 const registerUser = asyncHandler(async (req, res, next) => {
+  console.log("Received data:", req.body);
+
+
   try {
-    const { firstName, lastName, username, email, password, birthDate } =
-      req.body;
+    const {
+      name: {
+        firstName,
+        lastName
+      },
+      email: {
+        address
+      },
+      username,
+      password,
+      birthDate,
+      profilePicture
+    } = req.body;
+
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return sendResponse(res, null, "Invalid input fields", false);
     }
-
-    const userExists = await User.findOne({ $or: [{ email }, { username }] });
+    const userExists = await User.findOne({
+      $or: [{ "email.address": req.body.email.address }, { username: username }],
+    });
+    
 
     if (userExists) {
       return sendResponse(res, null, "User with the same email or username already exists", false);
     }
-
     const user = await User.create({
-      Name: {
+      name: {     
         firstName,
         lastName,
       },
+      email: {
+        address
+      },
       username,
-      email,
-      password,
+      password: {
+        value: password
+      },
       birthDate,
+      profilePicture
     });
 
     if (user) {
       const token = generateToken(res, user._id);
 
+    const emailVerificationToken = crypto.randomBytes(20).toString("hex");
+    user.email.verificationToken = emailVerificationToken;
+    user.email.verificationTokenExpiresAt = Date.now() + 3600000; // 1 hour
+    await user.save();
+
+   
+    const transporter = nodemailer.createTransport(smtpTransport({
+      host: 'smtp.elasticemail.com',
+      port: 2525,
+      auth: {
+        user: process.env.ELASTIC_EMAIL_USERNAME,
+        pass: process.env.ELASTIC_EMAIL_API_KEY,
+      },
+    }));
+   
+    const verificationURL = `${process.env.CLIENT_URL}/verify/${emailVerificationToken}`;
+
+    const mailOptions = {
+      from: process.env.ELASTIC_EMAIL_USERNAME,
+      to: user.email.address,
+      subject: "Verify your email",
+      text: `Click on the following link to verify your email: ${verificationURL}`,
+      html: `<p>Welcome to our platform!</p>
+             <p>Please <a href="${verificationURL}">click here</a> to verify your email and get started.</p>
+             <p>If the link doesn't work, you can copy and paste the following link into your browser:</p>
+             <p>${verificationURL}</p>
+             <p>Thank you for joining us!</p>`
+    };
+    
+    
+    
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Error sending verification email:", error);
+      } else {
+        console.log("Verification email sent:", info.response);
+      }
+    });
+
       sendResponse(res, {
         token,
         user: {
           _id: user._id,
-          name: user.Name,
+          name: user.name,
           username: user.username,
           email: user.email,
           birthDate: user.birthDate,
@@ -100,6 +155,39 @@ const registerUser = asyncHandler(async (req, res, next) => {
     next(error);
   }
 });
+
+const verifyEmail = asyncHandler(async (req, res, next) => {
+  try {
+    const { token } = req.body;
+    const user = await User.findOne({
+      "email.verificationToken": token,
+      "email.verificationTokenExpiresAt": { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return sendResponse(res, null, "Invalid or expired token", false);
+    }
+
+    user.email.verified = true;
+    user.email.verificationToken = undefined;
+    user.email.verificationTokenExpiresAt = undefined;
+    await user.save();
+
+    sendResponse(res, {
+      user: {
+        _id: user._id,
+        email: {
+          verified: user.email.verified
+        }
+      }
+    }, "Email verified successfully");
+
+  } catch (error) {
+    next(error);
+  }
+});
+
+
 
 // @desc    Logout user / clear cookie
 // @route   POST /api/user/logout
@@ -128,9 +216,9 @@ const getUserProfile = asyncHandler(async (req, res, next) => {
     if (user) {
       sendResponse(res, {
         _id: user._id,
-        name: user.Name,
+        name: user.name,
         username: user.username,
-        email: user.email,
+        email: user.email.address,
       }, "User profile retrieved successfully");
     } else {
       sendResponse(res, null, "User not found", false);
@@ -155,31 +243,50 @@ const updateUserProfile = asyncHandler(async (req, res, next) => {
 
     if (firstName) user.Name.firstName = firstName;
     if (lastName) user.Name.lastName = lastName;
+
+    let conditions = [];
+
     if (username && user.username !== username) {
-      const userExists = await User.findOne({ username });
-      if (userExists) {
-        sendResponse(res, null, "Username already exists", false);
-        return;
-      }
-      user.username = username;
+      conditions.push({ username });
     }
     if (email && user.email !== email) {
-      const userExists = await User.findOne({ email });
-      if (userExists) {
-        sendResponse(res, null, "User Email Already Exists", false);
-        return;
-      }
-      user.email = email;   }
+      conditions.push({ email });
+    }
 
+    if (conditions.length > 0) {
+      const existingUser = await User.findOne({
+        $or: conditions,
+        _id: { $ne: user._id }
+      });
+
+      if (existingUser) {
+        if (username && existingUser.username === username) {
+          sendResponse(res, null, "Username already exists", false);
+          return;
+        }
+        if (email && existingUser.email === email) {
+          sendResponse(res, null, "User Email Already Exists", false);
+          return;
+        }
+      }
+
+      if (username && user.username !== username) {
+        user.username = username;
+      }
+      if (email && user.email.address !== email) {
+        user.email.address = email;
+      }
+    }
 
     const updatedUser = await user.save();
 
     sendResponse(res, {
-        user:{_id: updatedUser._id,
+      user: {
+        _id: updatedUser._id,
         username: updatedUser.username,
         name: updatedUser.Name,
-        email: updatedUser.email}
-     
+        email: updatedUser.email
+      }
     }, "User profile updated successfully");
   } catch (error) {
     next(error);
@@ -234,4 +341,5 @@ export {
   getUserProfile,
   updateUserProfile,
   resetPassword,
+  verifyEmail,
 };

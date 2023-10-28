@@ -1,0 +1,105 @@
+.header {
+  background-color: var(--header-bg); 
+  color: var(--text-color); 
+  padding: var(--container-padding);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: var(--shadow-light);
+  transition: background-color 0.3s;
+  .header .user .logout:hover,
+  .header .search button:hover {
+      background-color: var(--hover-color);
+  }
+}
+
+.header a {
+  color: var(--text-color);
+  text-decoration: none;
+  margin-right: 20px;
+}
+
+.header a:hover {
+  color: var(--hover-color);
+}
+
+.header h1 {
+  font-size: 24px;
+  margin: 0;
+  padding: 0;
+}
+
+.header .logo {
+  font-weight: var(--bold-text);
+}
+
+.header .menu {
+  display: flex;
+  align-items: center;
+}
+
+.header .menu li {
+  list-style: none;
+  margin-right: 20px;
+}
+
+.header .menu .active {
+  font-weight: var(--bold-text);
+}
+
+.header .search {
+  display: flex;
+  align-items: center;
+}
+
+.header .search input {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+}
+
+.header .search button {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.header .search button:hover {
+  background-color: var(--hover-color);
+}
+
+.header .user {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.header .user .avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.header .user .username {
+  font-weight: var(--bold-text);
+}
+
+.header .user .logout {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.header .user .logout:hover {
+  background-color: var(--hover-color);
+}

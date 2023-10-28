@@ -1,0 +1,45 @@
+.CardContainer {
+    display: flex;
+    flex-direction: column;
+    width: 250px; /* Define your preferred width */
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+    background: #FFF;
+}
+
+.CardContainer img {
+    width: 100%;
+    height: 200px; /* Setting a fixed height for images */
+    object-fit: cover;
+    display: block; /* This ensures there's no unwanted space under the image */
+}
+
+.CardContainer .card-content {
+    padding: 10px;
+}
+
+.card-content h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.card-content p {
+    font-size: 16px;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.card-content .button {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.card-content .button:hover {
+    background-color: var(--hover-color);
+}
