@@ -1,15 +1,16 @@
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
-import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
-import { BsPersonFill } from 'react-icons/bs';
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { useLogoutMutation } from '../slices/userApiSlice';
-import { logoutRedux } from '../slices/authSlice';
-import { LinkContainer } from 'react-router-bootstrap';
-import ThemeToggle from './ThemeToggle';
+import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
+import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useLogoutMutation } from "../slices/userApiSlice";
+import { logoutRedux } from "../slices/authSlice";
+import { LinkContainer } from "react-router-bootstrap";
+import ThemeToggle from "./ThemeToggle";
+import { clearUserProfile } from "../slices/profileSlice";
 
 const Header = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isEmailVerified = useSelector((state) => state.auth.isEmailVerified);  
   const { user } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -19,7 +20,8 @@ const Header = () => {
     try {
       await logoutApiCall().unwrap();
       dispatch(logoutRedux());
-      navigate('/login');
+      dispatch(clearUserProfile());
+      navigate("/login");
     } catch (err) {
       console.error(err);
     }
@@ -27,51 +29,69 @@ const Header = () => {
 
   return (
     <header>
-      <Navbar bg='dark' expand='lg' collapseOnSelect variant='dark'>
+      <Navbar bg="dark" expand="lg" collapseOnSelect variant="dark">
         <Container>
-          <LinkContainer to='/'>
-            <Navbar.Brand>Hewaya Link</Navbar.Brand>
+          <LinkContainer to="/">
+            <Navbar.Brand className="logo"> <img src="./assets/logoNew.png" alt="Hewaya Logo" style={{ width: '100px', height: '100px' }} /></Navbar.Brand>
           </LinkContainer>
-          <Navbar.Toggle aria-controls='basic-navbar-nav' />
-          <Navbar.Collapse id='basic-navbar-nav'>
-            <Nav className='ms-4'>
-              <LinkContainer to='/'>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="menu ms-4">
+              <LinkContainer to="/">
                 <Nav.Link>Home</Nav.Link>
               </LinkContainer>
-              <LinkContainer to='/explore'>
+              <LinkContainer to="/explore">
                 <Nav.Link>Explore</Nav.Link>
               </LinkContainer>
-              <LinkContainer to='/blog'>
+              <LinkContainer to="/blog">
                 <Nav.Link>Blog</Nav.Link>
               </LinkContainer>
-              <LinkContainer to='/about'>
+              <LinkContainer to="/about">
                 <Nav.Link>About</Nav.Link>
               </LinkContainer>
             </Nav>
-            <Nav className='ms-auto'>
-            
+            <Nav className="ms-auto">
               {isAuthenticated ? (
-                <NavDropdown title={<><BsPersonFill className='me-2' />{user.username}</>} id='username'>
-                  <LinkContainer to='/profile'>
+                <NavDropdown
+                  title={
+                    <>
+                      <div className="avatars-container">
+                        <img
+                          className="user-avatar avatar"
+                          src={user.profilePicture}
+                          alt="User Avatar"
+                        />
+                        {!isEmailVerified && (
+                          <div className="notification-badge"></div>
+                        )}
+                      </div>
+                      {user.username}
+                    </>
+                  }
+                  id="username"
+                >
+                  <LinkContainer to="/profile">
                     <NavDropdown.Item>Profile</NavDropdown.Item>
                   </LinkContainer>
-                  <NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
+                  <NavDropdown.Item onClick={logoutHandler}>
+                    Logout
+                  </NavDropdown.Item>
                 </NavDropdown>
               ) : (
                 <>
-                  <LinkContainer to='/login'>
+                  <LinkContainer to="/login">
                     <Nav.Link>
                       <FaSignInAlt /> Sign In
                     </Nav.Link>
                   </LinkContainer>
-                  <LinkContainer to='/register'>
+                  <LinkContainer to="/register">
                     <Nav.Link>
                       <FaSignOutAlt /> Sign Up
                     </Nav.Link>
                   </LinkContainer>
                 </>
               )}
-              <ThemeToggle />
+             <ThemeToggle className="theme-toggle" />
             </Nav>
           </Navbar.Collapse>
         </Container>

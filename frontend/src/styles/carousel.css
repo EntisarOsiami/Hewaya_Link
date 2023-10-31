@@ -1,0 +1,15 @@
+.carousel {
+  display: flex;
+  overflow: hidden;
+}
+
+.carousel-item {
+  min-width: 100%;
+  transition: transform 0.5s;
+}
+
+.carousel-image {
+  height: 400px; 
+  object-fit: cover;
+  width: 100%;
+}

@@ -1,5 +1,5 @@
-import Comment from '../models/blogModels/comment.js';
-import Blog from '../models/blogModels/blog.js'; 
+import { Blog, Comment } from '../models/blogModels/index.js';
+
 import Joi from 'joi';
 
 

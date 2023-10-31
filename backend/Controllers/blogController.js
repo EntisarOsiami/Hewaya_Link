@@ -1,4 +1,4 @@
-import Blog from '../models/blogModels/blog.js';
+import { Blog } from '../models/blogModels/index.js';
 import Joi from 'joi';
 
 function sendResponse(res, data, message, success = true) {

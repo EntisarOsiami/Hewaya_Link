@@ -1,0 +1,37 @@
+/* Button Styles */
+.btn-custom {
+    background-color:#EC697F;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: var(--shadow-light);
+    transition: all 0.3s ease;
+    margin-right: 20px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+}
+
+.btn-custom:hover {
+    background-color: var(--hover-color);
+}
+
+.btn-custom:active {
+    transform: scale(0.97); 
+}
+
+.btn-custom:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+
+.btn-custom svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--text-color);
+}

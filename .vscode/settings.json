@@ -1,9 +1,12 @@
 {
     "cSpell.words": [
+        "ckeditor",
         "cloudinary",
+        "elasticemail",
         "hewaya",
         "JRMN",
         "popperjs",
-        "toastify"
+        "toastify",
+        "virtuals"
     ]
 }
