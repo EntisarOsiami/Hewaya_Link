@@ -13,6 +13,7 @@ const initializeStateFromLocalStorage = () => {
         },
         username: '',
         email: '',
+        profilePicture: '/Avatars/defaultPlaceholder.jpg' 
       },
   };
 };
@@ -31,6 +32,7 @@ const profileSlice = createSlice({
         },
         username: action.payload.data.user.username,
         email: action.payload.data.user.email,
+        profilePicture: action.payload.data.user.profilePicture.url,
       };
 
       localStorage.setItem('userProfile', JSON.stringify(state.user));
@@ -43,6 +45,7 @@ const profileSlice = createSlice({
         },
         username: '',
         email: '',
+        profilePicture: '/Avatars/defaultPlaceholder.jpg',
       };
       
       localStorage.removeItem('userProfile');

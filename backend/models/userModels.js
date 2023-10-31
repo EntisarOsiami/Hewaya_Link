@@ -33,6 +33,7 @@ const userSchema = new Schema({
     verificationToken: String,
     verificationTokenExpiresAt: Date,
   },
+  
   password: {
     value: {
       type: String,
@@ -59,6 +60,18 @@ const userSchema = new Schema({
 }, {
   timestamps: true,
 });
+
+userSchema.set('toJSON', {
+  transform: function(doc, ret, opt) {
+    delete ret['email']['verificationToken'];
+    delete ret['email']['verificationTokenExpiresAt'];
+    
+    delete ret['password']; 
+    
+    return ret;
+  }
+});
+
 
 userSchema.pre("save", async function(next) {
   if (!this.isModified("password.value")) return next();
