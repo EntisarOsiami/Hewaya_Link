@@ -27,6 +27,7 @@ const authSlice = createSlice({
     logoutRedux: (state) => {
       state.isAuthenticated = false;
       state.userId = null;
+      state.isEmailVerified = false;
       localStorage.removeItem('userId');
       localStorage.removeItem('isEmailVerified');  
     },

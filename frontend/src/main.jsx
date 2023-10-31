@@ -13,6 +13,7 @@ import BlogScreen from './Screens/BlogScreen.jsx';
 import ExploreScreen from './Screens/ExploreScreen.jsx';
 import About from './Screens/AboutScreen.jsx';
 import CombinedVerificationPage from './Screens/VerifyEmailPage.jsx';
+import ResetPassword from './Screens/ResetPasswordScreen.jsx';
 import { createRoot } from 'react-dom/client';
 
 
@@ -29,7 +30,7 @@ createRoot(document.getElementById('root')).render(
             <Route path="/explore" element={<ExploreScreen />} />
             <Route path="/about" element={<About />} />
             <Route path="/verify/:token" element={<CombinedVerificationPage />} />
-
+            <Route path="/reset-password/:passwordResetToken" element={<ResetPassword />} />
             <Route element={<PrivateRoute />}>
               <Route path="/profile" element={<UserProfileScreen />} />
               <Route path="/blog" element={<BlogScreen />} />
