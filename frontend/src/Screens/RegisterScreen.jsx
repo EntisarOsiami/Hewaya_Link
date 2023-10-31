@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Form, Button, Row, Col } from 'react-bootstrap';
+import { Form, Button, Row, Col, Collapse } from 'react-bootstrap';
 import FormContainer from '../Components/FormContainer.jsx';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,7 +7,8 @@ import { useRegisterMutation } from '../slices/userApiSlice.js';
 import { loginRedux } from '../slices/authSlice.js';
 import { toast } from 'react-toastify';
 import Loader from '../Components/Loader.jsx';
-import{updateUserProfile} from '../slices/profileSlice.js';
+import { updateUserProfile } from '../slices/profileSlice.js';
+import defaultAvatars from '../Data/avatars';
 
 const RegisterScreen = () => {
   const [firstName, setFirstName] = useState('');
@@ -17,12 +18,13 @@ const RegisterScreen = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [birthDate, setBirthDate] = useState(new Date());
+  const [selectedAvatar, setSelectedAvatar] = useState('/Avatars/defaultPlaceholder.jpg');
+  const [open, setOpen] = useState(false);
+  
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [register, { isLoading }] = useRegisterMutation();
-
-
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -30,26 +32,46 @@ const RegisterScreen = () => {
     }
   }, [navigate, isAuthenticated]);
 
+  const handleAvatarChange = (avatarUrl) => {
+    setSelectedAvatar(avatarUrl);
+    setOpen(false);  
+  };
+
+
   const submitHandler = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
       toast.error('Passwords do not match');
-    } else {
-      try {
-        const res = await register({ firstName, lastName, email, username, password, birthDate }).unwrap();
-        dispatch(loginRedux({ ...res }));
-        dispatch(updateUserProfile({ ...res }));
+      return;
+    }
 
-        navigate('/');
-        toast.success('Registration successful');
-      } catch (err) {
-        console.error('Register error:',err);
-        toast.error(err?.data?.message || err.error);
-      }
+    try {
+      const res = await register({
+        name: {
+          firstName,
+          lastName,
+        },
+        email: {
+          address: email
+        },
+        username,
+        password,
+        birthDate,
+        profilePicture: { url: selectedAvatar }
+      }).unwrap();
+      
+      console.log(res);
+
+      dispatch(loginRedux({ ...res }));
+      dispatch(updateUserProfile({ ...res }));
+
+      navigate('/verify/:token');
+    } catch (err) {
+      console.error('Register error:', err);
+      toast.error(err?.data?.message || err.error);
     }
   };
-
   return (
     <FormContainer>
       <h1 className='text-center'>Create an Account</h1>
@@ -136,6 +158,25 @@ const RegisterScreen = () => {
             }}
           ></Form.Control>
         </Form.Group>
+        <Form.Group controlId='avatar'>
+          <Form.Label>Choose an Avatar</Form.Label>
+          <div className="avatar-selection-box" onClick={() => setOpen(!open)}>
+            <img src={selectedAvatar} alt="Selected Avatar" />
+          </div>
+          <Collapse in={open}>
+            <div className="avatars-container">
+              {defaultAvatars.map(avatar => (
+                <img 
+                  key={avatar.url} 
+                  src={avatar.url} 
+                  alt={avatar.name} 
+                  className={`avatar-image ${selectedAvatar === avatar.url ? 'active' : ''}`}
+                  onClick={() => handleAvatarChange(avatar.url)} 
+                />
+              ))}
+            </div>
+          </Collapse>
+        </Form.Group>
 
         <Button type='submit' variant='primary' className='mt-3 w-100'>
           Create Account
@@ -154,3 +195,9 @@ const RegisterScreen = () => {
 };
 
 export default RegisterScreen;
+
+
+
+ 
+
+

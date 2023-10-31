@@ -1,7 +1,6 @@
 import React from 'react';
 import App from './App.jsx';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; 
-import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import store from './store';
 import { Provider } from 'react-redux';
@@ -12,7 +11,11 @@ import PrivateRoute from './Components/PrivateRoute.jsx';
 import UserProfileScreen from './Screens/UserProfileScreen.jsx';
 import BlogScreen from './Screens/BlogScreen.jsx';
 import ExploreScreen from './Screens/ExploreScreen.jsx';
+import About from './Screens/AboutScreen.jsx';
+import CombinedVerificationPage from './Screens/VerifyEmailPage.jsx';
+import ResetPassword from './Screens/ResetPasswordScreen.jsx';
 import { createRoot } from 'react-dom/client';
+
 
 
 createRoot(document.getElementById('root')).render(
@@ -25,6 +28,9 @@ createRoot(document.getElementById('root')).render(
             <Route path="/login" element={<LoginScreen />} />
             <Route path="/register" element={<RegisterScreen />} />
             <Route path="/explore" element={<ExploreScreen />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/verify/:token" element={<CombinedVerificationPage />} />
+            <Route path="/reset-password/:passwordResetToken" element={<ResetPassword />} />
             <Route element={<PrivateRoute />}>
               <Route path="/profile" element={<UserProfileScreen />} />
               <Route path="/blog" element={<BlogScreen />} />
@@ -35,3 +41,4 @@ createRoot(document.getElementById('root')).render(
     </React.StrictMode>
   </Provider>,
 );
+

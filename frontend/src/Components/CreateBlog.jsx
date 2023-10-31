@@ -3,6 +3,8 @@ import axios from 'axios';
 import Joi from 'joi';
 import { useSelector } from 'react-redux';
 import { CgRemove } from 'react-icons/cg';
+import CKEditor from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const CreateBlogForm = () => {
   const userId = useSelector((state) => state.auth.userId);
@@ -20,13 +22,18 @@ const CreateBlogForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    setError('');
+    setSuccess(false);
+
     const createBlogSchema = Joi.object({
       title: Joi.string().required(),
       content: Joi.string().required(),
       author: Joi.string().required(),
+      tags: Joi.array().items(Joi.string().valid(...approvedTags)).min(1)
     });
 
-    const validationResult = createBlogSchema.validate({ title, content, author: userId });
+    const tags = [...selectedTags, newTag];
+    const validationResult = createBlogSchema.validate({ title, content, author: userId, tags });
 
     if (validationResult.error) {
       setError(validationResult.error.details[0].message);
@@ -34,25 +41,23 @@ const CreateBlogForm = () => {
     }
 
     try {
-      const tags = [...selectedTags, newTag].join(',');
-      await axios.post('/api/blogs', { title, content, author: userId, tags });
+      await axios.post('/api/blogs', { title, content, author: userId, tags: tags.join(',') });
       setSuccess(true);
       setTitle('');
       setContent('');
       setSelectedTags([]);
       setNewTag('');
-      setFormVisible(false); // Hide the form after successful submission
+      setFormVisible(false);
     } catch (err) {
       console.error(err);
-      console.error("Error:", err.response ? err.response.data : err.message);
-      setError(err.response ? err.response.data.message : "There was an issue posting the blog.");      
+      setError(err.response ? err.response.data.message : "There was an issue posting the blog.");
     }
   };
 
   const handleAddTag = () => {
     if (newTag && !selectedTags.includes(newTag)) {
       setSelectedTags((prevTags) => [...prevTags, newTag]);
-      setNewTag('');
+      setNewTag(''); 
     }
   };
 
@@ -61,7 +66,7 @@ const CreateBlogForm = () => {
   };
 
   const handleCancel = () => {
-    setFormVisible(false); // Hide the form when canceled
+    setFormVisible(false);
   };
 
   if (!isAuthenticated) {
@@ -78,7 +83,14 @@ const CreateBlogForm = () => {
           </div>
           <div className="mb-3">
             <label htmlFor="content" className="form-label">Content:</label>
-            <textarea id="content" className="form-control" value={content} onChange={(event) => setContent(event.target.value)} />
+            <CKEditor
+              editor={ ClassicEditor }
+              data={content}
+              onChange={ (event, editor) => {
+                  const data = editor.getData();
+                  setContent(data);
+              }}
+            />
           </div>
           <div className="mb-3">
             <label htmlFor="tags" className="form-label">Tags:</label>
@@ -106,7 +118,7 @@ const CreateBlogForm = () => {
           </div>
           {error && <div className="alert alert-danger">{error}</div>}
           {success && <div className="alert alert-success">Blog created successfully!</div>}
-          <button type="submit" className="btn btn-success me-2" onClick={handleSubmit}>Submit</button >
+          <button type="submit" className="btn btn-success me-2">Submit</button>
           <button type="button" className="btn btn-danger" onClick={handleCancel}>
             <CgRemove className="me-1" />
             Cancel

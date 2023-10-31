@@ -1,9 +1,11 @@
 import { Schema, model } from 'mongoose';
 
-const commentSchema = new Schema({
-  text: {
-    type: String,
+const ratingSchema = new Schema({
+  value: {
+    type: Number,
     required: true,
+    min: 1,
+    max: 5,
   },
   author: {
     type: String,
@@ -15,12 +17,10 @@ const commentSchema = new Schema({
   },
   blog: {
     type: Schema.Types.ObjectId,
-    ref: 'Blog', 
-}
-}
+    ref: 'Blog',
+  },
+});
 
-);
+const Rating = model('Rating', ratingSchema);
 
-const Comment = model('Comment', commentSchema);
-
-export default Comment;
+export default Rating;

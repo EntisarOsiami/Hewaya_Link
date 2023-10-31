@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { Form, Button, Row, Col, Modal } from "react-bootstrap";
 import FormContainer from "../Components/FormContainer.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { useLoginMutation } from "../slices/userApiSlice.js";
@@ -8,10 +8,13 @@ import { toast } from "react-toastify";
 import Loader from "../Components/Loader.jsx";
 import { updateUserProfile } from "../slices/profileSlice.js";
 import { loginRedux } from "../slices/authSlice.js";
+import { requestPasswordReset } from "../Components/requestPasswordReset.jsx";
 
 const LoginScreen = () => {
   const [userInput, setUserInput] = useState("");
   const [password, setPassword] = useState("");
+  const [resetEmail, setResetEmail] = useState("");
+  const [showResetModal, setShowResetModal] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loginDatabase, { isLoading }] = useLoginMutation();
@@ -22,29 +25,25 @@ const LoginScreen = () => {
       navigate('/');
     }
   }, [navigate, isAuthenticated]);
-  
 
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      
       const res = await loginDatabase({
         emailOrUsername: userInput,
         password,
-      }).unwrap()
-      
+      }).unwrap();
       dispatch(loginRedux({...res }));
-      console.log("Login function dispatched");
-
       dispatch(updateUserProfile({...res }));
-      console.log("updateUserProfile function dispatched");
-   
-    
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
   };
-  console.log("isAuthenticated:", isAuthenticated);
+
+  const handlePasswordReset = async () => {
+    await requestPasswordReset(resetEmail);
+    setShowResetModal(false); // Close the modal after sending the request
+  };
 
   return (
     <FormContainer>
@@ -86,9 +85,41 @@ const LoginScreen = () => {
 
         <Row className="py-3">
           <Col className="text-center">
-            New Customer? <Link to="/register">Register</Link>
+            New Member? <Link to="/register">Register</Link>
           </Col>
         </Row>
+
+        <Row className="py-3">
+          <Col className="text-center">
+            <Link onClick={() => setShowResetModal(true)}>Forgot Password?</Link>
+          </Col>
+        </Row>
+
+        {/* Password Reset Modal */}
+        <Modal show={showResetModal} onHide={() => setShowResetModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Forgot Password</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form.Group>
+              <Form.Label>Enter your email:</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                value={resetEmail}
+                onChange={(e) => setResetEmail(e.target.value)}
+              />
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowResetModal(false)}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={handlePasswordReset}>
+              Send Reset Link
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     </FormContainer>
   );

@@ -1,6 +1,6 @@
 import { apiSlice } from './apiSlice';
 
-const USERS_URL = '/api/user';
+const USERS_URL = '/api/users';
 
 export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -38,6 +38,13 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    verifyEmail: builder.mutation({
+      query: (token) => ({
+        url: `${USERS_URL}/verify-email`,
+        method: 'POST',
+        body: { token },
+      }),
+    }),
   }),
 });
 
@@ -46,4 +53,4 @@ export const useLogoutMutation = userApiSlice.endpoints.logout.useMutation;
 export const useRegisterMutation = userApiSlice.endpoints.register.useMutation;
 export const useGetUserProfileQuery = userApiSlice.endpoints.getUserProfile.useQuery;
 export const useUpdateUserMutation = userApiSlice.endpoints.updateUser.useMutation;
-
+export const useVerifyEmailMutation = userApiSlice.endpoints.verifyEmail.useMutation;

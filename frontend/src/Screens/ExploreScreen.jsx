@@ -1,74 +1,113 @@
-import  { useEffect, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
-import CardContainer from '../Components/CardContainer.jsx';
+import { Col, Row } from "react-bootstrap";
+import { useState } from "react";
+import CardContainer from "../Components/CardContainer.jsx";
+import ImageModal from "../Components/ImageModal.jsx";
+import { useNavigate } from "react-router-dom";
 
 function ExploreScreen() {
-    const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [modalImageSrc, setModalImageSrc] = useState(null);
 
-    useEffect(() => {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting && !imagesLoaded) {
-                    setImagesLoaded(true);
-                }
-            });
-        });
+  const navigate = useNavigate();
 
-        observer.observe(document.querySelector('.container-fluid'));
+  function handleJoin() {
+    navigate("/register");
+  }
 
-        return () => {
-            observer.disconnect();
-        };
-    }, [imagesLoaded]);
+  const openModal = (imageSrc) => {
+    setModalImageSrc(imageSrc);
+  };
 
-    return (
-        <div className="container-fluid explore-container" style={{ overflow: "hidden", width: "100%" }}>
-            <Row className="explore-intro" style={{ textAlign: "center" }}>
-                <Col>
-                    <h2>Get to know us</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                </Col>
-            </Row>
+  const closeModal = () => {
+    setModalImageSrc(null);
+  };
 
-            {/* Card section */}
-            <Row className="py-3" style={{ backgroundColor: "rgb(255,248,239)" }}>
-                <Col>
-                    <CardContainer className="generic-card" />
-                </Col>
-                <Col>
-                    <CardContainer className="generic-card" />
-                </Col>
-                <Col>
-                    <CardContainer className="generic-card" />
-                </Col>
-            </Row>
+  const hobbies = [
+    {
+      title: "Photography",
+      descriptions: [
+        "Pixel perfection meets creative passion.",
+        "Brush strokes in a digital dimension.",
+        "Where technology meets artistry.",
+        "Crafting visual wonders, byte by byte."
+      ]
+    },
+    {
+      title: "Digital Art",
+      descriptions: [
+        "Where creativity meets technology.",
+        "Art in the age of digital mastery.",
+        "From digital dreams to vibrant visuals.",
+        "Pushing boundaries, one pixel at a time."
+      ]
+    },
+    {
+      title: "Cooking",
+      descriptions: [
+        "Where there’s smoke, there’s dinner.",
+        "A symphony of flavors and techniques.",
+        "Creating culinary masterpieces one dish at a time.",
+        "The kitchen is where magic happens."
+      ]
+    },
+    {
+      title: "Painting",
+      descriptions: [
+        "Every artist dips his brush in his own soul.",
+        "Painting is silent poetry.",
+        "Creating visions that speak louder than words.",
+        "Colors, shapes, and emotions in harmony."
+      ]
+    },
+    {
+      title: "Gardening",
+      descriptions: [
+        "To plant a garden is to believe in tomorrow.",
+        "Nature's canvas, painted by diligent hands.",
+        "Growth, patience, and beauty in every petal.",
+        "A sanctuary of green in a concrete world."
+      ]
+    }
+  ];
 
-            <Row style={{ backgroundColor: "rgb(255,248,239)" }}>
-                <Col>
-                    <CardContainer className="generic-card" />
-                </Col>
-                <Col>
-                    <CardContainer className="generic-card" />
-                </Col>
-            </Row>
+  return (
+    <div className="explore-container">
+      {hobbies.map((hobby, index) => (
+        <Row key={index} className="hobby-row">
+          <h4>{hobby.title}</h4>
+            {hobby.descriptions.map((description, idx) => (
+              <Col key={idx}>
+                <CardContainer
+                  title={hobby.title}
+                  description={description}
+                  cardIndex={idx}
+                  openModal={openModal}
+                />
+              </Col>
+            ))}
+        </Row>
+      ))}
 
-            {/* Subscribe section */}
-            <Row style={{ textAlign: "center", backgroundColor: "rgb(190,228,231)", padding: "20px 0" }}>
-                <div style={{
-                    backgroundColor: "rgb(255,248,239)",
-                    width: "80%",
-                    margin: "auto",
-                    padding: "4% 0"
-                }}>
-                    <h5>Join our mail list</h5>
-                    <div style={{ width: "80%", margin: "auto" }}>
-                        <input className="explore-subscribe-input" type="email" placeholder="Your Email" />
-                        <button className="explore-subscribe-button" value="submit">Subscribe</button>
-                    </div>
-                </div>
-            </Row>
+      <ImageModal
+        isOpen={!!modalImageSrc}
+        imageSrc={modalImageSrc}
+        onClose={closeModal}
+      />
+      <Row className="join-section">
+        <div className="join-content">
+          <h5>Join Our Community!</h5>
+          <p>
+            Discover more hobbies, share your experiences, and connect with
+            like-minded people.
+          </p>
+          <div className="button-container">
+            <button className="join-button" onClick={handleJoin}>
+              Join Now
+            </button>{" "}
+          </div>
         </div>
-    );
+      </Row>
+    </div>
+  );
 }
 
 export default ExploreScreen;
