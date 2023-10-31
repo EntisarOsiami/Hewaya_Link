@@ -148,6 +148,8 @@ const registerUser = asyncHandler(async (req, res, next) => {
   }
 });
 
+
+// @desc   verify email
 const verifyEmail = asyncHandler(async (req, res, next) => {
   try {
     const { token } = req.body;
@@ -282,31 +284,38 @@ const updateUserProfile = asyncHandler(async (req, res, next) => {
 });
 
 // @desc    Reset user password
-// @route   POST /api/user/reset-password
+// @route   POST /api/users/reset-password
 // @access  Public
 const resetPassword = asyncHandler(async (req, res, next) => {
   try {
     const { email } = req.body;
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ "email.address": email });
 
     if (!user) {
       return sendResponse(res, null, "User not found", false);
     }
 
-    // Generate a unique token and send it to the user's email
-    const token = generateToken(res, user._id);
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
+    const passwordResetToken = crypto.randomBytes(20).toString("hex");
+    user.password.resetToken = passwordResetToken;
+    user.password.resetTokenExpires = Date.now() + 3600000; // 1 hour
+    await user.save();
+
+
+    const transporter = nodemailer.createTransport(smtpTransport({
+      host: 'smtp.elasticemail.com',
+      port: 2525,
       auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD,
+        user: process.env.ELASTIC_EMAIL_USERNAME,
+        pass: process.env.ELASTIC_EMAIL_API_KEY,
       },
-    });
+    }));
+    const resetPasswordURL = `${process.env.CLIENT_URL}/reset-password/${passwordResetToken}`;
+
     const mailOptions = {
-      from: process.env.EMAIL_USERNAME,
+      from: process.env.ELASTIC_EMAIL_USERNAME,
       to: email,
       subject: "Password Reset Request",
-      text: `Click on the following link to reset your password: ${process.env.CLIENT_URL}/reset-password/${token}`,
+      text: `Click on the following link to reset your password: ${resetPasswordURL}`,
     };
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
@@ -317,10 +326,44 @@ const resetPassword = asyncHandler(async (req, res, next) => {
         sendResponse(res, null, "Password reset email sent successfully");
       }
     });
+    
   } catch (error) {
     next(error);
   }
 });
+
+// @desc    Confirm password reset and set new password
+// @route   POST /api/users/confirm-reset
+// @access  Public
+const confirmPasswordReset = asyncHandler(async (req, res, next) => {
+  try {
+    const { passwordResetToken, newPassword } = req.body;
+    const user = await User.findOne({
+      "password.resetToken": passwordResetToken,
+      "password.resetTokenExpires": { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return sendResponse(res, null, "Invalid or expired token", false);
+    }
+    console.log(newPassword)
+    console.log('New password:', user.password.value);
+
+    user.password.value = newPassword;
+    console.log('New password:', user.password.value);
+    
+    user.password.resetToken = undefined;
+    user.password.resetTokenExpires = undefined;
+
+    await user.save();
+
+    sendResponse(res, null, "Password updated successfully");
+
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 export {
   loginUser,
@@ -330,4 +373,5 @@ export {
   updateUserProfile,
   resetPassword,
   verifyEmail,
+  confirmPasswordReset,
 };

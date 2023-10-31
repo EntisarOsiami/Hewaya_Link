@@ -10,6 +10,7 @@ import { clearUserProfile } from "../slices/profileSlice";
 
 const Header = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isEmailVerified = useSelector((state) => state.auth.isEmailVerified);  
   const { user } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -60,7 +61,7 @@ const Header = () => {
                           src={user.profilePicture}
                           alt="User Avatar"
                         />
-                        {!user.isEmailVerified && (
+                        {!isEmailVerified && (
                           <div className="notification-badge"></div>
                         )}
                       </div>

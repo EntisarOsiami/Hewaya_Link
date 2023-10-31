@@ -15,10 +15,14 @@ import { useUpdateUserMutation } from "../slices/userApiSlice.js";
 import Image from "react-bootstrap/Image";
 import { updateUserProfile } from "../slices/profileSlice.js";
 import defaultAvatars from "../Data/avatars";
+import EmailVerificationBanner from "../Components/EmailVerificationBanner.jsx";
+import { requestPasswordReset } from "../Components/requestPasswordReset.jsx";
 
 const UserProfileScreen = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState({ firstName: "", lastName: "" });
+  const { isEmailVerified } = useSelector((state) => state.auth);
+
   const [profilePicture, setProfilePicture] = useState(
     "/Avatars/defaultPlaceholder.jpg"
   );
@@ -37,11 +41,10 @@ const UserProfileScreen = () => {
       setName(user.name);
       setUsername(user.username);
       setEmail(user.email.address);
-      setProfilePicture(user.profilePicture);  
-      setSelectedAvatar(user.profilePicture); 
+      setProfilePicture(user.profilePicture);
+      setSelectedAvatar(user.profilePicture);
     }
   }, [user]);
-
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -50,7 +53,7 @@ const UserProfileScreen = () => {
         username,
         email,
         name: { firstName: name.firstName, lastName: name.lastName },
-       profilePicture: { url: selectedAvatar }
+        profilePicture: { url: selectedAvatar },
       }).unwrap();
       console.log("API response:", res);
 
@@ -64,6 +67,7 @@ const UserProfileScreen = () => {
 
   return (
     <Container>
+      {!isEmailVerified && <EmailVerificationBanner />}
       <h1 className="mt-5">Profile</h1>
       <Row>
         <Col lg={4} md={5} className="mb-4">
@@ -81,6 +85,19 @@ const UserProfileScreen = () => {
                 <strong>Username:</strong> {username}
                 <br />
                 <strong>Email:</strong> {email}
+                <br />
+                <Button
+                  variant="link"
+                  size="sm"
+                  onClick={() => {
+                    if (window.confirm("Are you sure you want to reset your password?")) {
+                        requestPasswordReset(email);
+                    }
+                }}
+                
+                >
+                  Reset Password
+                </Button>
               </Card.Text>
               {showUpdateFields ? null : (
                 <Button

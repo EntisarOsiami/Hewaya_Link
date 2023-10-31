@@ -14,21 +14,25 @@ const CombinedVerificationPage = () => {
     const verifyEmailToken = async () => {
       try {
         const response = await axios.post("/api/users/verify-email", { token });
-        if (response.data.success) {
-          dispatch(loginRedux({ data: response.data }));
+        
+       
+        console.log("Full response:", response.data);
+
+        if (response.data && response.data.success) {
+          dispatch(loginRedux({ data: response.data.data }));  
           setVerificationState("success");
           setTimeout(() => navigate("/login"), 3000);
         } else {
           setVerificationState("error");
         }
       } catch (error) {
+        console.error("Error during verification:", error);
         setVerificationState("error");
       }
     };
 
     verifyEmailToken();
   }, [token, navigate, dispatch]);
-
   const renderContent = () => {
     switch (verificationState) {
       case "pending":
