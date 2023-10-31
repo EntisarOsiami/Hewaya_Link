@@ -36,7 +36,7 @@ const RegisterScreen = () => {
     setSelectedAvatar(avatarUrl);
     setOpen(false);  
   };
-console.log(selectedAvatar);
+
 
   const submitHandler = async (e) => {
     e.preventDefault();

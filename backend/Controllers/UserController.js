@@ -19,23 +19,22 @@ function sendResponse(res, data, message, success = true) {
     message,
   });
 }
-
+//********************************************************************************************************************************* */
 const loginUser = asyncHandler(async (req, res, next) => {
-  const { email, password } = req.body;
+  console.log("Login data received:", req.body);
 
-  const user = await User.findOne({ email });
+  const { emailOrUsername, password } = req.body;
+
+  const user = await User.findOne({ $or: [{ email: emailOrUsername }, { username: emailOrUsername }] });
+
+  console.log("User found:", user);
 
   if (user && (await user.matchPassword(password))) {
     const token = generateToken(res, user._id);
 
     sendResponse(res, {
       token,
-      user: {
-        _id: user._id,
-        name: user.name,
-        username: user.username,
-        email: user.email.address,
-      },
+      user:user,
     }, "Login successful");
   } else {
     sendResponse(res, null, "Invalid email or password", false);
@@ -74,13 +73,13 @@ const registerUser = asyncHandler(async (req, res, next) => {
     const userExists = await User.findOne({
       $or: [{ "email.address": req.body.email.address }, { username: username }],
     });
-    
+
 
     if (userExists) {
       return sendResponse(res, null, "User with the same email or username already exists", false);
     }
     const user = await User.create({
-      name: {     
+      name: {
         firstName,
         lastName,
       },
@@ -98,55 +97,48 @@ const registerUser = asyncHandler(async (req, res, next) => {
     if (user) {
       const token = generateToken(res, user._id);
 
-    const emailVerificationToken = crypto.randomBytes(20).toString("hex");
-    user.email.verificationToken = emailVerificationToken;
-    user.email.verificationTokenExpiresAt = Date.now() + 3600000; // 1 hour
-    await user.save();
+      const emailVerificationToken = crypto.randomBytes(20).toString("hex");
+      user.email.verificationToken = emailVerificationToken;
+      user.email.verificationTokenExpiresAt = Date.now() + 3600000; // 1 hour
+      await user.save();
 
-   
-    const transporter = nodemailer.createTransport(smtpTransport({
-      host: 'smtp.elasticemail.com',
-      port: 2525,
-      auth: {
-        user: process.env.ELASTIC_EMAIL_USERNAME,
-        pass: process.env.ELASTIC_EMAIL_API_KEY,
-      },
-    }));
-   
-    const verificationURL = `${process.env.CLIENT_URL}/verify/${emailVerificationToken}`;
 
-    const mailOptions = {
-      from: process.env.ELASTIC_EMAIL_USERNAME,
-      to: user.email.address,
-      subject: "Verify your email",
-      text: `Click on the following link to verify your email: ${verificationURL}`,
-      html: `<p>Welcome to our platform!</p>
+      const transporter = nodemailer.createTransport(smtpTransport({
+        host: 'smtp.elasticemail.com',
+        port: 2525,
+        auth: {
+          user: process.env.ELASTIC_EMAIL_USERNAME,
+          pass: process.env.ELASTIC_EMAIL_API_KEY,
+        },
+      }));
+
+      const verificationURL = `${process.env.CLIENT_URL}/verify/${emailVerificationToken}`;
+
+      const mailOptions = {
+        from: process.env.ELASTIC_EMAIL_USERNAME,
+        to: user.email.address,
+        subject: "Verify your email",
+        text: `Click on the following link to verify your email: ${verificationURL}`,
+        html: `<p>Welcome to our platform!</p>
              <p>Please <a href="${verificationURL}">click here</a> to verify your email and get started.</p>
              <p>If the link doesn't work, you can copy and paste the following link into your browser:</p>
              <p>${verificationURL}</p>
              <p>Thank you for joining us!</p>`
-    };
-    
-    
-    
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error("Error sending verification email:", error);
-      } else {
-        console.log("Verification email sent:", info.response);
-      }
-    });
+      };
+
+
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error("Error sending verification email:", error);
+        } else {
+          console.log("Verification email sent:", info.response);
+        }
+      });
 
       sendResponse(res, {
         token,
-        user: {
-          _id: user._id,
-          name: user.name,
-          username: user.username,
-          email: user.email,
-          birthDate: user.birthDate,
-          role: user.role,
-        },
+        user: user,
       }, "User registration successful");
     } else {
       sendResponse(res, null, "Invalid user data", false);
@@ -215,10 +207,7 @@ const getUserProfile = asyncHandler(async (req, res, next) => {
 
     if (user) {
       sendResponse(res, {
-        _id: user._id,
-        name: user.name,
-        username: user.username,
-        email: user.email.address,
+        user: user,
       }, "User profile retrieved successfully");
     } else {
       sendResponse(res, null, "User not found", false);
@@ -233,7 +222,7 @@ const getUserProfile = asyncHandler(async (req, res, next) => {
 
 const updateUserProfile = asyncHandler(async (req, res, next) => {
   try {
-    const { firstName, lastName, username, email } = req.body;
+    const { firstName, lastName, username, email, profilePicture } = req.body;
     const user = await User.findById(req.user._id);
 
     if (!user) {
@@ -241,8 +230,8 @@ const updateUserProfile = asyncHandler(async (req, res, next) => {
       return;
     }
 
-    if (firstName) user.Name.firstName = firstName;
-    if (lastName) user.Name.lastName = lastName;
+    if (firstName) user.name.firstName = firstName;
+    if (lastName) user.name.lastName = lastName;
 
     let conditions = [];
 
@@ -269,6 +258,10 @@ const updateUserProfile = asyncHandler(async (req, res, next) => {
           return;
         }
       }
+      if (profilePicture && profilePicture.url) {
+        user.profilePicture.url = profilePicture.url;
+    }
+    
 
       if (username && user.username !== username) {
         user.username = username;
@@ -281,12 +274,7 @@ const updateUserProfile = asyncHandler(async (req, res, next) => {
     const updatedUser = await user.save();
 
     sendResponse(res, {
-      user: {
-        _id: updatedUser._id,
-        username: updatedUser.username,
-        name: updatedUser.Name,
-        email: updatedUser.email
-      }
+      user: updatedUser,
     }, "User profile updated successfully");
   } catch (error) {
     next(error);

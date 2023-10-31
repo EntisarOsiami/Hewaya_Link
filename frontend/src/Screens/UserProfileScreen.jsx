@@ -1,15 +1,31 @@
 import { useState, useEffect } from "react";
-import { Form, Button, Row, Col, Container, Card } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  Row,
+  Col,
+  Container,
+  Card,
+  Collapse,
+} from "react-bootstrap";
 import Loader from "../Components/Loader.jsx";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { useUpdateUserMutation } from "../slices/userApiSlice.js";
 import Image from "react-bootstrap/Image";
 import { updateUserProfile } from "../slices/profileSlice.js";
+import defaultAvatars from "../Data/avatars";
 
 const UserProfileScreen = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState({ firstName: "", lastName: "" });
+  const [profilePicture, setProfilePicture] = useState(
+    "/Avatars/defaultPlaceholder.jpg"
+  );
+  const [selectedAvatar, setSelectedAvatar] = useState(
+    "/Avatars/defaultPlaceholder.jpg"
+  );
+  const [open, setOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [showUpdateFields, setShowUpdateFields] = useState(false);
   const dispatch = useDispatch();
@@ -20,9 +36,12 @@ const UserProfileScreen = () => {
     if (user) {
       setName(user.name);
       setUsername(user.username);
-      setEmail(user.email);
+      setEmail(user.email.address);
+      setProfilePicture(user.profilePicture);  
+      setSelectedAvatar(user.profilePicture); 
     }
   }, [user]);
+
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -31,7 +50,9 @@ const UserProfileScreen = () => {
         username,
         email,
         name: { firstName: name.firstName, lastName: name.lastName },
+       profilePicture: { url: selectedAvatar }
       }).unwrap();
+      console.log("API response:", res);
 
       dispatch(updateUserProfile({ ...res }));
       toast.success("Profile updated successfully");
@@ -49,7 +70,7 @@ const UserProfileScreen = () => {
           <Card>
             <Card.Body>
               <Image
-                src="assets/60111.jpg"
+                src={profilePicture || "/Avatars/defaultPlaceholder.jpg"}
                 thumbnail
                 className="mx-auto d-block"
               />
@@ -125,13 +146,39 @@ const UserProfileScreen = () => {
                       onChange={(e) => setEmail(e.target.value)}
                     />
                   </Form.Group>
+
+                  <Form.Group controlId="avatar">
+                    <Form.Label>Choose an Avatar</Form.Label>
+                    <div
+                      className="avatar-selection-box"
+                      onClick={() => setOpen(!open)}
+                    >
+                      <img src={selectedAvatar} alt="Selected Avatar" />
+                    </div>
+                    <Collapse in={open}>
+                      <div className="avatars-container">
+                        {defaultAvatars.map((avatar) => (
+                          <img
+                            key={avatar.url}
+                            src={avatar.url}
+                            alt={avatar.name}
+                            className={`avatar-image ${
+                              selectedAvatar === avatar.url ? "active" : ""
+                            }`}
+                            onClick={() => setSelectedAvatar(avatar.url)}
+                          />
+                        ))}
+                      </div>
+                    </Collapse>
+                  </Form.Group>
+
                   <Button type="submit" variant="success" className="mt-4 me-4">
                     Update
                   </Button>
                   <Button
                     variant="secondary"
                     onClick={() => setShowUpdateFields(false)}
-                    className="mt-4 me-4" 
+                    className="mt-4 me-4"
                   >
                     Cancel
                   </Button>

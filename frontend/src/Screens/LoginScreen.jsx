@@ -32,6 +32,7 @@ const LoginScreen = () => {
         emailOrUsername: userInput,
         password,
       }).unwrap()
+      console.log("API response:", res);
       
       dispatch(loginRedux({...res }));
       console.log("Login function dispatched");
