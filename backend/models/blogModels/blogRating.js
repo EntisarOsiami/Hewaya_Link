@@ -8,7 +8,8 @@ const ratingSchema = new Schema({
     max: 5,
   },
   author: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: 'User',
     required: true,
   },
   createdAt: {

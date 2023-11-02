@@ -10,8 +10,6 @@ const blogPostSchema = new Schema({
   },
   createdAt: { type: Date, default: Date.now },
   tags: [String],
-  comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
-  ratings: [{ type: Schema.Types.ObjectId, ref: 'Rating' }],
 });
 
 const Blog = model('Blog', blogPostSchema);
