@@ -8,6 +8,7 @@ function sendResponse(res, data, message, success = true) {
     message,
   });
 }
+
 const createBlogSchema = Joi.object({
   title: Joi.string().required(),
   content: Joi.string().required(),
@@ -25,7 +26,7 @@ const createBlog = async (req, res) => {
     const { title, content, author, tags } = req.body;
     const parsedTags = tags.split(',').map((tag) => tag.trim());
     const blog = new Blog({ title, content, author, tags: parsedTags });
-    
+
     await blog.save();
 
     sendResponse(res, blog, "Blog created successfully.");
@@ -61,10 +62,12 @@ const getAllBlogs = async (req, res) => {
 const updateBlog = async (req, res) => {
   try {
     const { title, content, tags } = req.body;
-    
+  
     const parsedTags = tags ? tags.split(',').map(tag => tag.trim()) : undefined;
-
-    const updateObject = { title, content, tags: parsedTags }.filter(item => item !== undefined);
+    
+    const updateObject = Object.fromEntries(
+      Object.entries({ title, content, tags: parsedTags }).filter(([key, val]) => val !== undefined)
+    );
 
     const updatedBlog = await Blog.findByIdAndUpdate(
       req.params.id,
@@ -87,7 +90,7 @@ const updateBlog = async (req, res) => {
 const getBlogById = async (req, res) => {
   try {
     const blogId = req.params.id;
-    const blog = await Blog.findById(blogId);
+    const blog = await Blog.findById(blogId).populate('author', 'name email');
 
     if (!blog) {
       return sendResponse(res, null, "Blog not found.", false);
