@@ -75,6 +75,6 @@ imageGallerySchema.virtual('averageRating').get(function () {
 
 imageGallerySchema.index({ user: 1 });  
 
-const ImageGallery = model('ImageGallery', imageGallerySchema);
+const Gallery = model('Gallery', imageGallerySchema);
 
-export default ImageGallery;
+export default Gallery;

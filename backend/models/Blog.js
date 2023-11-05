@@ -1,18 +1,18 @@
 import { Schema, model } from 'mongoose';
 
 const blogPostSchema = new Schema({
-  title: String,
-  content: String,
+  title: { type: String, required: true }, 
+  content: { type: String, required: true }, 
   author: {
-    type: Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId, // reference to User model
     ref: 'User',
-    required: true,
-  },
+    required: true 
+  }, 
   createdAt: { type: Date, default: Date.now },
   tags: [String],
-  comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
-  ratings: [{ type: Schema.Types.ObjectId, ref: 'Rating' }],
 });
+
+
 
 const Blog = model('Blog', blogPostSchema);
 

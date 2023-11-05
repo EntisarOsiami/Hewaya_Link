@@ -6,7 +6,9 @@
         "hewaya",
         "JRMN",
         "popperjs",
+        "tinymce",
         "toastify",
-        "virtuals"
+        "virtuals",
+        "zxcvbn"
     ]
 }

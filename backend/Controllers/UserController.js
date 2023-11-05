@@ -1,25 +1,21 @@
 import asyncHandler from "express-async-handler";
-import User from "../models/userModels.js";
+import {User} from "../models/index.js";
 import generateToken from "../Utils/generateToken.js";
 import { validationResult } from "express-validator";
 import rateLimit from "express-rate-limit";
 import nodemailer from "nodemailer";
-import smtpTransport from "nodemailer-smtp-transport";
 import crypto from "crypto";
+import sendResponse from "../Utils/responseHandler.js";
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 10, // limit each IP to 10 requests per windowMs
 });
 
-function sendResponse(res, data, message, success = true) {
-  res.status(success ? 200 : 400).json({
-    success,
-    data,
-    message,
-  });
-}
 //********************************************************************************************************************************* */
+// @desc    Login user
+// @route   POST /api/user/login
+// @access  Public
 const loginUser = asyncHandler(async (req, res, next) => {
   console.log("Login data received:", req.body);
 
@@ -94,24 +90,27 @@ const registerUser = asyncHandler(async (req, res, next) => {
       profilePicture
     });
 
+    // Create token and send it in a cookie
+
     if (user) {
       const token = generateToken(res, user._id);
+
+    // create email verification token save it in the user model  
 
       const emailVerificationToken = crypto.randomBytes(20).toString("hex");
       user.email.verificationToken = emailVerificationToken;
       user.email.verificationTokenExpiresAt = Date.now() + 3600000; // 1 hour
       await user.save();
 
-
-      const transporter = nodemailer.createTransport(smtpTransport({
-        host: 'smtp.elasticemail.com',
-        port: 2525,
-        auth: {
-          user: process.env.ELASTIC_EMAIL_USERNAME,
-          pass: process.env.ELASTIC_EMAIL_API_KEY,
-        },
-      }));
-
+// send a verification email to the user email address
+const transporter = nodemailer.createTransport({
+  host: 'smtp.elasticemail.com',
+  port: 2525,
+  auth: {
+    user: process.env.ELASTIC_EMAIL_USERNAME,
+    pass: process.env.ELASTIC_EMAIL_API_KEY,
+  },
+});
       const verificationURL = `${process.env.CLIENT_URL}/verify/${emailVerificationToken}`;
 
       const mailOptions = {
@@ -136,6 +135,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
         }
       });
 
+      // send a response to the client
       sendResponse(res, {
         token,
         user: user,
@@ -150,6 +150,10 @@ const registerUser = asyncHandler(async (req, res, next) => {
 
 
 // @desc   verify email
+// @route   POST /api/user/verify-email
+// @access  Public
+
+
 const verifyEmail = asyncHandler(async (req, res, next) => {
   try {
     const { token } = req.body;
@@ -295,20 +299,21 @@ const resetPassword = asyncHandler(async (req, res, next) => {
       return sendResponse(res, null, "User not found", false);
     }
 
+    //create a reset password token and save it in the user model
     const passwordResetToken = crypto.randomBytes(20).toString("hex");
     user.password.resetToken = passwordResetToken;
     user.password.resetTokenExpires = Date.now() + 3600000; // 1 hour
     await user.save();
 
-
-    const transporter = nodemailer.createTransport(smtpTransport({
+    // send a password reset email to the user email address
+    const transporter = nodemailer.createTransport({
       host: 'smtp.elasticemail.com',
       port: 2525,
       auth: {
         user: process.env.ELASTIC_EMAIL_USERNAME,
         pass: process.env.ELASTIC_EMAIL_API_KEY,
       },
-    }));
+    });
     const resetPasswordURL = `${process.env.CLIENT_URL}/reset-password/${passwordResetToken}`;
 
     const mailOptions = {

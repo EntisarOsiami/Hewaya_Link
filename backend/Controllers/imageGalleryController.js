@@ -1,4 +1,4 @@
-import ImageGallery from '../models/imageGalleryModel/imageGallerySchema.js';
+import ImageGallery from '../models/Gallery.js';
 import cloudinary from '../config/cloudinaryConfig.js';
 
 function sendResponse(res, data, message, statusCode = 200) {
