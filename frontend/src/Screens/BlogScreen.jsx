@@ -1,41 +1,46 @@
-import { useState } from 'react';
-import { BsPlus } from 'react-icons/bs';
+// import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import BlogList from '../Components/BlogList';
+import BlogDisplay from "../Components/BlogDisplay.jsx";
+
+// import Categories from '../Components/Categories';
+// import LatestPosts from '../Components/LatestPosts';
+// import Popular from '../Components/Popular';
 import CreateBlog from '../Components/CreateBlog';
 
 const BlogScreen = () => {
-  const [showCreateBlog, setShowCreateBlog] = useState(false);
-  const [shouldRefetchBlogs, setShouldRefetchBlogs] = useState(false);
+    return (
+        <div className="app-container">
+            <div className="app-blog-hero">
+                <h1>Hewaya Blog</h1>
+                <p>A blog for hobbyists by hobbyists</p>
+            </div>
 
-  const handleCreateBlogToggle = () => {
-    setShowCreateBlog((prevState) => !prevState);
-    if (!showCreateBlog) {
-      setShouldRefetchBlogs(false); 
-    }
-  };
+            <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
+                <Container>
+                    <Navbar.Brand as={Link} to="/blog/">Hewaya Blog</Navbar.Brand>
+                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                    <Navbar.Collapse id="responsive-navbar-nav">
+                        <Nav className="me-auto">
+                            <Nav.Link as={Link} to="/blog/">Home</Nav.Link>
+                            <Nav.Link as={Link} to="/blog/create">Create New Blog</Nav.Link>
+                            {/* Add other navigation links as needed */}
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
 
-  return (
-    <div>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <div className="container">
-          <span className="navbar-brand">Blog</span>
-          <button
-            className="btn btn-outline-primary"
-            onClick={handleCreateBlogToggle}
-            style={{ marginLeft: 'auto' }}
-          >
-            <BsPlus size={24} />
-          </button>
+            <main className="container">
+                <Routes>
+                    <Route index element={<BlogList />} />
+                    <Route path="create" element={<CreateBlog />} />
+                    <Route path=":blogId" element={<BlogDisplay />}/>
+                </Routes>
+            </main>
         </div>
-      </nav>
-      <main>
-        <div className="container mt-3">
-          <BlogList shouldRefetch={shouldRefetchBlogs} onRefetch={() => setShouldRefetchBlogs(false)} />
-          {showCreateBlog && <CreateBlog onClose={handleCreateBlogToggle} />}
-        </div>
-      </main>
-    </div>
-  );
+    );
 };
 
 export default BlogScreen;
