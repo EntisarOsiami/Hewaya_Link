@@ -15,7 +15,8 @@ import CombinedVerificationPage from "./Screens/VerifyEmailPage.jsx";
 import ResetPassword from "./Screens/ResetPasswordScreen.jsx";
 import { createRoot } from "react-dom/client";
 import BlogScreen from "./Screens/BlogScreen.jsx";
-import BlogDisplay from "./Components/BlogDisplay.jsx";
+
+
 
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
@@ -28,8 +29,8 @@ createRoot(document.getElementById("root")).render(
             <Route path="/register" element={<RegisterScreen />} />
             <Route path="/explore" element={<ExploreScreen />} />
             <Route path="/about" element={<About />} />
-            <Route path="/blog" element={<BlogScreen />} />
-            <Route path="/blog/:blogId" element={<BlogDisplay />} />
+            <Route path="/blog/*" element={<BlogScreen />} />
+           
             <Route
               path="/verify/:token"
               element={<CombinedVerificationPage />}

@@ -1,69 +1,44 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+// import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { Navbar, Nav, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import BlogDisplay from '../Components/BlogDisplay.jsx';
-import CreateBlog from '../Components/CreateBlog.jsx';
+import BlogList from '../Components/BlogList';
+import BlogDisplay from "../Components/BlogDisplay.jsx";
+
+// import Categories from '../Components/Categories';
+// import LatestPosts from '../Components/LatestPosts';
+// import Popular from '../Components/Popular';
+import CreateBlog from '../Components/CreateBlog';
 
 const BlogScreen = () => {
-    const [blogs, setBlogs] = useState([]);
-    const [selectedBlogId, setSelectedBlogId] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        const fetchBlogs = async () => {
-            try {
-                const response = await axios.get('/api/blogs');
-                if (response.data.success && Array.isArray(response.data.data.blogs)) {
-                    setBlogs(response.data.data.blogs);
-                } else {
-                    setError("Invalid data structure from the server.");
-                }
-                
-                setLoading(false);
-            } catch (err) {
-                console.error(err);
-                setError("Failed to fetch the blogs.");
-                setLoading(false);
-            }
-        };
-        
-
-        fetchBlogs();
-    }, []);
-
-    const handleBlogSelection = (blogId) => {
-        setSelectedBlogId(blogId);
-    };
-
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>{error}</p>;
-
     return (
-        <div>
-            <h1>Welcome to Our Blog</h1>
+        <div className="app-container">
+            <div className="app-blog-hero">
+                <h1>Hewaya Blog</h1>
+                <p>A blog for hobbyists by hobbyists</p>
+            </div>
 
-            <button onClick={() => setSelectedBlogId('create')}>Create a New Blog Post</button> 
-            
-            {selectedBlogId && selectedBlogId !== 'create' && (
-                <BlogDisplay blogId={selectedBlogId} />
-            )}
+            <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
+                <Container>
+                    <Navbar.Brand as={Link} to="/blog/">Hewaya Blog</Navbar.Brand>
+                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                    <Navbar.Collapse id="responsive-navbar-nav">
+                        <Nav className="me-auto">
+                            <Nav.Link as={Link} to="/blog/">Home</Nav.Link>
+                            <Nav.Link as={Link} to="/blog/create">Create New Blog</Nav.Link>
+                            {/* Add other navigation links as needed */}
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
 
-            {selectedBlogId === 'create' && (
-                <CreateBlog />
-            )}
-
-            <ul>
-                {blogs.map(blog => (
-                    <li key={blog._id}>
-                        <Link to="#" onClick={() => handleBlogSelection(blog._id)}>
-                            <h2>{blog.title}</h2>
-                            <p>{blog.description}</p>
-                            <span>By: {blog.author.username}</span>
-                        </Link>
-                    </li>
-                ))}
-            </ul>
+            <main className="container">
+                <Routes>
+                    <Route index element={<BlogList />} />
+                    <Route path="create" element={<CreateBlog />} />
+                    <Route path=":blogId" element={<BlogDisplay />}/>
+                </Routes>
+            </main>
         </div>
     );
 };

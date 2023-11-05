@@ -10,9 +10,9 @@ const UniversalLayout = ({ children }) => {
     const backgroundColorClass = theme === 'light' ? 'light-background' : 'dark-background';
 
     return (
-        <div className={`d-flex flex-column min-vh-100 ${backgroundColorClass}`}>
+        <div className={`d-flex flex-column min-vh-100  ${backgroundColorClass}`}>
             <Header />
-            <Container className="flex-grow-1">{children}</Container>
+            <Container fluid  className="flex-grow-1 md-1 justify-content center gx-0 ">{children}</Container>
             <Footer />
         </div>
     );

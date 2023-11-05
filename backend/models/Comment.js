@@ -1,4 +1,5 @@
-import { Schema, model } from 'mongoose';
+import mongoose from 'mongoose';
+const { Schema, model } = mongoose;
 
 const commentSchema = new Schema({
   text: {
@@ -14,11 +15,19 @@ const commentSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  blog: {
+  item: { 
     type: Schema.Types.ObjectId,
-    ref: 'Blog',
-  }
+    required: true,
+    refPath: 'onModel',
+  },
+  onModel: { 
+    type: String,
+    required: true,
+    enum: ['Blog', 'Gallery', 'Portal', /* other model names */],
+  },
 });
+
+
 
 const Comment = model('Comment', commentSchema);
 
