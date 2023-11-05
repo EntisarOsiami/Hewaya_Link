@@ -1,0 +1,19 @@
+import { Schema, model } from 'mongoose';
+
+const blogPostSchema = new Schema({
+  title: { type: String, required: true }, 
+  content: { type: String, required: true }, 
+  author: {
+    type: Schema.Types.ObjectId, // reference to User model
+    ref: 'User',
+    required: true 
+  }, 
+  createdAt: { type: Date, default: Date.now },
+  tags: [String],
+});
+
+
+
+const Blog = model('Blog', blogPostSchema);
+
+export default Blog;

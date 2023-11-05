@@ -1,6 +1,6 @@
 import asyncHandler from 'express-async-handler';
-import Portal from '../models/portal.js';
-import ImageGallery from '../models/imageGalleryModel/imageGallerySchema.js';
+import Portal from '../models/Portal.js';
+import ImageGallery from '../models/Gallery.js';
 
 export const createPortal = asyncHandler(async (req, res) => {
     const { name, description, category } = req.body;

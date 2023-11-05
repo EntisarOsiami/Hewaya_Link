@@ -1,21 +1,21 @@
 import mongoose from 'mongoose';
-import Blog from './backend/models/blogModels/blog.js';
-import User from './backend/models/userModels.js';
-import Comment from './backend/models/blogModels/blogComment.js';
-import Rating from './backend/models/blogModels/blogRating.js';
+import {Blog,User,Comment,Rating} from './backend/models/index.js';
 import connectDB from './backend/config/db.js';
 import dotenv from 'dotenv';
+
 dotenv.config({ path: './backend/.env' });
 
 const seedData = async () => {
     await connectDB();
 
     try {
+        // Clear existing data
         await Blog.deleteMany({});
-await User.deleteMany({});
-await Comment.deleteMany({});
-await Rating.deleteMany({});
+        await User.deleteMany({});
+        await Comment.deleteMany({});
+        await Rating.deleteMany({});
         console.log('Database cleared.');
+
         // Seed users
         const dummyUsers = [
             {
@@ -40,48 +40,48 @@ await Rating.deleteMany({});
                 birthDate: new Date(1992, 7, 5),
             },
         ];
-
         const createdUsers = await User.insertMany(dummyUsers);
+        console.log('Users seeded.');
 
         // Seed blogs
-        const dummyBlogs = [];
-        createdUsers.forEach(user => {
-            for (let i = 1; i <= 3; i++) {
-                dummyBlogs.push({
-                    title: `Blog ${i} by ${user.name.firstName}`,
-                    content: `This is a sample blog content ${i} by ${user.username}.`,
-                    author: user._id,
-                    tags: ['Sample', 'Test'],
-                });
-            }
-        });
-
+        const dummyBlogs = createdUsers.map((user, index) => ({
+            title: `Blog Post ${index + 1}`,
+            content: `This is blog post content number ${index + 1}`,
+            author: user._id,
+            tags: [`Tag${index + 1}`, `Blog${index + 1}`],
+        }));
         const createdBlogs = await Blog.insertMany(dummyBlogs);
+        console.log('Blogs seeded.');
 
-        // Seed comments and ratings for blogs
-        for (let blog of createdBlogs) {
-            const dummyComments = createdUsers.map(user => ({
-                text: `Comment by ${user.username} on ${blog.title}`,
+        // Seed comments for blogs
+        const dummyComments = createdBlogs.flatMap(blog =>
+            createdUsers.map(user => ({
+                text: `This is a comment by ${user.username} on blog post ${blog.title}`,
                 author: user._id,
-                blog: blog._id,
-            }));
+                item: blog._id,
+                onModel: 'Blog',
+            }))
+        );
+        await Comment.insertMany(dummyComments);
+        console.log('Comments seeded.');
 
-            const dummyRatings = createdUsers.map(user => ({
+        // Seed ratings for blogs
+        const dummyRatings = createdBlogs.flatMap(blog =>
+            createdUsers.map(user => ({
                 value: Math.floor(Math.random() * 5) + 1,
                 author: user._id,
-                blog: blog._id,
-            }));
-
-            await Comment.insertMany(dummyComments);
-            await Rating.insertMany(dummyRatings);
-        }
+                item: blog._id,
+                onModel: 'Blog',
+            }))
+        );
+        await Rating.insertMany(dummyRatings);
+        console.log('Ratings seeded.');
 
         console.log('Data seeded successfully!');
-
     } catch (error) {
         console.error('Error seeding data:', error);
     } finally {
-        await mongoose.connection.close();
+        mongoose.connection.close();
         console.log('Database connection closed.');
     }
 };

@@ -1,21 +1,26 @@
+import { useSelector } from 'react-redux';
 import { Card, Container, Row, Col } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
 const Hero = () => {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
   return (
     <div>
       <div className="hero-section">
         <div className="text-center">
           <h1 className="mb-4">Hewaya Link</h1>
           <p className="mb-4">Your gateway to exploring the world of hobbies</p>
-          <div className="d-flex">
-            <LinkContainer to="/login">
-              <button className="btn-custom">Sign In</button>
-            </LinkContainer>
-            <LinkContainer to="/register">
-              <button className="btn-custom">Sign Up</button>
-            </LinkContainer>
-          </div>
+          {!isAuthenticated && (
+            <div className="d-flex">
+              <LinkContainer to="/login">
+                <button className="btn-custom">Sign In</button>
+              </LinkContainer>
+              <LinkContainer to="/register">
+                <button className="btn-custom">Sign Up</button>
+              </LinkContainer>
+            </div>
+          )}
         </div>
       </div>
       

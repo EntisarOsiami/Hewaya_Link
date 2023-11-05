@@ -1,52 +1,74 @@
-import { Blog, Comment } from '../models/blogModels/index.js';
+import { Comment } from '../models/index.js';
+import sendResponse from "../Utils/responseHandler.js";
+import { Blog, Gallery, Portal } from '../models/index.js';
 
-import Joi from 'joi';
 
+const validModels = {
+  Blog,
+  Gallery,
+  Portal,
+};
 
-const createCommentSchema = Joi.object({
-  text: Joi.string().required(),
-  author: Joi.string().required(),
-  blogId: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required()
-});
-
-function sendResponse(res, data, message, success = true) {
-  res.status(success ? 200 : 400).json({
-    success,
-    data,
-    message,
-  });
-}
-
+//@ desc Create a comment
+//@route POST /api/comments
+//@access Private
 const createComment = async (req, res) => {
   try {
-    const { error } = createCommentSchema.validate(req.body);
+    const { text, author, itemId, onModel } = req.body;
 
-    if (error) {
-      return sendResponse(res, null, error.details[0].message, false);
+    if (!validModels[onModel]) {
+      return sendResponse(res, null, "Invalid item type.", false);
     }
+    console.log(req.body);
 
-    const { text, author, blogId } = req.body;
-    const comment = new Comment({ text, author, blog: blogId });
+
+    console.log(`Looking for ${onModel} with ID: ${itemId}`);
+    const item = await validModels[onModel].findById(itemId);
+    console.log('Found item:', item);
+    if (!item) {
+      return sendResponse(res, null, "Item not found.", false);
+    }
+    console.log(`Looking for ${onModel} with ID: ${itemId}`);
+
+    // Create a new comment
+    const comment = new Comment({
+      text,
+      author,
+      item: itemId,
+      onModel
+    });
+
+    // Save the comment
     await comment.save();
 
-    const blog = await Blog.findById(blogId);
-    if (!blog) {
-      return sendResponse(res, null, "Blog not found.", false);
-    }
-    blog.comments.push(comment);
-    await blog.save();
+    await comment.populate('author', 'username');
 
     sendResponse(res, comment, "Comment created successfully.");
   } catch (error) {
     console.error(error);
-    sendResponse(res, null, "Server error.", false);
+    sendResponse(res, null, error.message || "Server error.", false);
   }
+  
 };
 
-const getCommentsByBlogId = async (req, res) => {
+//@ desc Get comments by item id
+//@route GET /api/comments/:itemId/:onModel
+//@access Public
+const getCommentsByItemId = async (req, res) => {
+  const { itemId, onModel } = req.params;
+
+  // Validate the model type
+  if (!validModels[onModel]) {
+    return sendResponse(res, null, "Invalid item type.", false);
+  }
+
+  // Retrieve the comments for the item
   try {
-    const blogId = req.params.blogId;
-    const comments = await Comment.find({ blog: blogId }).sort({ createdAt: -1 });
+    const comments = await Comment.find({
+      item: itemId,
+      onModel
+    }).populate('author', 'username');
+
     sendResponse(res, comments, "Comments retrieved successfully.");
   } catch (error) {
     console.error(error);
@@ -54,17 +76,18 @@ const getCommentsByBlogId = async (req, res) => {
   }
 };
 
+//@ desc Delete a comment
+//@route DELETE /api/comments/:commentId
+//@access Private
 const deleteComment = async (req, res) => {
   try {
-    const commentId = req.params.id;
-    const comment = await Comment.findByIdAndDelete(commentId);
+    const { commentId } = req.params;
 
-    const blog = await Blog.findById(comment.blog);
-    if (!blog) {
-      return sendResponse(res, null, "Blog not found.", false);
+    // Delete the comment
+    const comment = await Comment.findByIdAndDelete(commentId);
+    if (!comment) {
+      return sendResponse(res, null, "Comment not found.", false);
     }
-    blog.comments = blog.comments.filter((c) => c.toString() !== commentId);
-    await blog.save();
 
     sendResponse(res, null, "Comment deleted successfully.");
   } catch (error) {
@@ -75,6 +98,6 @@ const deleteComment = async (req, res) => {
 
 export {
   createComment,
-  getCommentsByBlogId,
+  getCommentsByItemId,
   deleteComment,
 };
