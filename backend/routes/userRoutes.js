@@ -7,7 +7,9 @@ import {
   updateUserProfile,
   verifyEmail,
   resetPassword,
-  confirmPasswordReset
+  confirmPasswordReset,
+  resendVerificationEmail,
+
 } from '../Controllers/UserController.js';
 import { authenticateUser } from '../middleware/AuthMiddleware.js';
 
@@ -21,5 +23,6 @@ router.put('/profile', authenticateUser, updateUserProfile);
 router.post('/verify-email', verifyEmail);
 router.post('/reset-password', resetPassword);
 router.post('/confirm-reset',confirmPasswordReset)
+router.post('/resend-verification',resendVerificationEmail)
 
 export default router;

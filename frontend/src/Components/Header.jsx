@@ -32,11 +32,11 @@ const Header = () => {
       <Navbar bg="" expand="lg" collapseOnSelect >
         <Container>
           <LinkContainer to="/">
-            <Navbar.Brand className="logo"> Hewaya Link</Navbar.Brand>
+            <Navbar.Brand className="logo">Hewaya Link</Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="menu ms-4">
+            <Nav className="menu mx-auto">
               <LinkContainer to="/">
                 <Nav.Link>Home</Nav.Link>
               </LinkContainer>
@@ -46,9 +46,13 @@ const Header = () => {
               <LinkContainer to="/blog">
                 <Nav.Link>Blog</Nav.Link>
               </LinkContainer>
+              <LinkContainer to="/gallery">
+                <Nav.Link>Gallery</Nav.Link>
+              </LinkContainer>
               <LinkContainer to="/about">
                 <Nav.Link>About</Nav.Link>
               </LinkContainer>
+             
             </Nav>
             <Nav className="ms-auto">
               {isAuthenticated ? (
@@ -91,7 +95,7 @@ const Header = () => {
                   </LinkContainer>
                 </>
               )}
-             <ThemeToggle className="theme-toggle" />
+              <ThemeToggle />
             </Nav>
           </Navbar.Collapse>
         </Container>

@@ -21,7 +21,7 @@ const ResetPassword = () => {
     try {
       const response = await axios.post("/api/users/confirm-reset", { passwordResetToken, newPassword });
       if (response.data.success) {
-        toast.success("Password successfully reset! You can now log in.");
+        toast.success("Password successfully reset!");
         navigate("/login");  
       } else {
         toast.error(response.data.message);
@@ -32,22 +32,26 @@ const ResetPassword = () => {
   };
 
   return (
-    <div>
-      <h2>Reset Password</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="resetPasswordContainer">
+      <h2 className="resetPasswordTitle">Reset Password</h2>
+      <form onSubmit={handleSubmit} className="resetPasswordForm">
         <input
           type="password"
           placeholder="New Password"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
+          className="resetPasswordInput"
         />
         <input
           type="password"
           placeholder="Confirm New Password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
+          className="resetPasswordInput"
         />
-        <button type="submit">Reset Password</button>
+        <button type="submit" className="resetPasswordButton">
+          Reset Password
+        </button>
       </form>
     </div>
   );

@@ -4,7 +4,6 @@ import { Navbar, Nav, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import BlogList from '../Components/BlogList';
 import BlogDisplay from "../Components/BlogDisplay.jsx";
-
 // import Categories from '../Components/Categories';
 // import LatestPosts from '../Components/LatestPosts';
 // import Popular from '../Components/Popular';
@@ -26,7 +25,6 @@ const BlogScreen = () => {
                         <Nav className="me-auto">
                             <Nav.Link as={Link} to="/blog/">Home</Nav.Link>
                             <Nav.Link as={Link} to="/blog/create">Create New Blog</Nav.Link>
-                            {/* Add other navigation links as needed */}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

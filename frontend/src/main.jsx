@@ -14,6 +14,7 @@ import ExploreScreen from './Screens/ExploreScreen.jsx';
 import About from './Screens/AboutScreen.jsx';
 import CombinedVerificationPage from './Screens/VerifyEmailPage.jsx';
 import ResetPassword from './Screens/ResetPasswordScreen.jsx';
+import GalleryScreen from './Screens/GalleryScreen.jsx';
 import BlogScreen from './Screens/BlogScreen.jsx';
 import { setInitialTheme } from './slices/themeSlice';
 
@@ -38,6 +39,7 @@ root.render(
             <Route path="about" element={<About />} />
             <Route path="blog/*" element={<BlogScreen />} />
             <Route path="verify/:token" element={<CombinedVerificationPage />} />
+            <Route path="gallery" element={<GalleryScreen />} />
             <Route path="reset-password/:passwordResetToken" element={<ResetPassword />} />
             <Route element={<PrivateRoute />}>
               <Route path="profile" element={<UserProfileScreen />} />
