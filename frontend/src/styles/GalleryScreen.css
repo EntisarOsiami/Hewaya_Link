@@ -1,0 +1,31 @@
+.GalleryScreen-container {
+    padding: 20px;
+    margin: 0; 
+    height: 100vh; 
+    background-color: var(--bg-color);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .GalleryScreen-header {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+    align-items: center;
+    justify-content: center;
+
+  }
+  
+  .GalleryScreen-subheader {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    color: var(--secondary-color);
+    text-align: center;
+  }
+  
+  @media (min-width: 768px) {
+    .GalleryScreen-container {
+      padding: 40px;
+    }
+  }
+  

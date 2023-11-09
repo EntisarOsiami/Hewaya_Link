@@ -2,27 +2,51 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #f4f4f4;
-}
-
-.verify-email-card {
-    width: 70%;
-    max-width: 600px;
+    min-height: 100vh;
+    background-color: var(--bg-color);
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
+  }
+  
+  .verify-email-card {
+    width: 100%;
+    max-width: 450px; 
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: var(--shadow-dark);
+    background-color: var(--primary-color-transparent);
     text-align: center;
-}
-
-.verify-email-card h2 {
-    color: #333;
-    margin-bottom: 20px;
-}
-
-.verify-email-card p {
-    color: #666;
-    line-height: 1.5;
-    margin-bottom: 10px;
-}
+    margin: 20px;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .verify-email-card h2 {
+    color: var(--header-bg);
+    margin-bottom: 25px;
+  }
+  
+  .verify-email-card p {
+    color: var(--text-color);
+    line-height: 1.6;
+    margin-bottom: 15px;
+  }
+  
+  .verify-email-container p {
+    color: var(--accent-color);
+    font-size: 1rem;
+    margin: 10px 0;
+  }
+  
+  .verification-success {
+    color: var(--hover-color); 
+  }
+  
+  .verification-error {
+    color: #ff6b6b; 
+  }
+  
+  @media (max-width: 768px) {
+    .verify-email-card {
+      padding: 20px;
+    }
+  }
+  
