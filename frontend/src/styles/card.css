@@ -1,56 +1,39 @@
-/* Card Styles */
 .custom-card {
-  background-color: #fff;
-  overflow: hidden;
+  background-color: var(--bg-color);
   transition: transform 0.3s, box-shadow 0.3s;
-  margin-top: 4rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 10px; 
+  animation: fadeIn 3s ease-in;
 }
+
 
 .custom-card:hover {
   transform: scale(1.05);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
-}
-
-.custom-card img {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
+  box-shadow: var(--shadow-light);
 }
 
 .custom-card .card-body {
   padding: var(--container-padding);
-  background: #276168;
+  background: var(--secondary-color-transparent);
   margin: 0;
   font-family: sans-serif;
+  border: 10px solid transparent;
+  border-image: linear-gradient(to right, rgb(70, 112, 94), rgba(100, 52, 75, 0)) 1 stretch;
 }
 
 .custom-card .card-title {
-  color: #ffffff;
+  color: var(--text-color);
   font-size: 20px;
   margin: 0;
   padding: 0;
-  font-style: bold;
+  font-weight: var(--bold-text);
 }
 
 .custom-card .card-text {
   font-size: 16px;
-  color: #ffffff;
-  margin-top: 10px;
-}
-
-.custom-card .button {
-  background-color: var(--primary-color);
   color: var(--text-color);
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
   margin-top: 10px;
-  transition: background-color 0.3s;
-}
-
-.custom-card .button:hover {
-  background-color: var(--hover-color);
 }
 
 .row-equal-height {
@@ -64,5 +47,16 @@
 }
 
 .row-equal-height > .col-md-3 .custom-card {
-  flex: 1;  
+  flex: 1;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

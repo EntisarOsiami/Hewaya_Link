@@ -28,11 +28,11 @@ const Header = () => {
   };
 
   return (
-    <header>
-      <Navbar bg="dark" expand="lg" collapseOnSelect variant="dark">
+    <header className="header">
+      <Navbar bg="" expand="lg" collapseOnSelect >
         <Container>
           <LinkContainer to="/">
-            <Navbar.Brand className="logo"> <img src="./assets/logoNew.png" alt="Hewaya Logo" style={{ width: '100px', height: '100px' }} /></Navbar.Brand>
+            <Navbar.Brand className="logo"> Hewaya Link</Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
