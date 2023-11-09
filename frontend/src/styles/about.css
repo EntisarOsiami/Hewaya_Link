@@ -1,51 +1,42 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap'); 
-
-
-body {
-  font-family: 'Open Sans', sans-serif;  
-}
-
-.about {
-  padding: var(--container-padding);
-  border-radius: 10px; 
-  box-shadow: 0px 0px 15px rgba(0,0,0,0.1);
-  background-color: rgba(255, 255, 255, 0.8);  
-}
-
-.about h1, .about h2, .about p, .about h4 {
-  color: var(--text-color);
-}
-
-.about img {
-  box-shadow: var(--shadow-light);
-}
-
 .about-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding: 20px; 
-
-
-  
+  padding: 20px;
+  color: var(--text-color); 
+  background-color: var(--bg-color); 
 }
 
-
-.website-description, 
-.community-guidelines, 
-.privacy-policy, 
+.website-description,
+.community-guidelines,
+.privacy-policy,
 .additional-section {
-  max-width: 800px; 
+  max-width: 800px;
   width: 100%;
-  text-align: left; 
-  margin-bottom: 20px; 
+  text-align: left;
+  margin-bottom: 20px;
+  background-color: var(--secondary-color);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: var(--shadow-dark);
+  border: 3px solid var(--primary-color);
 }
 
-.website-description p, 
-.community-guidelines ol, 
-.privacy-policy ol, 
+.website-description h2,
+.website-description p,
+.community-guidelines h2,
+.community-guidelines ol,
+.privacy-policy h2,
+.privacy-policy ol,
+.additional-section h2,
 .additional-section p {
-  text-align: left;
+  color: var(--text-color); 
 }
+
+
+.about img {
+  box-shadow: var(--shadow-light); 
+}
+

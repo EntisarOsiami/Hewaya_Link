@@ -18,7 +18,7 @@ const BlogScreen = () => {
                 <p>A blog for hobbyists by hobbyists</p>
             </div>
 
-            <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
+            <Navbar collapseOnSelect  className="blog-header" expand="lg">
                 <Container>
                     <Navbar.Brand as={Link} to="/blog/">Hewaya Blog</Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />

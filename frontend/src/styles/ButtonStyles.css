@@ -1,38 +1,40 @@
-/* Button Styles */
 .btn-custom {
-    background-color:#EC697F;
-    color: #fff;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: var(--shadow-light);
-    transition: all 0.3s ease;
-    margin-right: 20px;
+  background-color: var( --secondary-color);
+  color:var(--text-color);
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: var(--shadow-light);
+  transition: all 0.3s ease; 
+  margin-right: 20px;
+  display: inline-flex; 
+  align-items: center;
+  gap: 10px;
+  text-align: center; 
+  justify-content: center; 
+  font-weight: var(--bold-text);
 
-    display: flex;
-    align-items: center;
-    gap: 10px; 
 }
 
 .btn-custom:hover {
-    background-color: var(--hover-color);
+  background-color: var(--hover-color);
+  box-shadow: var(--shadow-dark);
+  transform: scale(1.05); 
 }
 
 .btn-custom:active {
-    transform: scale(0.97); 
+  transform: scale(0.95); 
 }
 
 .btn-custom:disabled {
-    background-color: #aaa;
-    cursor: not-allowed;
+  background-color: #aaa;
+  cursor: not-allowed;
 }
-
 
 .btn-custom svg {
-    width: 20px;
-    height: 20px;
-    fill: var(--text-color);
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
 }
-
