@@ -9,8 +9,8 @@ import express  from "express";
 import userRoutes from './routes/userRoutes.js';
 import roleRoutes from './routes/roleRoutes.js';
 import blogRoutes from "./routes/blogRoutes.js";
-import CommentRoutes from './routes/commentRoutes.js';
-import RatingRoutes from './routes/ratingRoutes.js'
+import CommentRoutes from './routes/CommentRoutes.js';
+import RatingRoutes from './routes/RatingRoutes.js'
 import galleryRoutes from './routes/galleryRoutes.js'
 import { notFound,errorHandler } from "./middleware/errorMiddleware.js";
 import connectDB from "./config/db.js";
