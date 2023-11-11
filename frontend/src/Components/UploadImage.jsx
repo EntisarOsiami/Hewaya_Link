@@ -1,8 +1,11 @@
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import  { useState } from 'react';
+
 
 const UploadComponent = () => {
   const { userId, isAuthenticated } = useSelector((state) => state.auth);
+  const [uploading, setUploading] = useState(false);
 
   const handleImageUpload = async (file, imageName, description) => {
     if (!file) {
@@ -13,7 +16,7 @@ const UploadComponent = () => {
     formData.append('image', file);
     formData.append('imageName', imageName);
     formData.append('description', description);
-    formData.append('user', userId);
+    formData.append('userId', userId);
 
     try {
       const response = await axios.post('/api/gallery/upload', formData, {
@@ -34,8 +37,8 @@ const UploadComponent = () => {
     const imageName = event.target.imageName.value;
     const description = event.target.description.value;
 
-    handleImageUpload(file, imageName, description);
-  };
+    setUploading(true);
+    handleImageUpload(file, imageName, description).finally(() => setUploading(false));  };
 
   if (!isAuthenticated) {
     return <div className="UploadComponent-alert">Please log in to upload images.</div>;
@@ -59,6 +62,7 @@ const UploadComponent = () => {
         ></textarea>
         <button type="submit" className="UploadComponent-button">Upload Image</button>
       </form>
+      {uploading && <div>Uploading...</div>}
     </div>
   );
 };

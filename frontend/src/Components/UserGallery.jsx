@@ -1,22 +1,28 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const UserGallery = () => {
   const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchImages = async () => {
-      try {
-        const response = await axios.get('/api/gallery/images');
-        setImages(response.data.data.images);
-      } catch (error) {
-        console.error('Error fetching images', error);
-      }
+        setLoading(true);
+        try {
+            const response = await axios.get('/api/gallery/images');
+            setImages(response.data.data.images);
+            setError('');
+        } catch (error) {
+            console.error('Error fetching images', error);
+            setError('Failed to fetch images.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     fetchImages();
-  }, []);
-
+}, []);
   const handleDelete = async (id) => {
     try {
       await axios.delete(`/api/gallery/images/${id}`);
@@ -25,6 +31,9 @@ const UserGallery = () => {
       console.error('Error deleting image', error);
     }
   };
+
+  if (loading) return <div>Loading images...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="UserGallery-container">
