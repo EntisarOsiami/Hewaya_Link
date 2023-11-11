@@ -1,4 +1,4 @@
-import ImageGallery from '../models/Gallery.js';
+import Gallery from '../models/Gallery.js';
 import {cloudinary} from '../config/cloudinaryConfig.js';
 import sendResponse from '../Utils/responseHandler.js';
 import multer from 'multer';
@@ -57,7 +57,7 @@ export const uploadToCloudinary = async (req, res) => {
                         sendResponse(res, null, 'Error uploading image', 500);
                         return;
                     }
-                    const newImage = new ImageGallery({
+                    const newImage = new Gallery({
                         user: req.user._id,
                         imageName: sanitizedImageName,
                         imageUrl: result.secure_url,
@@ -95,12 +95,12 @@ export const getAllImages = async (req, res) => {
     const skip = (page - 1) * pageSize;
 
     try {
-        const images = await ImageGallery.find({ user: userId }) 
+        const images = await Gallery.find({ user: userId }) 
             .skip(skip)
             .limit(pageSize)
             .exec();
 
-        const total = await ImageGallery.countDocuments({ user: userId });
+        const total = await Gallery.countDocuments({ user: userId });
 
         sendResponse(res, {
             images,
@@ -119,19 +119,21 @@ export const getAllImages = async (req, res) => {
 
 export const deleteFromCloudinary = async (req, res) => {
     const id = req.params.id;
-    const image = await ImageGallery.findById(id);
-    
-    if (!image) {
-        return sendResponse(res, null, 'Image not found', 404);
-    }
 
     try {
-        await cloudinary.uploader.destroy(image.cloudinaryId); 
-        await ImageGallery.findByIdAndRemove(id);
-        
+        const image = await Gallery.findById(id);
+        if (!image) {
+            return sendResponse(res, null, 'Image not found', 404);
+        }
+
+        await cloudinary.uploader.destroy(image.cloudinaryId);
+
+        const deletedImage = await Gallery.findByIdAndDelete(id);
+
         sendResponse(res, null, 'Image deleted successfully');
     } catch (error) {
         console.error(error);
         sendResponse(res, null, 'Internal server error', 500);
     }
-}
+};
+
