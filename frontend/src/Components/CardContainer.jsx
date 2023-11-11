@@ -21,7 +21,7 @@ function CardContainer({ className = '', title, description, cardIndex, openModa
                     />
                 </div>
                 <div className="card-content">
-                   <p className="card-description">{description}</p>
+                   <p className=".card-content p ">{description}</p>
                 </div>
             </div>
       

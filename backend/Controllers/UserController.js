@@ -148,6 +148,66 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+// @desc    Resend email verification token
+// @route   POST /api/user/resend-verification
+// @access  Public
+
+const resendVerificationEmail = asyncHandler(async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ "email.address": email });
+    
+    if (!user) {
+      return sendResponse(res, null, "User not found", false);
+    }
+
+    if (user.email.isVerified) {
+      return sendResponse(res, null, "Email is already verified", false);
+    }
+
+    const emailVerificationToken = crypto.randomBytes(20).toString("hex");
+    user.email.verificationToken = emailVerificationToken;
+    user.email.verificationTokenExpiresAt = Date.now() + 3600000; // 1 hour
+    await user.save();
+
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.elasticemail.com',
+      port: 2525,
+      auth: {
+        user: process.env.ELASTIC_EMAIL_USERNAME,
+        pass: process.env.ELASTIC_EMAIL_API_KEY,
+      },
+    });
+    
+    const verificationURL = `${process.env.CLIENT_URL}/verify/${emailVerificationToken}`;
+    
+    const mailOptions = {
+      from: process.env.ELASTIC_EMAIL_USERNAME,
+      to: user.email.address,
+      subject: "Verify your email",
+      text: `Click on the following link to verify your email: ${verificationURL}`,
+      html: `<p>Please <a href="${verificationURL}">click here</a> to verify your email and get started.</p>
+             <p>If the link doesn't work, you can copy and paste the following link into your browser:</p>
+             <p>${verificationURL}</p>
+             <p>If you did not request this, please ignore this email.</p>`
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Error sending verification email:", error);
+        sendResponse(res, null, "Error sending verification email", false);
+      } else {
+        console.log("Verification email sent:", info.response);
+        sendResponse(res, null, "Verification email sent successfully", true);
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+
 
 // @desc   verify email
 // @route   POST /api/user/verify-email
@@ -379,4 +439,5 @@ export {
   resetPassword,
   verifyEmail,
   confirmPasswordReset,
+  resendVerificationEmail,
 };

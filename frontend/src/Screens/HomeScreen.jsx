@@ -3,9 +3,10 @@ import SlideImages from '../Components/CarouselMainPage.jsx';
 
 const HomeScreen = () => {
   return (
-    <div>
+    <div className='home-screen d-flex flex-column'>
+       <Hero />
       <SlideImages />
-      <Hero />
+     
     </div>
   );
 };
