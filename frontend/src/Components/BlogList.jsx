@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Card, Button } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 
 const BlogList = () => {
   const [blogs, setBlogs] = useState([]);
@@ -48,9 +48,9 @@ const BlogList = () => {
                 <Card.Text className="text-muted">
                   Posted by {blog.author.username} on {new Date(blog.createdAt).toLocaleDateString()}
                 </Card.Text>
-                <Button variant="primary" onClick={() => navigate(`/blog/${blog._id}`)}>
-                  Read More
-                </Button>
+                <button className="btn-custom" onClick={() => navigate(`/blog/${blog._id}`)}>
+  <span>Read More</span>
+</button>
               </Card.Body>
             </Card>
           </div>

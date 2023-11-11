@@ -144,19 +144,11 @@ const RegisterScreen = () => {
         <Form.Group controlId='date'>
           <Form.Label>Date of Birth</Form.Label>
           <Form.Control
-            type='date'
-            placeholder=''
-            value={birthDate}
-            onChange={(e) => setBirthDate(e.target.value)}
-            style={{
-              padding: '10px',
-              border: 'none',
-              borderRadius: '5px',
-              backgroundColor: '#f2f2f2',
-              fontSize: '16px',
-              color: '#333',
-            }}
-          ></Form.Control>
+  type='date'
+  className='form-control-date'
+  value={birthDate}
+  onChange={(e) => setBirthDate(e.target.value)}
+></Form.Control>
         </Form.Group>
         <Form.Group controlId='avatar'>
           <Form.Label>Choose an Avatar</Form.Label>

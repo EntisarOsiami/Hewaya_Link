@@ -100,7 +100,7 @@ function ExploreScreen() {
             like-minded people.
           </p>
           <div className="button-container">
-            <button className="join-button" onClick={handleJoin}>
+            <button className="btn-custom" onClick={handleJoin}>
               Join Now
             </button>{" "}
           </div>
