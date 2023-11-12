@@ -128,7 +128,7 @@ export const deleteFromCloudinary = async (req, res) => {
 
         await cloudinary.uploader.destroy(image.cloudinaryId);
 
-        const deletedImage = await Gallery.findByIdAndDelete(id);
+        await Gallery.findByIdAndDelete(id);
 
         sendResponse(res, null, 'Image deleted successfully');
     } catch (error) {
