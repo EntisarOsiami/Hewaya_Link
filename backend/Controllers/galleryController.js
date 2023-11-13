@@ -29,7 +29,7 @@ export const uploadToCloudinary = async (req, res) => {
         }
 
         try {
-            const { imageName, description } = req.body; // Removed userId from here since we're getting it from req.user
+            const { imageName, description } = req.body; 
 
             if (!req.file) {
                 return sendResponse(res, null, 'No image provided', 400);
@@ -42,7 +42,6 @@ export const uploadToCloudinary = async (req, res) => {
             const sanitizedImageName = sanitize(imageName);
             const sanitizedDescription = sanitize(description);
 
-            // Verify req.user and req.user._id are present
             if (!req.user || !req.user._id) {
                 return sendResponse(res, null, 'User not found', 400);
             }
