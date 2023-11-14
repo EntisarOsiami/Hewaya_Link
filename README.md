@@ -20,7 +20,7 @@ To set up Hewaya Link for development, follow these steps:
 
 Navigate to the project directory:
 
-    cd hewaya-link
+    cd hewaya_link
     
 
 Install the dependencies:
@@ -53,7 +53,7 @@ Interested in contributing to Hewaya Link? That's great! Follow these steps:
     
 - Push to the original branch: 
 
-      git push origin hewaya-link/[location].
+      git push origin hewaya_link/[location].
     
     
 - Create the pull request.
