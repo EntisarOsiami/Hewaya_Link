@@ -17,13 +17,11 @@ const limiter = rateLimit({
 // @route   POST /api/user/login
 // @access  Public
 const loginUser = asyncHandler(async (req, res, next) => {
-  console.log("Login data received:", req.body);
 
   const { emailOrUsername, password } = req.body;
 
   const user = await User.findOne({ $or: [{ email: emailOrUsername }, { username: emailOrUsername }] });
 
-  console.log("User found:", user);
 
   if (user && (await user.matchPassword(password))) {
     const token = generateToken(res, user._id);
@@ -43,7 +41,6 @@ const loginUser = asyncHandler(async (req, res, next) => {
 
 
 const registerUser = asyncHandler(async (req, res, next) => {
-  console.log("Received data:", req.body);
 
 
   try {
@@ -131,7 +128,6 @@ const transporter = nodemailer.createTransport({
         if (error) {
           console.error("Error sending verification email:", error);
         } else {
-          console.log("Verification email sent:", info.response);
         }
       });
 
@@ -198,7 +194,6 @@ const resendVerificationEmail = asyncHandler(async (req, res, next) => {
         console.error("Error sending verification email:", error);
         sendResponse(res, null, "Error sending verification email", false);
       } else {
-        console.log("Verification email sent:", info.response);
         sendResponse(res, null, "Verification email sent successfully", true);
       }
     });
@@ -387,7 +382,6 @@ const resetPassword = asyncHandler(async (req, res, next) => {
         console.error("Error sending email:", error);
         sendResponse(res, null, "An error occurred while sending the email", false);
       } else {
-        console.log("Email sent:", info.response);
         sendResponse(res, null, "Password reset email sent successfully");
       }
     });
@@ -411,11 +405,10 @@ const confirmPasswordReset = asyncHandler(async (req, res, next) => {
     if (!user) {
       return sendResponse(res, null, "Invalid or expired token", false);
     }
-    console.log(newPassword)
-    console.log('New password:', user.password.value);
+   
 
     user.password.value = newPassword;
-    console.log('New password:', user.password.value);
+   
     
     user.password.resetToken = undefined;
     user.password.resetTokenExpires = undefined;

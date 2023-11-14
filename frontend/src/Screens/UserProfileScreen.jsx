@@ -55,7 +55,6 @@ const UserProfileScreen = () => {
         name: { firstName: name.firstName, lastName: name.lastName },
         profilePicture: { url: selectedAvatar },
       }).unwrap();
-      console.log("API response:", res);
 
       dispatch(updateUserProfile({ ...res }));
       toast.success("Profile updated successfully");

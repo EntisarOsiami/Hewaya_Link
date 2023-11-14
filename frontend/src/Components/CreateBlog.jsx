@@ -20,20 +20,15 @@ function CreateBlog() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    //console log the values to make sure they are correct
-    console.log("Title:", title);
-    console.log("Content:", content);
-    console.log("Author:", author);
-    console.log("Tags:", tags);
+   
 
     try {
-      const response = await axios.post("/api/blogs", {
+      await axios.post("/api/blogs", {
         title,
         content,
         author,
         tags,
       });
-      console.log(response.data);
       toast.success("Blog created successfully!");
     } catch (error) {
       console.error("Error creating the blog:", error);

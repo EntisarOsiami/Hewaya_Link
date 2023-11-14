@@ -16,7 +16,6 @@ const CombinedVerificationPage = () => {
         const response = await axios.post("/api/users/verify-email", { token });
         
        
-        console.log("Full response:", response.data);
 
         if (response.data && response.data.success) {
           dispatch(loginRedux({ data: response.data.data }));  

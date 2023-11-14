@@ -61,7 +61,6 @@ const RegisterScreen = () => {
         profilePicture: { url: selectedAvatar }
       }).unwrap();
       
-      console.log(res);
 
       dispatch(loginRedux({ ...res }));
       dispatch(updateUserProfile({ ...res }));
