@@ -19,16 +19,12 @@ const createComment = async (req, res) => {
     if (!validModels[onModel]) {
       return sendResponse(res, null, "Invalid item type.", false);
     }
-    console.log(req.body);
 
 
-    console.log(`Looking for ${onModel} with ID: ${itemId}`);
     const item = await validModels[onModel].findById(itemId);
-    console.log('Found item:', item);
     if (!item) {
       return sendResponse(res, null, "Item not found.", false);
     }
-    console.log(`Looking for ${onModel} with ID: ${itemId}`);
 
     // Create a new comment
     const comment = new Comment({
