@@ -15,7 +15,7 @@ To set up Hewaya Link for development, follow these steps:
   Clone the repository:
 
 
-    git clone [URL to the Hewaya Link repository]
+    git clone https://github.com/EntisarOsiami/Hewaya_Link.git
     
 
 Navigate to the project directory:
