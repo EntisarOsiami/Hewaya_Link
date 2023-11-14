@@ -74,7 +74,6 @@ const getAverageRatingByItemId = async (req, res) => {
     return sendResponse(res, null, "Invalid item type :L.", false);
 
   }
-  console.log(`Casting itemId to ObjectId: ${itemId}`);
 
   // Aggregate the ratings collection to get the average rating and the number of ratings for the item
   try {
