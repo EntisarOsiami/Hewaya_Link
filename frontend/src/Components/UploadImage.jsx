@@ -19,13 +19,13 @@ const UploadComponent = () => {
     formData.append('userId', userId);
 
     try {
-      const response = await axios.post('/api/gallery/upload', formData, {
+       await axios.post('/api/gallery/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
 
-      console.log(response.data);
+   
     } catch (error) {
       console.error(error);
     }

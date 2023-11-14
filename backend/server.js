@@ -1,16 +1,11 @@
 import dotenv from 'dotenv';
 dotenv.config({ path: './backend/.env' });
-console.log({
-    cloudName: process.env.CLOUDINARY_CLOUD_NAME,
-    apiKey: process.env.CLOUDINARY_API_KEY,
-    apiSecret: process.env.CLOUDINARY_API_SECRET,
-});
 import express  from "express";
 import userRoutes from './routes/userRoutes.js';
 import roleRoutes from './routes/roleRoutes.js';
 import blogRoutes from "./routes/blogRoutes.js";
-import CommentRoutes from './routes/CommentRoutes.js';
-import RatingRoutes from './routes/RatingRoutes.js'
+import CommentRoutes from './routes/commentRoutes.js';
+import RatingRoutes from './routes/ratingRoutes.js'
 import galleryRoutes from './routes/galleryRoutes.js'
 import { notFound,errorHandler } from "./middleware/errorMiddleware.js";
 import connectDB from "./config/db.js";
