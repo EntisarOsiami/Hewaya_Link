@@ -38,7 +38,6 @@ export const uploadToCloudinary = async (req, res) => {
         console.error(error);
         sendResponse(res, null, 'Internal server error', 500);
     }
-};
 
 
 export const getAllImages = async (req, res) => {

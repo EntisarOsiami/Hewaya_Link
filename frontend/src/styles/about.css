@@ -1,0 +1,42 @@
+.about-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  color: var(--text-color); 
+  background-color: var(--bg-color); 
+}
+
+.website-description,
+.community-guidelines,
+.privacy-policy,
+.additional-section {
+  max-width: 800px;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 20px;
+  background-color: var(--secondary-color);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: var(--shadow-dark);
+  border: 3px solid var(--primary-color);
+}
+
+.website-description h2,
+.website-description p,
+.community-guidelines h2,
+.community-guidelines ol,
+.privacy-policy h2,
+.privacy-policy ol,
+.additional-section h2,
+.additional-section p {
+  color: var(--text-color); 
+}
+
+
+.about img {
+  box-shadow: var(--shadow-light); 
+}
+

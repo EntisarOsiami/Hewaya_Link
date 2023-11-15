@@ -1,0 +1,53 @@
+.BlogEditor-container {
+    background-color: var(--secondary-color-transparent);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+  }
+  
+  .BlogEditor-header {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+  }
+  
+  .BlogEditor-toolbar {
+    background-color: var(--footer-bg);
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .BlogEditor-editor {
+    background-color: var(--bg-color);
+    padding: 20px;
+    border: 1px solid var(--primary-color);
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+    color: var(--text-color);
+  }
+  
+  .BlogEditor-editor-content {
+    font-size: 16px;
+  }
+  
+  .BlogEditor-button {
+    background-color: var(--accent-color);
+    color: var(--text-color);
+    ;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .BlogEditor-button:hover {
+    background-color: var(--hover-color);
+    
+  }
+  

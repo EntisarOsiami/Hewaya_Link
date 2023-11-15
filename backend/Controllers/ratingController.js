@@ -1,54 +1,133 @@
-import Rating from '../models/blogModels/rating.js';
+import mongoose from 'mongoose';
+import { Rating } from '../models/index.js';
+import { Blog, Gallery, Portal } from '../models/index.js';
+import sendResponse from "../Utils/responseHandler.js";
 
+
+// ----------------------------------------//
+
+const validModels = {
+  Blog,
+  Gallery,
+  Portal,
+};
+//@ desc Create or update a rating
+//@route POST /api/ratings
+//@access Private
 const createRating = async (req, res) => {
   try {
-    const { value, author, blogId } = req.body;
-    const rating = new Rating({ value, author, blog: blogId });
-    await rating.save();
+    const { value, author, itemId, onModel } = req.body;
 
-    const blog = await Blog.findById(blogId);
-    if (!blog) {
-      return res.status(404).json({ error: 'Blog not found' });
+    if (!validModels[onModel]) {
+      return sendResponse(res, null, "Invalid item type.", false);
     }
-    blog.ratings.push(rating);
-    await blog.save();
 
-    res.status(201).json(rating);
+    const item = await validModels[onModel].findById(itemId);
+    if (!item) {
+      return sendResponse(res, null, "Item not found.", false);
+    }
+
+    // Check if the user has already rated the item
+    let rating = await Rating.findOne({
+      author,
+      item: itemId,
+      onModel
+    });
+
+    // If the user has already rated the item, update the existing rating
+    if (rating) {
+      rating.value = value;
+      await rating.save();
+      return sendResponse(res, rating, "Rating updated successfully.");
+    }
+
+    // If not, create a new rating
+    const newRating = new Rating({
+      value,
+      author,
+      item: itemId,
+      onModel
+    });
+
+    await newRating.save();
+    sendResponse(res, newRating, "Rating added successfully.");
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    // If there's a unique index error, handle it appropriately
+    if (error.code === 11000) {
+      return sendResponse(res, null, "You have already rated this item.", false);
+    }
+    console.error(error);
+    sendResponse(res, null, "Server error.", false);
   }
 };
 
-const getRatingsByBlogId = async (req, res) => {
+
+//@ desc Get average rating by item id
+//@route GET /api/ratings/:itemId/:onModel
+//@access Public
+
+const getAverageRatingByItemId = async (req, res) => {
+  const { itemId, onModel } = req.params;
+
+  // Check if the onModel item type is valid
+  if (!validModels[onModel]) {
+    return sendResponse(res, null, "Invalid item type :L.", false);
+
+  }
+
+  // Aggregate the ratings collection to get the average rating and the number of ratings for the item
   try {
-    const blogId = req.params.blogId;
-    const ratings = await find({ blog: blogId }).sort({ createdAt: -1 });
-    res.json(ratings);
+    const average = await Rating.aggregate([
+      {
+        $match: {
+          item: new mongoose.Types.ObjectId(itemId),
+          onModel
+        }
+      },
+      {
+        $group: {
+          _id: '$item',
+          averageRating: { $avg: '$value' },
+          ratingCount: { $sum: 1 }
+        }
+      }
+    ]);
+    // If there is no rating for the item, return 0 as the average rating and 0 as the number of ratings
+    const result = average.length > 0 ? average[0] : { averageRating: 0, ratingCount: 0 };
+
+    sendResponse(res, result, "Average rating retrieved successfully.");
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    console.error(error);
+    sendResponse(res, null, "Server error.", false);
   }
 };
+
+//@ desc Delete a rating
+//@route DELETE /api/ratings/:ratingId/:onModel
+//@access Private
 
 const deleteRating = async (req, res) => {
   try {
-    const ratingId = req.params.id;
-    const rating = await findByIdAndDelete(ratingId);
+    const { ratingId, onModel } = req.params;
 
-    const blog = await Blog.findById(rating.blog);
-    if (!blog) {
-      return res.status(404).json({ error: 'Blog not found' });
+    if (!validModels[onModel]) {
+      return sendResponse(res, null, "Invalid item type.", false);
     }
-    blog.ratings = blog.ratings.filter((r) => r.toString() !== ratingId);
-    await blog.save();
 
-    res.json({ message: 'Rating deleted' });
+    const rating = await Rating.findByIdAndDelete(ratingId);
+    if (!rating) {
+      return sendResponse(res, null, "Rating not found.", false);
+    }
+
+    sendResponse(res, null, "Rating deleted successfully.");
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    console.error(error);
+    sendResponse(res, null, "Server error.", false);
   }
 };
 
-export  {
+export {
   createRating,
-  getRatingsByBlogId,
+  getAverageRatingByItemId,
   deleteRating,
 };

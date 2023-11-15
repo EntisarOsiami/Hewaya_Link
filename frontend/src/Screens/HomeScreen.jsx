@@ -1,17 +1,14 @@
-import Hero from '../Components/Hero.jsx'
-import SlideImages from '../Components/SlideImages.jsx'
+import Hero from '../Components/Hero.jsx';
+import SlideImages from '../Components/CarouselMainPage.jsx';
+
 const HomeScreen = () => {
   return (
-  
-    <div>
-      <SlideImages/>
-      <Hero/>
-      
-      </div>
+    <div className='home-screen d-flex flex-column'>
+       <Hero />
+      <SlideImages />
+     
+    </div>
+  );
+};
 
-
-   
-  )
-}
-
-export default HomeScreen
+export default HomeScreen;

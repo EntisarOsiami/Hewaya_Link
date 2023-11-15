@@ -3,28 +3,24 @@ import axios from 'axios';
 import { useState } from 'react';
 import { Form } from 'react-bootstrap';
 
+
 const UploadComponent = () => {
   const { userId, isAuthenticated } = useSelector((state) => state.auth);
   const [uploading, setUploading] = useState(false);
   const [isPublic, setIsPublic] = useState(true);
 
   const handleImageUpload = async (file, imageName, description, isPublic) => {
-    if (!file) {
-      alert('Please select an image to upload.');
-      return;
-    }
 
-    const formData = new FormData();
-    formData.append('image', file);
-    formData.append('imageName', imageName);
-    formData.append('description', description);
-    formData.append('userId', userId);
+
+
+
     formData.append('isPublic', isPublic);
 
     try {
       await axios.post('/api/gallery/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
+
     } catch (error) {
       console.error(error);
     }
@@ -60,6 +56,7 @@ const UploadComponent = () => {
           />
         </div>
         <button type="submit">Upload Image</button>
+
       </form>
       {uploading && <div>Uploading...</div>}
     </div>

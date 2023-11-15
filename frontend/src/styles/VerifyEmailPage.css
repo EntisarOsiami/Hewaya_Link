@@ -1,0 +1,52 @@
+.verify-email-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--bg-color);
+    padding: 20px;
+  }
+  
+  .verify-email-card {
+    width: 100%;
+    max-width: 450px; 
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: var(--shadow-dark);
+    background-color: var(--primary-color-transparent);
+    text-align: center;
+    margin: 20px;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .verify-email-card h2 {
+    color: var(--header-bg);
+    margin-bottom: 25px;
+  }
+  
+  .verify-email-card p {
+    color: var(--text-color);
+    line-height: 1.6;
+    margin-bottom: 15px;
+  }
+  
+  .verify-email-container p {
+    color: var(--accent-color);
+    font-size: 1rem;
+    margin: 10px 0;
+  }
+  
+  .verification-success {
+    color: var(--hover-color); 
+  }
+  
+  .verification-error {
+    color: #ff6b6b; 
+  }
+  
+  @media (max-width: 768px) {
+    .verify-email-card {
+      padding: 20px;
+    }
+  }
+  
