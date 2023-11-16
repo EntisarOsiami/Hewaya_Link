@@ -1,5 +1,6 @@
 .UploadComponent-container {
-    max-width: 500px;
+    max-width: 400px;
+    flex-basis: 40%;
     margin: 20px auto;
     padding: 20px;
     background-color: var(--secondary-color-transparent);
