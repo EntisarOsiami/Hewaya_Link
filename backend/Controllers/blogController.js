@@ -110,7 +110,7 @@ const updateBlog = async (req, res) => {
     const parsedTags = tags ? tags.split(',').map(tag => tag.trim()) : undefined;
 
     const updateObject = Object.fromEntries(
-      Object.entries({ title, content, tags: parsedTags }).filter(([key, val]) => val !== undefined)
+      Object.entries({ title, content, tags: parsedTags }).filter(([, val]) => val !== undefined)
     );
 
     const updatedBlog = await Blog.findByIdAndUpdate(

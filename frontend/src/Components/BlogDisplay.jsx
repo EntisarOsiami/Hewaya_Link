@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import PropTypes from "prop-types";
 import CommentSystem from "./CommentSystem.jsx"; 
 import RatingSystem from "./RatingSystem.jsx";
 import { useParams, useNavigate } from 'react-router-dom';
@@ -73,8 +72,5 @@ const BlogDisplay = () => {
 );
 };
 
-BlogDisplay.propTypes = {
-  blogId: PropTypes.string.isRequired, 
-};
 
 export default BlogDisplay;

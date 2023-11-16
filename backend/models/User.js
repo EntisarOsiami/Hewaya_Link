@@ -27,6 +27,7 @@ const userSchema = new Schema({
       unique: true,
       validate: {
         validator: function (v) {
+          // eslint-disable-next-line no-useless-escape
           return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
         },
         message: props => `${props.value} is not a valid email address!`
@@ -68,7 +69,7 @@ const userSchema = new Schema({
 
 // Remove password and email verification token from user object when sending a response
 userSchema.set('toJSON', {
-  transform: function (doc, ret, opt) {
+  transform: function (doc, ret) {
     if (ret.email) {
       delete ret.email.verificationToken;
       delete ret.email.verificationTokenExpiresAt;
