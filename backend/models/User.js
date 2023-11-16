@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs';
 const passwordSchema = new passwordValidator();
 passwordSchema
   .is().min(8)
-  .is().max(50)
+  .is().max(100)
   .has().letters(1)
   .has().digits(1)
   .has().uppercase(1)
