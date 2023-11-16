@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -12,7 +12,7 @@ const RatingSystem = ({ itemId, onModel }) => {
 
   const userId = useSelector((state) => state.auth.userId);
 
-  const fetchAverageRating = async () => {
+  const fetchAverageRating = useCallback(async () => {
     setError(null);
     try {
       const response = await axios.get(
@@ -26,8 +26,11 @@ const RatingSystem = ({ itemId, onModel }) => {
       setError("Failed to fetch average rating.");
       console.error(err);
     }
-  };
+  }, [itemId, onModel]); 
 
+  useEffect(() => {
+    fetchAverageRating();
+  }, [fetchAverageRating]); 
   const ratingChanged = (newRating) => {
     setRatingValue(newRating);
     handleSubmit(newRating);
@@ -49,10 +52,9 @@ const RatingSystem = ({ itemId, onModel }) => {
     }
   };
 
-  // Fetch the average rating when the component mounts
   useEffect(() => {
     fetchAverageRating();
-  }, []);
+  }, [fetchAverageRating]);
 
   return (
     <div>
