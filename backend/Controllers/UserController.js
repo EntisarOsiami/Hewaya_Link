@@ -2,21 +2,21 @@ import asyncHandler from "express-async-handler";
 import {User} from "../models/index.js";
 import generateToken from "../Utils/generateToken.js";
 import { validationResult } from "express-validator";
-import rateLimit from "express-rate-limit";
+// import rateLimit from "express-rate-limit";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 import sendResponse from "../Utils/responseHandler.js";
 
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10, // limit each IP to 10 requests per windowMs
-});
+// const limiter = rateLimit({
+//   windowMs: 15 * 60 * 1000, // 15 minutes
+//   max: 10, // limit each IP to 10 requests per windowMs
+// });
 
 //********************************************************************************************************************************* */
 // @desc    Login user
 // @route   POST /api/user/login
 // @access  Public
-const loginUser = asyncHandler(async (req, res, next) => {
+const loginUser = asyncHandler(async (req, res) => {
 
   const { emailOrUsername, password } = req.body;
 
@@ -124,11 +124,10 @@ const transporter = nodemailer.createTransport({
 
 
 
-      transporter.sendMail(mailOptions, (error, info) => {
+      transporter.sendMail(mailOptions, (error) => {
         if (error) {
           console.error("Error sending verification email:", error);
-        } else {
-        }
+        } else { /* empty */ }
       });
 
       // send a response to the client
@@ -189,7 +188,7 @@ const resendVerificationEmail = asyncHandler(async (req, res, next) => {
              <p>If you did not request this, please ignore this email.</p>`
     };
 
-    transporter.sendMail(mailOptions, (error, info) => {
+    transporter.sendMail(mailOptions, (error) => {
       if (error) {
         console.error("Error sending verification email:", error);
         sendResponse(res, null, "Error sending verification email", false);
@@ -377,7 +376,7 @@ const resetPassword = asyncHandler(async (req, res, next) => {
       subject: "Password Reset Request",
       text: `Click on the following link to reset your password: ${resetPasswordURL}`,
     };
-    transporter.sendMail(mailOptions, (error, info) => {
+    transporter.sendMail(mailOptions, (error) => {
       if (error) {
         console.error("Error sending email:", error);
         sendResponse(res, null, "An error occurred while sending the email", false);
