@@ -1,13 +1,18 @@
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import  { useState } from 'react';
-
+import { useState } from 'react';
+import { Form } from 'react-bootstrap';
 
 const UploadComponent = () => {
   const { userId, isAuthenticated } = useSelector((state) => state.auth);
   const [uploading, setUploading] = useState(false);
+  const [visibility, setVisibility] = useState("private"); 
 
-  const handleImageUpload = async (file, imageName, description) => {
+  const handleVisibilityChange = (e) => {
+    setVisibility(e.target.checked ? "public" : "private");
+  };
+
+  const handleImageUpload = async (file, imageName, description, visibility) => {
     if (!file) {
       alert('Please select an image to upload.');
       return;
@@ -17,15 +22,14 @@ const UploadComponent = () => {
     formData.append('imageName', imageName);
     formData.append('description', description);
     formData.append('userId', userId);
+    formData.append('visibility', visibility); 
 
     try {
-       await axios.post('/api/gallery/upload', formData, {
+      await axios.post('/api/gallery/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-
-   
     } catch (error) {
       console.error(error);
     }
@@ -38,7 +42,8 @@ const UploadComponent = () => {
     const description = event.target.description.value;
 
     setUploading(true);
-    handleImageUpload(file, imageName, description).finally(() => setUploading(false));  };
+    handleImageUpload(file, imageName, description, visibility).finally(() => setUploading(false));
+  };
 
   if (!isAuthenticated) {
     return <div className="UploadComponent-alert">Please log in to upload images.</div>;
@@ -46,22 +51,38 @@ const UploadComponent = () => {
 
   return (
     <div className="UploadComponent-container">
-      <form onSubmit={handleSubmit} className="UploadComponent-form">
-        <input type="file" name="image" required className="UploadComponent-input" />
-        <input
-          type="text"
-          name="imageName"
-          placeholder="Enter image name"
-          required
-          className="UploadComponent-input"
-        />
-        <textarea
-          name="description"
-          placeholder="Enter image description"
-          className="UploadComponent-textarea"
-        ></textarea>
+      <Form onSubmit={handleSubmit} className="UploadComponent-form">
+        <Form.Group controlId="formFile" className="mb-3">
+          <Form.Label>Image</Form.Label>
+          <Form.Control type="file" name="image" required />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Image Name</Form.Label>
+          <Form.Control
+            type="text"
+            name="imageName"
+            placeholder="Enter image name"
+            required
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Description</Form.Label>
+          <Form.Control
+            as="textarea"
+            name="description"
+            placeholder="Enter image description"
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Check 
+            type="switch"
+            id="visibility-switch"
+            label="Make Public"
+            onChange={handleVisibilityChange}
+          />
+        </Form.Group>
         <button type="submit" className="UploadComponent-button">Upload Image</button>
-      </form>
+      </Form>
       {uploading && <div>Uploading...</div>}
     </div>
   );
