@@ -115,3 +115,24 @@ export const deleteFromCloudinary = async (req, res) => {
     sendResponse(res, null, "Internal server error", 500);
   }
 };
+
+
+export const toggleFavorite = async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user._id;
+
+  try {
+    const image = await Gallery.findOne({ _id: id, user: userId });
+    if (!image) {
+      return sendResponse(res, null, "Image not found", 404);
+    }
+
+    image.isFavorite = !image.isFavorite;
+
+    const updatedImage = await image.save();
+    sendResponse(res, updatedImage, "Favorite state updated successfully");
+  } catch (error) {
+    console.error(error);
+    sendResponse(res, null, "Internal server error", 500);
+  }
+};

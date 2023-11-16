@@ -47,17 +47,13 @@ const imageGallerySchema = new Schema(
     },
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
     ratings: [{ type: Schema.Types.ObjectId, ref: "Rating" }],
-    favorites: [{ type: Schema.Types.ObjectId, ref: "User" }],
-  },
+    isFavorite: {
+      type: Boolean,
+      default: false,
+    },  },
   {
     timestamps: true,
-    toJSON: {
-      virtuals: true,
-    },
-    toObject: {
-      virtuals: true,
-    },
-  }
+    }
 );
 
 imageGallerySchema.index({ user: 1 });
