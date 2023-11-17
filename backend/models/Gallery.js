@@ -45,8 +45,6 @@ const imageGallerySchema = new Schema(
       type: Boolean,
       default: false,
     },
-    comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
-    ratings: [{ type: Schema.Types.ObjectId, ref: "Rating" }],
     isFavorite: {
       type: Boolean,
       default: false,

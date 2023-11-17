@@ -1,6 +1,5 @@
 /* UserGallery.css */
 .UserGallery-container {
- width: 50%; 
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,9 +10,12 @@
   background-color: var(--secondary-color-transparent);
   border-radius: 5px;
   box-shadow:var(--shadow) ;
-  flex-basis: 60%; 
-  max-width: 800px;
+  flex-basis: 80%; 
+  max-width: auto;
   padding: 20px;
+  margin: 20px auto;
+  max-width: 1000px;
+
   
 }
 
@@ -28,6 +30,8 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  width: 100%;  
+  width: 100%;
+  flex-direction: column;
+
 
 }
