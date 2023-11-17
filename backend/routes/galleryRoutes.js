@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { uploadToCloudinary, getAllImages, deleteFromCloudinary } from '../Controllers/galleryController.js';
+import { uploadToCloudinary, getAllImages, deleteFromCloudinary, toggleFavorite } from '../Controllers/galleryController.js';
 import { authenticateUser } from '../middleware/AuthMiddleware.js';
 import upload from '../config/multerConfig.js';
 
@@ -7,6 +7,8 @@ const router = Router();
 
 router.post('/upload', authenticateUser, upload.single('image'), uploadToCloudinary);
 router.get('/images', authenticateUser, getAllImages);
-router.delete('/images/:id', deleteFromCloudinary);
+router.delete('/images/:id',authenticateUser, deleteFromCloudinary);
+router.patch('/images/:id/favorite', authenticateUser, toggleFavorite);
+
 
 export default router;

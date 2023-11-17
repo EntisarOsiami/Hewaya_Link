@@ -5,8 +5,7 @@
   justify-content: center;
   min-height: 100vh;
   padding: 20px;
-  color: var(--text-color); 
-  background-color: var(--bg-color); 
+ 
 }
 
 .website-description,

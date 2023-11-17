@@ -282,10 +282,12 @@ const getUserProfile = asyncHandler(async (req, res, next) => {
 
 const updateUserProfile = asyncHandler(async (req, res, next) => {
   try {
+    console.log("Updating user profile...");
     const { firstName, lastName, username, email, profilePicture } = req.body;
     const user = await User.findById(req.user._id);
 
     if (!user) {
+      console.log("User not found");
       sendResponse(res, null, "User not found", false);
       return;
     }
@@ -310,11 +312,13 @@ const updateUserProfile = asyncHandler(async (req, res, next) => {
 
       if (existingUser) {
         if (username && existingUser.username === username) {
+          console.log("Username already exists");
           sendResponse(res, null, "Username already exists", false);
           return;
         }
         if (email && existingUser.email === email) {
-          sendResponse(res, null, "User Email Already Exists", false);
+          console.log("User email already exists");
+          sendResponse(res, null, "User email already exists", false);
           return;
         }
       }
@@ -332,11 +336,12 @@ const updateUserProfile = asyncHandler(async (req, res, next) => {
     }
 
     const updatedUser = await user.save();
-
+    console.log("User profile updated successfully");
     sendResponse(res, {
       user: updatedUser,
     }, "User profile updated successfully");
   } catch (error) {
+    console.error("Error updating user profile:", error);
     next(error);
   }
 });
