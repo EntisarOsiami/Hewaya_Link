@@ -6,6 +6,7 @@ import roleRoutes from './routes/roleRoutes.js';
 import blogRoutes from "./routes/blogRoutes.js";
 import CommentRoutes from './routes/CommentRoutes.js';
 import RatingRoutes from './routes/RatingRoutes.js'
+import adminRoutes from './routes/adminRoutes.js'
 import galleryRoutes from './routes/galleryRoutes.js'
 import { notFound,errorHandler } from "./middleware/errorMiddleware.js";
 import connectDB from "./config/db.js";
@@ -31,6 +32,7 @@ app.use('/api/blogs', blogRoutes);
 app.use('/api/comments', CommentRoutes);
 app.use('/api/ratings', RatingRoutes);
 app.use('/api/gallery',galleryRoutes);  
+app.use('/api/admin', adminRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
