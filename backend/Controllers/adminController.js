@@ -1,5 +1,6 @@
 import {User,Portal} from "../models/index.js";
 import sendResponse from "../Utils/responseHandler.js";
+import {Tag, Category} from '../models/index.js';
 
 export const disableUser = async (req, res) => {
     try {
@@ -15,7 +16,6 @@ export const disableUser = async (req, res) => {
     }
 };
 
-// enable users
 export const enableUser = async (req, res) => {
     try {
         const user = await User.findById(req.params._id);
@@ -30,7 +30,6 @@ export const enableUser = async (req, res) => {
     }
 };
 
-// write a function to get all users
 export const getAllUsers = async (req, res) => {
     try {
         const users = await User.find();
@@ -40,7 +39,6 @@ export const getAllUsers = async (req, res) => {
     }
 };
 
-// write a function to get all portals
 
 export const getAllPortals = async (req, res) => {
     try {
@@ -54,7 +52,6 @@ export const getAllPortals = async (req, res) => {
     }
 };
 
-// write a function to edit portal
 export const editPortal = async (req, res) => {
     try {
         const portal = await Portal.findById(req.params._id);
@@ -71,7 +68,6 @@ export const editPortal = async (req, res) => {
     }
 };
 
-// write a function to delete portal
 export const deletePortal = async (req, res) => {
     try {
         const portal = await Portal.findById(req.params._id);
@@ -85,7 +81,6 @@ export const deletePortal = async (req, res) => {
     }
 };
 
-// write a function to create portal
 export const createPortal = async (req, res) => {
     try {
         const portal = await Portal.create(req.body);
@@ -96,7 +91,6 @@ export const createPortal = async (req, res) => {
 };
 
 
-// write a function to get all categories
 export const getAllCategories = async (req, res) => {
     try {
         const categories = await Category.find();
@@ -106,7 +100,6 @@ export const getAllCategories = async (req, res) => {
     }
 };
 
-// write a function to edit category
 export const editCategory = async (req, res) => {
     try {
         const category = await Category.findById(req.params._id);
@@ -121,7 +114,6 @@ export const editCategory = async (req, res) => {
     }
 };
 
-// write a function to delete category
 export const deleteCategory = async (req, res) => {
     try {
         const category = await Category.findById(req.params._id);
@@ -135,7 +127,6 @@ export const deleteCategory = async (req, res) => {
     }
 };
 
-// write a function to create category
 export const createCategory = async (req, res) => {
     try {
         const category = await Category.create(req.body);
@@ -145,7 +136,6 @@ export const createCategory = async (req, res) => {
     }
 };
 
-// write a function to get all tags
 export const getAllTags = async (req, res) => {
     try {
         const tags = await Tag.find();
@@ -155,7 +145,6 @@ export const getAllTags = async (req, res) => {
     }
 };
 
-// write a function to edit tag
 export const editTag = async (req, res) => {
     try {
         const tag = await Tag.findById(req.params._id);
@@ -170,7 +159,6 @@ export const editTag = async (req, res) => {
     }
 };
 
-// write a function to delete tag
 export const deleteTag = async (req, res) => {
     try {
         const tag = await Tag.findById(req.params._id);
@@ -184,7 +172,6 @@ export const deleteTag = async (req, res) => {
     }
 };
 
-// write a function to create tag
 export const createTag = async (req, res) => {
     try {
         const tag = await Tag.create(req.body);
@@ -194,7 +181,6 @@ export const createTag = async (req, res) => {
     }
 };
 
-// write a function to get one category
 export const getOneCategory = async (req, res) => {
     try {
         const category = await Category.findById(req.params._id);
@@ -206,7 +192,6 @@ export const getOneCategory = async (req, res) => {
         return sendResponse(res, 500, "Internal server error");
     }
 };
-// write a function to get one tag
 export const getOneTag = async (req, res) => {
     try {
         const tag = await Tag.findById(req.params._id);
@@ -218,7 +203,6 @@ export const getOneTag = async (req, res) => {
         return sendResponse(res, 500, "Internal server error");
     }
 };
-// write a function to get one portal
 
 export const getOnePortal = async (req, res) => {
     try {
@@ -231,7 +215,6 @@ export const getOnePortal = async (req, res) => {
         return sendResponse(res, 500, "Internal server error");
     }
 };
-// write a function to get one user
 export const getOneUser = async (req, res) => {
     try {
         const user = await User.findById(req.params._id);
