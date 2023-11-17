@@ -33,12 +33,11 @@ const userSchema = new Schema({
         message: props => `${props.value} is not a valid email address!`
       },
     },
-
     verified: { type: Boolean, default: false },
     verificationToken: String,
     verificationTokenExpiresAt: Date,
   },
-
+  disabled: { type: Boolean, default: false },
   password: {
     value: {
       type: String,
