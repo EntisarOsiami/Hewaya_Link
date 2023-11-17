@@ -5,7 +5,7 @@ import { sanitize } from "../Utils/sanitizer.js";
 
 export const uploadToCloudinary = async (req, res) => {
     try {
-        const { imageName, description } = req.body;
+        const { imageName, description, visibility } = req.body; 
 
         if (!req.file) {
             return sendResponse(res, null, "No image provided", 400);
@@ -17,6 +17,7 @@ export const uploadToCloudinary = async (req, res) => {
 
         const sanitizedImageName = sanitize(imageName);
         const sanitizedDescription = sanitize(description);
+        const sanitizedVisibility = visibility === "public" ? "public" : "private"; 
 
         if (!req.user || !req.user._id) {
             return sendResponse(res, null, "User not found", 400);
@@ -38,6 +39,7 @@ export const uploadToCloudinary = async (req, res) => {
                     imageUrl: result.secure_url,
                     cloudinaryId: result.public_id,
                     description: sanitizedDescription,
+                    visibility: sanitizedVisibility, 
                 });
 
                 newImage.save()
@@ -55,6 +57,7 @@ export const uploadToCloudinary = async (req, res) => {
         sendResponse(res, null, "Internal server error", 500);
     }
 };
+
 
 
 export const getAllImages = async (req, res) => {
@@ -107,6 +110,27 @@ export const deleteFromCloudinary = async (req, res) => {
     await Gallery.findByIdAndDelete(id);
 
     sendResponse(res, null, "Image deleted successfully");
+  } catch (error) {
+    console.error(error);
+    sendResponse(res, null, "Internal server error", 500);
+  }
+};
+
+
+export const toggleFavorite = async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user._id;
+
+  try {
+    const image = await Gallery.findOne({ _id: id, user: userId });
+    if (!image) {
+      return sendResponse(res, null, "Image not found", 404);
+    }
+
+    image.isFavorite = !image.isFavorite;
+
+    const updatedImage = await image.save();
+    sendResponse(res, updatedImage, "Favorite state updated successfully");
   } catch (error) {
     console.error(error);
     sendResponse(res, null, "Internal server error", 500);

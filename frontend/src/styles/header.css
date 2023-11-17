@@ -1,5 +1,5 @@
 .header .navbar {
-  background-color: var(--header-bg);
+  background-color: var(--primary-color-transparent);
   padding: 15px var(--container-padding);
   display: flex;
   align-items: center;
@@ -8,13 +8,15 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  box-shadow: var(--shadow-light);
   transition: all 0.3s;
   border-radius: 0 0 5px 5px;
+  font-size: x-large;
 }
 
 .navbar-brand {
-  color: #f8f8f8 !important;
+  color: var(--text-color);
+  font-size: xx-large !important;
+
 }
 
 .logo:hover {
