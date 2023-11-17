@@ -3,7 +3,9 @@ import Comment from './Comment.js';
 import Rating from './Rating.js';
 import Gallery from './Gallery.js';
 import Portal from './Portal.js';
-import User from './User.js'
+import User from './User.js';
+import Tag from './Tag.js';
+import Category from './Category.js';
 
 export {
   Blog,
@@ -12,4 +14,6 @@ export {
   Gallery,
   Portal,  
   User,
+  Tag,
+  Category,
 };
