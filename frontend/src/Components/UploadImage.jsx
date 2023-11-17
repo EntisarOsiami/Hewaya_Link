@@ -1,33 +1,38 @@
-import { useSelector } from 'react-redux';
-import axios from 'axios';
-import { useState } from 'react';
-import { Form } from 'react-bootstrap';
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { useState } from "react";
+import { Form, OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const UploadComponent = () => {
   const { userId, isAuthenticated } = useSelector((state) => state.auth);
   const [uploading, setUploading] = useState(false);
-  const [visibility, setVisibility] = useState("private"); 
+  const [visibility, setVisibility] = useState("private");
 
   const handleVisibilityChange = (e) => {
     setVisibility(e.target.checked ? "public" : "private");
   };
 
-  const handleImageUpload = async (file, imageName, description, visibility) => {
+  const handleImageUpload = async (
+    file,
+    imageName,
+    description,
+    visibility
+  ) => {
     if (!file) {
-      alert('Please select an image to upload.');
+      alert("Please select an image to upload.");
       return;
     }
     const formData = new FormData();
-    formData.append('image', file);
-    formData.append('imageName', imageName);
-    formData.append('description', description);
-    formData.append('userId', userId);
-    formData.append('visibility', visibility); 
+    formData.append("image", file);
+    formData.append("imageName", imageName);
+    formData.append("description", description);
+    formData.append("userId", userId);
+    formData.append("visibility", visibility);
 
     try {
-      await axios.post('/api/gallery/upload', formData, {
+      await axios.post("/api/gallery/upload", formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       });
     } catch (error) {
@@ -42,12 +47,24 @@ const UploadComponent = () => {
     const description = event.target.description.value;
 
     setUploading(true);
-    handleImageUpload(file, imageName, description, visibility).finally(() => setUploading(false));
+    handleImageUpload(file, imageName, description, visibility).finally(() =>
+      setUploading(false)
+    );
   };
 
   if (!isAuthenticated) {
-    return <div className="UploadComponent-alert">Please log in to upload images.</div>;
+    return (
+      <div className="UploadComponent-alert">
+        Please log in to upload images.
+      </div>
+    );
   }
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Public images will be visible to all users viewing your gallery. Private
+      images will only be visible to you.
+    </Tooltip>
+  );
 
   return (
     <div className="UploadComponent-container">
@@ -74,14 +91,24 @@ const UploadComponent = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Check 
+          <Form.Check
             type="switch"
             id="visibility-switch"
-            label="Make Public"
+            label={visibility === "public" ? "Public" : "Private"}
             onChange={handleVisibilityChange}
+            checked={visibility === "public"}
           />
+          <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={renderTooltip}
+          >
+            <span className="ms-2 info-icon">ℹ️</span>
+          </OverlayTrigger>
         </Form.Group>
-        <button type="submit" className="UploadComponent-button">Upload Image</button>
+        <button type="submit" className="UploadComponent-button">
+          Upload Image
+        </button>
       </Form>
       {uploading && <div>Uploading...</div>}
     </div>
