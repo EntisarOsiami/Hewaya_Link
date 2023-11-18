@@ -9,7 +9,7 @@ import {
 
 const router = express.Router();
 
-import { adminMiddleware, authenticateUser } from '../middleware/adminMiddleware.js';
+import { adminMiddleware, authenticateUser } from '../middleware/AuthMiddleware.js';
 
 router.put('/disable/:_id', authenticateUser,adminMiddleware, disableUser);
 router.put('/enable/:_id', authenticateUser, adminMiddleware, enableUser);
