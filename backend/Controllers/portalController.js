@@ -53,6 +53,20 @@ const PortalController = {
       sendResponse(res, null, 'Failed to delete portal', false);
     }
   },
+  async getPortalById(req, res) {
+    const { id } = req.params;
+
+    try {
+      const portal = await Portal.findById(id);
+      if (!portal) {
+        return sendResponse(res, null, 'Portal not found', false);
+      }
+      sendResponse(res, portal, 'Portal retrieved successfully');
+    } catch (error) {
+      console.error('Error fetching portal by ID:', error);
+      sendResponse(res, null, 'Failed to fetch portal', false);
+    }
+  },
 
   async toggleSubscription(req, res) {
     const { id } = req.params; 

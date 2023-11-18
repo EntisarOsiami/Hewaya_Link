@@ -5,6 +5,9 @@ const router = express.Router();
 
 router.get('/', PortalController.getAllPortals);
 
+router.get('/:id', PortalController.getPortalById);
+
+
 router.post('/', PortalController.addPortal);
 
 router.put('/:id', PortalController.updatePortal);
