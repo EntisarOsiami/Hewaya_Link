@@ -1,5 +1,5 @@
 import { Comment } from '../models/index.js';
-import sendResponse from "../Utils/responseHandler.js";
+import sendResponse from "../Utils/sendResponse.js";
 import { Blog, Gallery, Portal } from '../models/index.js';
 
 

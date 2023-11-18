@@ -16,6 +16,8 @@ import CombinedVerificationPage from './Screens/VerifyEmailPage.jsx';
 import ResetPassword from './Screens/ResetPasswordScreen.jsx';
 import GalleryScreen from './Screens/GalleryScreen.jsx';
 import BlogScreen from './Screens/BlogScreen.jsx';
+import PortalList from './Components/PortalList.jsx';
+import PortalDetail from './Components/PortalDetail.jsx';
 import { setInitialTheme } from './slices/themeSlice';
 
 const container = document.getElementById('root');
@@ -41,6 +43,8 @@ root.render(
             <Route path="verify/:token" element={<CombinedVerificationPage />} />
             <Route path="gallery" element={<GalleryScreen />} />
             <Route path="reset-password/:passwordResetToken" element={<ResetPassword />} />
+            <Route path="/portal"  element={<PortalList/>} />
+        <Route path="/portal/:id" element={<PortalDetail/>} />
             <Route element={<PrivateRoute />}>
               <Route path="profile" element={<UserProfileScreen />} />
             </Route>

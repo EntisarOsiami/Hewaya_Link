@@ -5,7 +5,7 @@ import { validationResult } from "express-validator";
 // import rateLimit from "express-rate-limit";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
-import sendResponse from "../Utils/responseHandler.js";
+import sendResponse from "../Utils/sendResponse.js";
 
 // const limiter = rateLimit({
 //   windowMs: 15 * 60 * 1000, // 15 minutes

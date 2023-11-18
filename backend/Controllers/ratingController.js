@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { Rating } from '../models/index.js';
 import { Blog, Gallery, Portal } from '../models/index.js';
-import sendResponse from "../Utils/responseHandler.js";
+import sendResponse from "../Utils/sendResponse.js";
 
 
 // ----------------------------------------//
