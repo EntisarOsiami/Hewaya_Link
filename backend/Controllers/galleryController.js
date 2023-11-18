@@ -1,6 +1,6 @@
 import Gallery from "../models/Gallery.js";
 import { cloudinary } from "../config/cloudinaryConfig.js";
-import sendResponse from "../Utils/responseHandler.js";
+import sendResponse from "../Utils/sendResponse.js";
 import { sanitize } from "../Utils/sanitizer.js";
 
 export const uploadToCloudinary = async (req, res) => {

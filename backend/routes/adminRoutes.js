@@ -1,18 +1,20 @@
-import express from 'express';
-import { authenticateUser } from '../middleware/AuthMiddleware.js';
 
+import express from 'express';
 import {
     disableUser,
     enableUser,
     getAllUsers,
     getAllPortals
-    } 
-from '../Controllers/adminController.js';
+} from '../Controllers/adminController.js';
 
 const router = express.Router();
 
-router.put('/disable/:_id', disableUser);
-router.put('/enable/:_id', enableUser);
-router.get('/users', getAllUsers);
-router.get('/portals', getAllPortals);
+import { adminMiddleware, authenticateUser } from '../middleware/adminMiddleware.js';
+
+router.put('/disable/:_id', authenticateUser,adminMiddleware, disableUser);
+router.put('/enable/:_id', authenticateUser, adminMiddleware, enableUser);
+router.get('/users', authenticateUser, adminMiddleware, getAllUsers);
+router.get('/portals', authenticateUser, adminMiddleware, getAllPortals);
+
 export default router;
+
