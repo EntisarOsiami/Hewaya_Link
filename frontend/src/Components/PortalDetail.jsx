@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import PropTypes from "prop-types";
+import { useParams } from "react-router-dom";
 
-const PortalDetail = ({ match }) => {
+const PortalDetail = () => {
+  const { id } = useParams();
   const [portal, setPortal] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -11,7 +12,7 @@ const PortalDetail = ({ match }) => {
     const fetchPortal = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`/api/portals/${match.params.id}`);
+        const response = await axios.get(`/api/portals/${id}`);
         setPortal(response.data.data);
         setLoading(false);
       } catch (err) {
@@ -21,19 +22,11 @@ const PortalDetail = ({ match }) => {
     };
 
     fetchPortal();
-  }, [match.params.id]);
+  }, [id]); 
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!portal) return <div>Portal not found</div>;
-
-  PortalDetail.propTypes = {
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        id: PropTypes.string,
-      }),
-    }),
-  };
 
   return (
     <div>
