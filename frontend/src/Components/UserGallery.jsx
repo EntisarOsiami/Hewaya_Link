@@ -5,7 +5,6 @@ import {
   Button,
   Accordion,
   Pagination,
-  Badge,
   Form,
   InputGroup,
 } from "react-bootstrap";
@@ -56,7 +55,6 @@ const UserGallery = () => {
         setPortals(response.data.data);
       } catch (error) {
         console.error("Error fetching portals:", error);
-        // Handle error for fetching portals
       }
     };
 
@@ -135,7 +133,6 @@ const UserGallery = () => {
       setError("Failed to delete image.");
     }
   };
-
   const handlePublish = async (imageId) => {
     const portalId = selectedPortal[imageId];
     if (!portalId) {
@@ -143,11 +140,54 @@ const UserGallery = () => {
       return;
     }
     try {
-      await axios.patch(`/api/gallery/images/${imageId}/publish`, { portalId });
+      const response = await axios.patch(`/api/gallery/images/${imageId}/publish`, { portalId });
+      console.log(response.data.message);
+  
+      const updatedImages = allImages.map((img) =>
+        img._id === imageId ? { ...img, published: !img.published } : img
+      );
+  
+      setAllImages(updatedImages);
+      setFilteredImages(updatedImages.filter(image =>
+        filterOption === "all" ||
+        (filterOption === "fav" && image.isFavorite) ||
+        (filterOption === "published" && image.published)
+      ));
     } catch (error) {
       console.error("Error publishing image", error);
     }
   };
+  
+  const formatFileSize = (bytes) => {
+    const KB = 1024;
+    const MB = 1024 * KB;
+    if (bytes < MB) {
+      return (bytes / KB).toFixed(2) + " KB";
+    } else {
+      return (bytes / MB).toFixed(2) + " MB";
+    }
+  };
+
+  const handleVisibilityToggle = async (imageId, currentVisibility) => {
+    try {
+      await axios.patch(`/api/gallery/images/${imageId}/visibility`);
+      setAllImages(
+        allImages.map((img) =>
+          img._id === imageId
+            ? {
+                ...img,
+                visibility:
+                  currentVisibility === "public" ? "private" : "public",
+              }
+            : img
+        )
+      );
+    } catch (error) {
+      console.error("Error toggling visibility", error);
+      setError("Failed to update image visibility.");
+    }
+  };
+
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -155,8 +195,10 @@ const UserGallery = () => {
   if (error) return <div className="text-danger">Error: {error}</div>;
 
   return (
+    
     <div className="UserGallery-container">
-      <InputGroup className="mb-3">
+      
+      <InputGroup className="search-input">
         <InputGroup.Text>
           <FontAwesomeIcon icon={faSearch} />
         </InputGroup.Text>
@@ -167,27 +209,30 @@ const UserGallery = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </InputGroup>
+
       <Form.Select
+        className="sort-select"
         aria-label="Sort images"
         value={sortOption}
         onChange={(e) => setSortOption(e.target.value)}
-        className="mb-3"
       >
         <option value="name-asc">Name Ascending</option>
         <option value="name-desc">Name Descending</option>
         <option value="date-asc">Date Ascending</option>
         <option value="date-desc">Date Descending</option>
       </Form.Select>
+
       <Form.Select
         aria-label="Filter images"
         value={filterOption}
         onChange={(e) => setFilterOption(e.target.value)}
-        className="mb-3"
+        className="filter-select"
       >
         <option value="all">All Images</option>
         <option value="fav">Favorites</option>
         <option value="published">Published</option>
       </Form.Select>
+
       <div className="card-container">
         {currentImages.map((image) => (
           <Card key={image._id} className="image-card">
@@ -196,35 +241,42 @@ const UserGallery = () => {
               src={image.imageUrl}
               alt={image.imageName}
             />
-
             <Card.Body>
-              <Card.Title>{image.imageName}</Card.Title>
-              <Button
-                variant="outline-danger"
-                onClick={() => handleDelete(image._id)}
-              >
-                <FontAwesomeIcon icon={faTrashAlt} />
-              </Button>{" "}
-              <Button
-                variant="outline-warning"
-                onClick={() => handleFavoriteToggle(image._id)}
-              >
-                <FontAwesomeIcon
-                  icon={image.isFavorite ? faStarSolid : faStarRegular}
-                />
-              </Button>
-              {image.visibility === "public" ? (
-                <Badge bg="success" className="ms-2 p-2">
-                  <FontAwesomeIcon icon={faEye} /> Public
-                </Badge>
-              ) : (
-                <Badge bg="secondary" className="ms-2 p-2">
-                  <FontAwesomeIcon icon={faEyeSlash} /> Private
-                </Badge>
-              )}
-              <br />
-              <div className="row align-items-center p-2 card-publish-container">
-                <div className="col-8">
+              <Card.Title className="card-title">{image.imageName}</Card.Title>
+
+              <div className="card-actions-container">
+                <Button
+                  variant="outline-warning"
+                  onClick={() => handleFavoriteToggle(image._id)}
+                >
+                  <FontAwesomeIcon
+                    icon={image.isFavorite ? faStarSolid : faStarRegular}
+                  />
+                </Button>
+                <Button
+                  variant="outline-secondary"
+                  onClick={() =>
+                    handleVisibilityToggle(image._id, image.visibility)
+                  }
+                >
+                  <FontAwesomeIcon
+                    icon={image.visibility === "public" ? faEye : faEyeSlash}
+                  />
+                </Button>
+
+                <Button
+                  variant="outline-danger"
+                  onClick={() => handleDelete(image._id)}
+                >
+                  <FontAwesomeIcon icon={faTrashAlt} />
+                </Button>
+              </div>
+              <p className="text-center mt-4">
+                To share an image, select a portal from the dropdown and then
+                click the Publish button.
+              </p>
+              <div className="card-publish-side">
+                <div>
                   <Form.Select
                     className="card-publish-dropdown"
                     aria-label="Select portal"
@@ -244,7 +296,7 @@ const UserGallery = () => {
                     ))}
                   </Form.Select>
                 </div>
-                <div className="col-4">
+                <div className="">
                   <Button
                     variant={
                       image.published ? "outline-danger" : "outline-success"
@@ -261,7 +313,7 @@ const UserGallery = () => {
                 </div>
               </div>
             </Card.Body>
-            <Accordion>
+            <Accordion className="accordion-container">
               <Accordion.Item eventKey="0">
                 <Accordion.Header>Details</Accordion.Header>
                 <Accordion.Body>
@@ -273,8 +325,20 @@ const UserGallery = () => {
                       <br />
                       <strong>Rating:</strong>{" "}
                       {image.rating ? `${image.rating}/5` : "Not rated"}
+                      <br />
                     </>
                   )}
+                  <strong>Metadata:</strong>
+                  <ul>
+                    <li>
+                      Resolution: {image.metadata.resolution.width} x{" "}
+                      {image.metadata.resolution.height} pixels
+                    </li>
+                    <li>File Type: {image.metadata.fileType}</li>
+                    <li>
+                      File Size: {formatFileSize(image.metadata.fileSize)}
+                    </li>{" "}
+                  </ul>
                 </Accordion.Body>
               </Accordion.Item>
             </Accordion>

@@ -35,8 +35,7 @@ const imageGallerySchema = new Schema(
       enum: ["public", "private"],
       default: "private",
     },
-    category: String,
-    album: String,
+  
     cloudinaryId: {
       type: String,
       required: true,
