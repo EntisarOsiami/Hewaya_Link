@@ -31,6 +31,8 @@ const UserGallery = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const imagesPerPage = 6;
   const [filterOption, setFilterOption] = useState("all");
+  const [portals, setPortals] = useState([]);
+  const [selectedPortal, setSelectedPortal] = useState({});
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -48,7 +50,18 @@ const UserGallery = () => {
       }
     };
 
+    const fetchPortals = async () => {
+      try {
+        const response = await axios.get("/api/portals");
+        setPortals(response.data.data);
+      } catch (error) {
+        console.error("Error fetching portals:", error);
+        // Handle error for fetching portals
+      }
+    };
+
     fetchImages();
+    fetchPortals();
   }, []);
 
   useEffect(() => {
@@ -124,20 +137,15 @@ const UserGallery = () => {
   };
 
   const handlePublish = async (imageId) => {
+    const portalId = selectedPortal[imageId];
+    if (!portalId) {
+      console.error("No portal selected for publishing");
+      return;
+    }
     try {
-      const response = await axios.patch(
-        `/api/gallery/images/${imageId}/togglePublished`
-      );
-
-      if (response.data && response.data.success) {
-        setAllImages(
-          allImages.map((img) =>
-            img._id === imageId ? { ...img, published: !img.published } : img
-          )
-        );
-      }
+      await axios.patch(`/api/gallery/images/${imageId}/publish`, { portalId });
     } catch (error) {
-      console.error("Error toggling publish state", error);
+      console.error("Error publishing image", error);
     }
   };
 
@@ -188,6 +196,7 @@ const UserGallery = () => {
               src={image.imageUrl}
               alt={image.imageName}
             />
+
             <Card.Body>
               <Card.Title>{image.imageName}</Card.Title>
               <Button
@@ -204,25 +213,53 @@ const UserGallery = () => {
                   icon={image.isFavorite ? faStarSolid : faStarRegular}
                 />
               </Button>
-              <Button
-                variant={image.published ? "outline-danger" : "outline-success"}
-                onClick={() => handlePublish(image._id)}
-                className="ms-2"
-              >
-                <FontAwesomeIcon
-                  icon={image.published ? faEyeSlash : faUpload}
-                />
-                {image.published ? " Unpublish" : " Publish"}
-              </Button>
               {image.visibility === "public" ? (
-                <Badge bg="success" className="ms-2">
+                <Badge bg="success" className="ms-2 p-2">
                   <FontAwesomeIcon icon={faEye} /> Public
                 </Badge>
               ) : (
-                <Badge bg="secondary" className="ms-2">
+                <Badge bg="secondary" className="ms-2 p-2">
                   <FontAwesomeIcon icon={faEyeSlash} /> Private
                 </Badge>
               )}
+              <br />
+              <div className="row align-items-center p-2 card-publish-container">
+                <div className="col-8">
+                  <Form.Select
+                    className="card-publish-dropdown"
+                    aria-label="Select portal"
+                    value={selectedPortal[image._id] || ""}
+                    onChange={(e) =>
+                      setSelectedPortal({
+                        ...selectedPortal,
+                        [image._id]: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="">Select a Portal</option>
+                    {portals.map((portal) => (
+                      <option key={portal._id} value={portal._id}>
+                        {portal.name}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </div>
+                <div className="col-4">
+                  <Button
+                    variant={
+                      image.published ? "outline-danger" : "outline-success"
+                    }
+                    onClick={() => handlePublish(image._id)}
+                    className="w-100 card-publish-button"
+                    disabled={!selectedPortal[image._id]}
+                  >
+                    <FontAwesomeIcon
+                      icon={image.published ? faEyeSlash : faUpload}
+                    />
+                    {image.published ? " Unpublish" : " Publish"}
+                  </Button>
+                </div>
+              </div>
             </Card.Body>
             <Accordion>
               <Accordion.Item eventKey="0">

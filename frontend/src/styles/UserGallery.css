@@ -11,27 +11,67 @@
   border-radius: 5px;
   box-shadow:var(--shadow) ;
   flex-basis: 80%; 
-  max-width: auto;
   padding: 20px;
   margin: 20px auto;
   max-width: 1000px;
+  padding: 10px;
+
+
 
   
 }
 
 .image-card {
 
-  margin: 0.5rem; 
+  margin: 0.5rem;
+  border-radius: 5px;
+ 
+  box-shadow:var(--shadow) ;
+  transition: transform 0.3s ease-in-out;
 
+
+}
+.image-card:hover {
+  transform: scale(1.05); 
 }
 
 .card-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   width: 100%;
   flex-direction: column;
 
 
+}
+
+.card-publish-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+}
+
+.card-publish-dropdown {
+  flex-grow: 1; 
+  margin-right: 0.5rem;
+  margin: 0.5rem; 
+}
+
+.card-publish-button {
+  white-space: nowrap; 
+  margin: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .card-publish-dropdown,
+  .card-publish-button {
+    width: 100%; 
+    margin-bottom: 0.5rem; 
+  }
+
+  .card-publish-button {
+    width: auto; 
+  }
 }
