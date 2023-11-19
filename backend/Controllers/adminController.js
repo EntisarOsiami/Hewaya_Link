@@ -52,6 +52,7 @@ export const getAllPortals = async (req, res) => {
     }
 };
 
+
 export const editPortal = async (req, res) => {
     try {
         const portal = await Portal.findById(req.params._id);
@@ -68,13 +69,16 @@ export const editPortal = async (req, res) => {
     }
 };
 
+
+
+
 export const deletePortal = async (req, res) => {
     try {
         const portal = await Portal.findById(req.params._id);
         if (!portal) {
             return sendResponse(res, 404, "Portal not found");
         }
-        await portal.remove();
+        await Portal.deleteOne({ _id: req.params._id });
         return sendResponse(res, 200, "Portal deleted successfully");
     } catch (error) {
         return sendResponse(res, 500, "Internal server error");
@@ -120,7 +124,7 @@ export const deleteCategory = async (req, res) => {
         if (!category) {
             return sendResponse(res, 404, "Category not found");
         }
-        await category.remove();
+        await Category.deleteOne({ _id: req.params._id });
         return sendResponse(res, 200, "Category deleted successfully");
     } catch (error) {
         return sendResponse(res, 500, "Internal server error");
@@ -165,7 +169,7 @@ export const deleteTag = async (req, res) => {
         if (!tag) {
             return sendResponse(res, 404, "Tag not found");
         }
-        await tag.remove();
+        await Tag.deleteOne({ _id: req.params._id });
         return sendResponse(res, 200, "Tag deleted successfully");
     } catch (error) {
         return sendResponse(res, 500, "Internal server error");
