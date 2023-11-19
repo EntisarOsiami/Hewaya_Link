@@ -2,6 +2,7 @@ import Gallery from "../models/Gallery.js";
 import { cloudinary } from "../config/cloudinaryConfig.js";
 import sendResponse from "../Utils/sendResponse.js";
 import { sanitize } from "../Utils/sanitizer.js";
+import Portal from "../models/Portal.js";
 
 export const uploadToCloudinary = async (req, res) => {
     try {
@@ -151,6 +152,18 @@ export const togglePublished = async (req, res) => {
     image.published = !image.published;
 
     const updatedImage = await image.save();
+
+    if (image.published) {
+      const portal = await Portal.findOne({ categories: { $in: image.category } });
+      if (portal) {
+        portal.Images.push(image._id);
+        if (!portal.subscribers.includes(userId)) {
+          portal.subscribers.push(userId);
+        }
+        await portal.save();
+      }
+    }
+
     sendResponse(res, updatedImage, "Published state updated successfully");
   } catch (error) {
     console.error(error);

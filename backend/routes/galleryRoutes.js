@@ -9,7 +9,7 @@ router.post('/upload', authenticateUser, upload.single('image'), uploadToCloudin
 router.get('/images', authenticateUser, getAllImages);
 router.delete('/images/:id',authenticateUser, deleteFromCloudinary);
 router.patch('/images/:id/favorite', authenticateUser, toggleFavorite);
-router.patch('/images/:id/togglePublished', authenticateUser, togglePublished);
+router.patch('/images/:id/published', authenticateUser, togglePublished);
 
 
 export default router;
