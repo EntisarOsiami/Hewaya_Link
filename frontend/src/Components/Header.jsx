@@ -49,6 +49,9 @@ const Header = () => {
               <LinkContainer to="/gallery">
                 <Nav.Link>Gallery</Nav.Link>
               </LinkContainer>
+              <LinkContainer to="/portal">
+                <Nav.Link>Portal</Nav.Link>
+              </LinkContainer>
               <LinkContainer to="/about">
                 <Nav.Link>About</Nav.Link>
               </LinkContainer>

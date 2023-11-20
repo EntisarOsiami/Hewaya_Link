@@ -1,158 +1,102 @@
-import asyncHandler from 'express-async-handler';
 import Portal from '../models/Portal.js';
-import ImageGallery from '../models/Gallery.js';
+import sendResponse from '../Utils/sendResponse.js';
 
-export const createPortal = asyncHandler(async (req, res) => {
-    const { name, description, category } = req.body;
+const PortalController = {
 
-    const existingPortal = await Portal.findOne({ name });
-    if (existingPortal) {
-        return res.status(400).json({ message: "Portal with this name already exists" });
+  async getAllPortals(req, res) {
+    try {
+      const portals = await Portal.find({});
+      sendResponse(res, portals, 'Portals retrieved successfully');
+    } catch (error) {
+      console.error('Error fetching portals:', error);
+      sendResponse(res, null, 'Failed to fetch portals', false);
     }
+  },
 
-    const portal = new Portal({
-        name,
-        description,
-        category,
-    });
-
-    await portal.save();
-    res.status(201).json(portal);
-});
-
-export const getPortalDetails = asyncHandler(async (req, res) => {
-    const portalId = req.params.portalId;
-
-    const portal = await Portal.findById(portalId).populate('images subscribers');
-    if (!portal) {
-        return res.status(404).json({ message: 'Portal not found' });
+  async addPortal(req, res) {
+    try {
+      const { name, description, categories, tags } = req.body;
+      const newPortal = new Portal({ name, description, categories, tags });
+      await newPortal.save();
+      sendResponse(res, newPortal, 'New portal added successfully');
+    } catch (error) {
+      console.error('Error adding new portal:', error);
+      sendResponse(res, null, 'Failed to add new portal', false);
     }
+  },
 
-    res.json({ data: portal });
-});
-
-export const getPortalFeed = asyncHandler(async (req, res) => {
-    const portalId = req.params.portalId;
-
-    const portal = await Portal.findById(portalId).populate('images');
-    if (!portal) {
-        return res.status(404).json({ message: 'Portal not found' });
+ async updatePortal(req, res) {
+    const { id } = req.params;
+    const updateData = req.body;
+    try {
+      const updatedPortal = await Portal.findByIdAndUpdate(id, updateData, { new: true });
+      if (!updatedPortal) {
+        return sendResponse(res, null, 'Portal not found', false);
+      }
+      sendResponse(res, updatedPortal, 'Portal updated successfully');
+    } catch (error) {
+      console.error('Error updating portal:', error);
+      sendResponse(res, null, 'Failed to update portal', false);
     }
+  },
 
-    res.json({ data: portal.images });
-});
-
-export const getUserSubscribedFeed = asyncHandler(async (req, res) => {
-    const userId = req.user._id;
-    const sortBy = req.query.sortBy || 'createdAt';
-    const order = req.query.order === 'desc' ? -1 : 1;  
-    const category = req.query.category || null;
-    const limit = Number(req.query.limit) || 10;
-    const skip = (Number(req.query.page) - 1) * limit || 0;
-
-    const filterCriteria = category ? { subscribers: userId, category } : { subscribers: userId };
-    
-    const userSubscribedPortals = await Portal.find(filterCriteria).populate({
-        path: 'images',
-        options: {
-            sort: { [sortBy]: order },
-            limit,
-            skip
-        }
-    });
-
-    let feedImages = [];
-
-    userSubscribedPortals.forEach(portal => {
-        feedImages.push(...portal.images);
-    });
-
-    feedImages.sort((a, b) => {
-        if(order === 1) return new Date(a[sortBy]) - new Date(b[sortBy]);
-        else return new Date(b[sortBy]) - new Date(a[sortBy]);
-    });
-
-    res.json({ data: feedImages });
-});
-
-export const updatePortalDetails = asyncHandler(async (req, res) => {
-    const portalId = req.params.portalId;
-    const updates = req.body;
-
-    const portal = await Portal.findById(portalId);
-    if (!portal) {
-        return res.status(404).json({ message: 'Portal not found' });
+  async deletePortal(req, res) {
+    const { id } = req.params;
+    try {
+      const deletedPortal = await Portal.findByIdAndDelete(id);
+      if (!deletedPortal) {
+        return sendResponse(res, null, 'Portal not found', false);
+      }
+      sendResponse(res, deletedPortal, 'Portal deleted successfully');
+    } catch (error) {
+      console.error('Error deleting portal:', error);
+      sendResponse(res, null, 'Failed to delete portal', false);
     }
+  },
+  async getPortalById(req, res) {
+    const { id } = req.params;
 
-    Object.keys(updates).forEach(update => portal[update] = updates[update]);
-    await portal.save();
-
-    res.json({ message: 'Portal updated successfully', data: portal });
-});
-
-export const subscribeToPortal = asyncHandler(async (req, res) => {
-    const portalId = req.params.portalId;
-    const userId = req.user._id;
-
-    const portal = await Portal.findById(portalId);
-    if (!portal) {
-        return res.status(404).json({ message: 'Portal not found' });
+    try {
+      const portal = await Portal.findById(id);
+      if (!portal) {
+        return sendResponse(res, null, 'Portal not found', false);
+      }
+      sendResponse(res, portal, 'Portal retrieved successfully');
+    } catch (error) {
+      console.error('Error fetching portal by ID:', error);
+      sendResponse(res, null, 'Failed to fetch portal', false);
     }
+  },
 
-    if (!portal.subscribers.includes(userId)) {
-        portal.subscribers.push(userId);
-        await portal.save();
+  async toggleSubscription(req, res) {
+    const { id } = req.params; 
+    const userId = req.user._id; 
+
+    try {
+      const portal = await Portal.findById(id);
+      if (!portal) {
+        return sendResponse(res, null, 'Portal not found', false);
+      }
+
+      const index = portal.subscribers.indexOf(userId);
+      if (index > -1) {
+        portal.subscribers.splice(index, 1); 
+      } else {
+        portal.subscribers.push(userId); 
+      }
+
+      await portal.save();
+      sendResponse(res, portal.subscribers, 'Subscription updated successfully');
+    } catch (error) {
+      console.error('Error toggling subscription:', error);
+      sendResponse(res, null, 'Failed to toggle subscription', false);
     }
+  }
 
-    res.json({ message: 'Subscribed successfully' });
-});
+  // Other controller methods can be added here
 
-export const unsubscribeFromPortal = asyncHandler(async (req, res) => {
-    const portalId = req.params.portalId;
-    const userId = req.user._id;
+};
 
-    const portal = await Portal.findById(portalId);
-    if (!portal) {
-        return res.status(404).json({ message: 'Portal not found' });
-    }
+export default PortalController;
 
-    portal.subscribers = portal.subscribers.filter(subscriber => subscriber.toString() !== userId.toString());
-    await portal.save();
 
-    res.json({ message: 'Unsubscribed successfully' });
-});
-
-export const addImageToPortal = asyncHandler(async (req, res) => {
-    const portalId = req.params.portalId;
-    const imageId = req.body.imageId;
-
-    const image = await ImageGallery.findById(imageId);
-    if (!image || image.user.toString() !== req.user._id.toString()) {
-        return res.status(400).json({ message: "Image not found or you don't have permission" });
-    }
-
-    const portal = await Portal.findById(portalId);
-    if (!portal) {
-        return res.status(404).json({ message: 'Portal not found' });
-    }
-
-    if (!portal.images.includes(imageId)) {
-        portal.images.push(imageId);
-        await portal.save();
-    }
-
-    res.json({ message: 'Image added to portal successfully' });
-});
-
-export const deletePortal = asyncHandler(async (req, res) => {
-    const portalId = req.params.portalId;
-
-    const portal = await Portal.findById(portalId);
-    if (!portal) {
-        return res.status(404).json({ message: 'Portal not found' });
-    }
-
-    await portal.remove();
-
-    res.json({ message: 'Portal deleted successfully' });
-});

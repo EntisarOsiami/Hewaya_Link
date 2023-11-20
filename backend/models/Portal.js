@@ -1,34 +1,44 @@
-import { Schema, model } from 'mongoose';
+import mongoose from 'mongoose';
 
-const portalSchema = new Schema({
+const { Schema, model } = mongoose;
+
+const PortalSchema = new Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
+    trim: true
   },
-  description: String,
-  category: {
+  description: {
     type: String,
-    enum: [
-      'digital_art', 
-      'painting', 
-      'crafts', 
-      'cooking', 
-      'photography', 
-      'gardening'
-    ],
-    required: true,
+    required: true
   },
-  subscribers: [
-    { type: Schema.Types.ObjectId, ref: 'User' }
-  ],
-  images: [
-    { type: Schema.Types.ObjectId, ref: 'ImageGallery' }
-  ]
-}, {
-  timestamps: true,
-});
+  categories: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Category' 
+  }],
+  tags: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Tag' 
+  }],
+  subscribers: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User' 
+  }],
+  moderators: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User' 
+  }],
+  Images: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Gallery' 
+  }],
+  analytics: {
+    views: { type: Number, default: 0 },
+    interactions: { type: Number, default: 0 },
+    subscribers: { type: Number, default: 0 },
+    posts: { type: Number, default: 0 },
+    
+  }
+}, { timestamps: true });
 
-const Portal = model('Portal', portalSchema);
-
-export default Portal;
+export default model('Portal', PortalSchema);

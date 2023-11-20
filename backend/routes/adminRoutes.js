@@ -1,10 +1,6 @@
-import express from 'express';
-import { authenticateUser } from '../middleware/AuthMiddleware.js';
 
+import express from 'express';
 import {
-    disableUser,
-    enableUser,
-    getAllUsers,
     getAllPortals,
     createPortal,
     editPortal,

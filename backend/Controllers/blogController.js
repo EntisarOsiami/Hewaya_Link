@@ -2,7 +2,7 @@ import { Blog } from '../models/index.js';
 import Joi from 'joi';
 import { JSDOM } from 'jsdom';
 
-import sendResponse from "../Utils/responseHandler.js";
+import sendResponse from "../Utils/sendResponse.js";
 
 
 // A schema to validate blog data

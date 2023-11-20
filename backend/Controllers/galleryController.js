@@ -1,7 +1,8 @@
 import Gallery from "../models/Gallery.js";
 import { cloudinary } from "../config/cloudinaryConfig.js";
-import sendResponse from "../Utils/responseHandler.js";
+import sendResponse from "../Utils/sendResponse.js";
 import { sanitize } from "../Utils/sanitizer.js";
+import Portal from "../models/Portal.js";
 
 export const uploadToCloudinary = async (req, res) => {
     try {
@@ -14,10 +15,10 @@ export const uploadToCloudinary = async (req, res) => {
         if (!imageName) {
             return sendResponse(res, null, "Image name is required", 400);
         }
-
+      
         const sanitizedImageName = sanitize(imageName);
         const sanitizedDescription = sanitize(description);
-        const sanitizedVisibility = visibility === "public" ? "public" : "private"; 
+        const sanitizedVisibility = visibility === "public" ? "public" : "private";
 
         if (!req.user || !req.user._id) {
             return sendResponse(res, null, "User not found", 400);
@@ -32,6 +33,14 @@ export const uploadToCloudinary = async (req, res) => {
                     console.error(error);
                     return sendResponse(res, null, "Error uploading image to Cloudinary", 500);
                 }
+                const metadata = {
+                  resolution: {
+                    width: result.width,
+                    height: result.height,
+                  },
+                  fileType: result.format,
+                  fileSize: result.bytes, 
+                };
 
                 const newImage = new Gallery({
                     user: req.user._id,
@@ -40,6 +49,8 @@ export const uploadToCloudinary = async (req, res) => {
                     cloudinaryId: result.public_id,
                     description: sanitizedDescription,
                     visibility: sanitizedVisibility, 
+                    metadata: metadata,
+
                 });
 
                 newImage.save()
@@ -140,6 +151,7 @@ export const toggleFavorite = async (req, res) => {
 
 export const togglePublished = async (req, res) => {
   const { id } = req.params;
+  const { portalId } = req.body; 
   const userId = req.user._id;
 
   try {
@@ -150,8 +162,47 @@ export const togglePublished = async (req, res) => {
 
     image.published = !image.published;
 
+    const portal = await Portal.findOne({ _id: portalId });
+    if (!portal) {
+      return sendResponse(res, null, "Portal not found", 404);
+    }
+
+    if (image.published) {
+      if (!portal.Images.includes(image._id)) {
+        portal.Images.push(image._id);
+      }
+      if (!portal.subscribers.includes(userId)) {
+        portal.subscribers.push(userId);
+      }
+    } else {
+      portal.Images.pull(image._id);
+    }
+
+    await portal.save();
     const updatedImage = await image.save();
+
     sendResponse(res, updatedImage, "Published state updated successfully");
+  } catch (error) {
+    console.error(error);
+    sendResponse(res, null, "Internal server error", 500);
+  }
+};
+
+
+export const toggleVisibility = async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user._id;
+
+  try {
+    const image = await Gallery.findOne({ _id: id, user: userId });
+    if (!image) {
+      return sendResponse(res, null, "Image not found", 404);
+    }
+
+    image.visibility = image.visibility === "public" ? "private" : "public";
+
+    const updatedImage = await image.save();
+    sendResponse(res, updatedImage, "Visibility state updated successfully");
   } catch (error) {
     console.error(error);
     sendResponse(res, null, "Internal server error", 500);

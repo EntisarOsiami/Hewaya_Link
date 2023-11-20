@@ -1,5 +1,5 @@
 import {User,Portal} from "../models/index.js";
-import sendResponse from "../Utils/responseHandler.js";
+import sendResponse from "../Utils/sendResponse.js";
 import {Tag, Category} from '../models/index.js';
 
 export const disableUser = async (req, res) => {

@@ -9,14 +9,14 @@
   flex-wrap: wrap; 
   gap: 20px; 
   justify-content: center;
-  align-items: flex-start; 
+  align-items: center; 
    
 }
 
 @media (max-width: 767px) {
   .GalleryScreen-container {
     flex-direction: column;
-    padding: 40px;
+    padding: 20px;
 
   }
 
