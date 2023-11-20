@@ -2,8 +2,9 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { useState } from "react";
 import { Form, OverlayTrigger, Tooltip } from "react-bootstrap";
+import PropTypes from "prop-types";
 
-const UploadComponent = () => {
+const UploadComponent = ({ onImageUpload }) => {
   const { userId, isAuthenticated } = useSelector((state) => state.auth);
   const [uploading, setUploading] = useState(false);
   const [visibility, setVisibility] = useState("private");
@@ -12,12 +13,7 @@ const UploadComponent = () => {
     setVisibility(e.target.checked ? "public" : "private");
   };
 
-  const handleImageUpload = async (
-    file,
-    imageName,
-    description,
-    visibility
-  ) => {
+  const handleImageUpload = async (file, imageName, description, visibility) => {
     if (!file) {
       alert("Please select an image to upload.");
       return;
@@ -35,6 +31,10 @@ const UploadComponent = () => {
           "Content-Type": "multipart/form-data",
         },
       });
+      if (onImageUpload) {
+        console.log("Calling onImageUpload to refresh images");
+        onImageUpload();  
+      }
     } catch (error) {
       console.error(error);
     }
@@ -47,9 +47,7 @@ const UploadComponent = () => {
     const description = event.target.description.value;
 
     setUploading(true);
-    handleImageUpload(file, imageName, description, visibility).finally(() =>
-      setUploading(false)
-    );
+    handleImageUpload(file, imageName, description, visibility).finally(() => setUploading(false));
   };
 
   if (!isAuthenticated) {
@@ -113,6 +111,10 @@ const UploadComponent = () => {
       {uploading && <div>Uploading...</div>}
     </div>
   );
+};
+
+UploadComponent.propTypes = {
+  onImageUpload: PropTypes.func.isRequired,
 };
 
 export default UploadComponent;
