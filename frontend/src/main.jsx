@@ -15,6 +15,7 @@ import About from './Screens/AboutScreen.jsx';
 import CombinedVerificationPage from './Screens/VerifyEmailPage.jsx';
 import ResetPassword from './Screens/ResetPasswordScreen.jsx';
 import GalleryScreen from './Screens/GalleryScreen.jsx';
+import AdminScreen from './Screens/AdminScreen.jsx';
 import BlogScreen from './Screens/BlogScreen.jsx';
 import PortalList from './Components/PortalList.jsx';
 import PortalDetail from './Components/PortalDetail.jsx';
@@ -44,6 +45,7 @@ root.render(
             <Route path="gallery" element={<GalleryScreen />} />
             <Route path="reset-password/:passwordResetToken" element={<ResetPassword />} />
             <Route path="/portal"  element={<PortalList/>} />
+            <Route path="/admin" element={<AdminScreen />} />
         <Route path="/portal/:id" element={<PortalDetail/>} />
             <Route element={<PrivateRoute />}>
               <Route path="profile" element={<UserProfileScreen />} />

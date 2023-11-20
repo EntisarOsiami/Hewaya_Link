@@ -22,14 +22,14 @@ const CategoriesManagement = () => {
         const response = await axios.put(`/category/${id}/`, updatedCategory);
         console.log(response.data);
 
-        fetchCategories(); // Refresh the categories list
+        fetchCategories(); 
     };
 
     const deleteCategory = async (id) => {
         const response = await axios.delete(`/category/${id}/`);
         console.log(response.data);
 
-        fetchCategories(); // Refresh the categories list
+        fetchCategories(); 
     };
 
     return (
