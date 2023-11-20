@@ -17,6 +17,9 @@ import {
     editCategory,
     deleteCategory,
     getAllCategories,
+    disableUser,
+    enableUser,
+    getAllUsers,
 
     } 
 from '../Controllers/adminController.js';
