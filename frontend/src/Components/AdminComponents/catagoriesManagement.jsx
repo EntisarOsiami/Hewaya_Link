@@ -9,28 +9,28 @@ const CategoriesManagement = () => {
     }, []);
 
     const fetchCategories = async () => {
-        const response = await axios.get('/category/');
-        setCategories(response.data);
+        const response = await axios.get('/api/admin/category/');
+        setCategories(response.data.data);
     };
+    
     const createCategory = async (category) => {
-        const response = await axios.post('/category/', category);
+        const response = await axios.post('/api/admin/category/', category);
         console.log(response.data);
         fetchCategories(); 
     };
-
+    
     const editCategory = async (id, updatedCategory) => {
-        const response = await axios.put(`/category/${id}/`, updatedCategory);
+        const response = await axios.put(`/api/admin/category/${id}/`, updatedCategory);
         console.log(response.data);
-
         fetchCategories(); 
     };
-
+    
     const deleteCategory = async (id) => {
-        const response = await axios.delete(`/category/${id}/`);
+        const response = await axios.delete(`/api/admin/category/${id}/`);
         console.log(response.data);
-
         fetchCategories(); 
     };
+    
 
     return (
         <div>
