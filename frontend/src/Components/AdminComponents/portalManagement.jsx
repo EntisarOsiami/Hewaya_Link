@@ -10,21 +10,22 @@ const PortalManagement = () => {
 
   const fetchPortals = async () => {
     try {
-      const response = await axios.get('/admin/portals');
-      setPortals(response.data);
+      const response = await axios.get('/api/admin/portals');
+      setPortals(response.data.data);
     } catch (error) {
       console.error('Failed to fetch portals:', error);
     }
   };
-
+  
   const handleDelete = async (portalId) => {
     try {
-      await axios.delete(`/admin/portals/${portalId}`);
-      fetchPortals(); // Refresh the portals list
+      await axios.delete(`/api/admin/portals/${portalId}`);
+      fetchPortals(); 
     } catch (error) {
       console.error('Failed to delete portal:', error);
     }
   };
+  
 
   return (
     <div>
@@ -32,9 +33,7 @@ const PortalManagement = () => {
       {portals.map(portal => (
         <div key={portal._id}>
           <h2>{portal.name}</h2>
-          <button onClick={() => handleDelete(portal._id)}>Delete</button>
-          {/* Add navigation to edit portal page */}
-          <button onClick={() => window.location.href=`/editPortal/${portal._id}`}>Edit</button>
+          <button onClick={() => handleDelete(portal._id)}>Delete</button>         
         </div>
       ))}
     </div>
