@@ -25,7 +25,7 @@ import {
 from '../Controllers/adminController.js';
 
 const router = express.Router();
-
+//app.use('/api/admin', adminRoutes);
 // users related apis
 router.put('/disable/:_id', disableUser);
 router.put('/enable/:_id', enableUser);
