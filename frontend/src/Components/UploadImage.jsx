@@ -66,50 +66,53 @@ const UploadComponent = ({ onImageUpload }) => {
 
   return (
     <div className="UploadComponent-container">
-      <Form onSubmit={handleSubmit} className="UploadComponent-form">
-        <Form.Group controlId="formFile" className="mb-3">
-          <Form.Label>Image</Form.Label>
-          <Form.Control type="file" name="image" required />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>Image Name</Form.Label>
-          <Form.Control
-            type="text"
-            name="imageName"
-            placeholder="Enter image name"
-            required
-          />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>Description</Form.Label>
-          <Form.Control
-            as="textarea"
-            name="description"
-            placeholder="Enter image description"
-          />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Check
-            type="switch"
-            id="visibility-switch"
-            label={visibility === "public" ? "Public" : "Private"}
-            onChange={handleVisibilityChange}
-            checked={visibility === "public"}
-          />
-          <OverlayTrigger
-            placement="right"
-            delay={{ show: 250, hide: 400 }}
-            overlay={renderTooltip}
-          >
-            <span className="ms-2 info-icon">ℹ️</span>
-          </OverlayTrigger>
-        </Form.Group>
-        <button type="submit" className="UploadComponent-button">
-          Upload Image
-        </button>
-      </Form>
-      {uploading && <div>Uploading...</div>}
-    </div>
+    <h1 className="GalleryScreen-header">Gallery</h1>
+    <h2 className="GalleryScreen-subheader">Upload New Image</h2>
+    <Form onSubmit={handleSubmit} className="UploadComponent-form">
+      <Form.Group controlId="formFile" className="mb-3">
+        <Form.Label>Image</Form.Label>
+        <Form.Control type="file" name="image" required />
+      </Form.Group>
+      <Form.Group className="mb-3">
+        <Form.Label>Image Name</Form.Label>
+        <Form.Control
+          type="text"
+          name="imageName"
+          placeholder="Enter image name"
+          required
+        />
+      </Form.Group>
+      <Form.Group className="mb-3">
+        <Form.Label>Description</Form.Label>
+        <Form.Control
+          as="textarea"
+          name="description"
+          placeholder="Enter image description"
+        />
+      </Form.Group>
+      <Form.Group className="mb-3">
+        <Form.Check
+          type="switch"
+          id="visibility-switch"
+          label={visibility === "public" ? "Public" : "Private"}
+          onChange={handleVisibilityChange}
+          checked={visibility === "public"}
+        />
+        <OverlayTrigger
+          placement="right"
+          delay={{ show: 250, hide: 400 }}
+          overlay={renderTooltip}
+        >
+          <span className="ms-2 info-icon">ℹ️</span>
+        </OverlayTrigger>
+      </Form.Group>
+      <button type="submit" className="UploadComponent-button">
+        Upload Image
+      </button>
+    </Form>
+    {uploading && <div>Uploading...</div>}
+  </div>
+  
   );
 };
 

@@ -1,12 +1,21 @@
 .UploadComponent-container {
-    max-width: 400px;
-    flex-basis: 20%;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: var(--secondary-color-transparent);
-    border-radius: 8px;
-    box-shadow: var(--shadow-light);
-  }
+  position: absolute;
+  top: 0; 
+  left: 0; 
+  max-width: 400px;
+  flex-basis: 20%;
+  margin-right: 80%;
+  margin-left: 30px;
+  margin-top: 40px;
+  padding: 20px;
+  background-color: var(--secondary-color-transparent);
+  border-radius: 5px;
+  border-style: solid;
+  border-color: var(--secondary-color);
+  border-width: 2px;
+  box-shadow: var(--shadow);
+}
+
   
   .UploadComponent-form {
     display: flex;
