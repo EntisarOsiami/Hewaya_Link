@@ -32,10 +32,8 @@ const GalleryScreen = () => {
   return (
     <div className="GalleryScreen-container">
       <div>
-        <h1 className="GalleryScreen-header">Gallery</h1>
         {isAuthenticated && (
           <>
-            <h2 className="GalleryScreen-subheader">Upload New Image</h2>
             <UploadComponent onImageUpload={fetchImages} />{" "}
           </>
         )}
