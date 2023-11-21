@@ -1,0 +1,61 @@
+/* Portals.css */
+.portals-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  .portals-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 1200px;
+  }
+  
+  .portal-details {
+    margin: 20px 0;
+    width: 100%;
+    max-width: 700px;
+    text-align: center;
+  }
+  
+  .image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: 500px; 
+    overflow-y: auto; 
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+  }
+  .image-card {
+    border: 1px solid gray;
+    border-radius: 5px;
+    width: 95%;
+    max-width: 600px;
+    margin: 10px auto; 
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+  }
+  
+  .image-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .portal-image {
+    width: 100%;
+    display: block;
+  }
+  
+  .card-content {
+    padding: 10px;
+  }
+  
+  @media (max-width: 768px) {
+    .portal-details {
+      width: 90%;
+    }
+  }
+  

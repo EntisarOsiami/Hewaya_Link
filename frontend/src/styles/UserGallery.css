@@ -13,6 +13,22 @@
   padding: 10px; 
   margin: 20px auto;
   max-width: 1000px;
+  flex: 3;
+}
+
+.scrollable-gallery {
+  max-height: 850px; 
+  overflow-y: auto;
+  padding-right: 15px; 
+}
+
+.scrollable-gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollable-gallery {
+  -ms-overflow-style: none;  
+  scrollbar-width: none;  
 }
 
 .image-card {
@@ -20,12 +36,9 @@
   box-shadow: var(--shadow);
   width: 100%;
   max-width: 800px;
+  
 
-  /* transition: transform 0.3s ease-in-out; */
 }
-/* .image-card:hover {
-  transform: scale(1.05);
-} */
 
 .card-container {
   display: flex;
@@ -34,8 +47,10 @@
   align-items: center;
   width: 100%;
   flex-direction: column;
-  padding: 0.5rem;
-  margin: 0.5rem;
+  gap: 40px;
+  margin: auto;
+  padding: auto;
+  
 
 
 }
@@ -45,7 +60,6 @@
   gap: 0.5rem;
   align-content: center;
   justify-content: center;
-
   display: flex;
 
 }
