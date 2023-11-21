@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Scrollbars } from 'react-custom-scrollbars-2';
 
 const Portals = () => {
   const [portals, setPortals] = useState([]);
@@ -36,23 +37,46 @@ const Portals = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div>
+    <div className="portals-container">
       <h1>Portals</h1>
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
+      <div className="portals-list">
         {portals.map((portal) => (
-          <div key={portal._id} onClick={() => fetchPortalDetails(portal._id)} style={{ border: "1px solid black", margin: "10px", padding: "10px", cursor: "pointer" }}>
+          <div
+            key={portal._id}
+            onClick={() => fetchPortalDetails(portal._id)}
+            style={{
+              border: "1px solid black",
+              margin: "10px",
+              padding: "10px",
+              cursor: "pointer",
+            }}
+          >
             <h3>{portal.name}</h3>
-            <div style={{ width: "100px", height: "100px", backgroundColor: "#ddd" }}></div>
             <p>{portal.description}</p>
           </div>
         ))}
       </div>
 
       {selectedPortal && (
-        <div style={{ marginTop: "20px", border: "1px solid blue", padding: "10px" }}>
+        <div className="portal-details">
           <h2>Details of {selectedPortal.name}</h2>
           <p>{selectedPortal.description}</p>
-          {/* Additional details can be added here */}
+          <Scrollbars style={{ width: 'auto', height: '500px' }} autoHide>
+            <div className="images-feed">
+              {selectedPortal.Images && selectedPortal.Images.length > 0 && 
+                selectedPortal.Images.map((image, index) => (
+                  <div key={index} className="image-card">
+                    <img src={image.imageUrl} alt={`Image for ${selectedPortal.name}`} className="portal-image" />
+                    <div className="card-content">
+                      <h4>{image.imageName}</h4>
+                      <p>{image.description}</p>
+                      {/* You can add more content here */}
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+          </Scrollbars>
         </div>
       )}
     </div>

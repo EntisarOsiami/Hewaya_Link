@@ -5,8 +5,9 @@ const PortalController = {
 
   async getAllPortals(req, res) {
     try {
-      const portals = await Portal.find({});
+      const portals = await Portal.find({}).populate('Images');
       sendResponse(res, portals, 'Portals retrieved successfully');
+      
     } catch (error) {
       console.error('Error fetching portals:', error);
       sendResponse(res, null, 'Failed to fetch portals', false);
@@ -57,7 +58,7 @@ const PortalController = {
     const { id } = req.params;
 
     try {
-      const portal = await Portal.findById(id);
+      const portal = await Portal.findById(id).populate('Images');
       if (!portal) {
         return sendResponse(res, null, 'Portal not found', false);
       }

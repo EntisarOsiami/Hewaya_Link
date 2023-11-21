@@ -232,7 +232,7 @@ const UserGallery = () => {
         <option value="fav">Favorites</option>
         <option value="published">Published</option>
       </Form.Select>
-
+      <div className="card-container scrollable-gallery">
       <div className="card-container">
         {currentImages.map((image) => (
           <Card key={image._id} className="image-card">
@@ -313,6 +313,7 @@ const UserGallery = () => {
                 </div>
               </div>
             </Card.Body>
+            
             <Accordion className="accordion-container">
               <Accordion.Item eventKey="0">
                 <Accordion.Header>Details</Accordion.Header>
@@ -356,6 +357,7 @@ const UserGallery = () => {
           ))}
         </Pagination>
       </div>
+    </div>
     </div>
   );
 };

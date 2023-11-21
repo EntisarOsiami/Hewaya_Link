@@ -1,15 +1,11 @@
 .GalleryScreen-container {
-  position: relative; 
   max-width: 100%; 
-  margin: auto;
   padding: 20px;
   min-height: calc(100vh - 120px);
   overflow: auto;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  justify-content: center; 
-  align-items: center;
 }
 
 
