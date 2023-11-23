@@ -1,18 +1,18 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
-const PortalDetail = () => {
-  const { id } = useParams();
+const PortalDetails = () => {
   const [portal, setPortal] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { portalId } = useParams();
 
   useEffect(() => {
-    const fetchPortal = async () => {
+    const fetchPortalDetails = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`/api/portals/${id}`);
+        const response = await axios.get(`/api/portals/${portalId}`);
         setPortal(response.data.data);
         setLoading(false);
       } catch (err) {
@@ -21,19 +21,20 @@ const PortalDetail = () => {
       }
     };
 
-    fetchPortal();
-  }, [id]); 
+    fetchPortalDetails();
+  }, [portalId]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
-  if (!portal) return <div>Portal not found</div>;
+  if (!portal) return <div>No portal found</div>;
 
   return (
-    <div>
-      <h1>{portal.name}</h1>
+    <div className="portal-details">
+      <h2>{portal.name}</h2>
       <p>{portal.description}</p>
+      {/* Render portal images and other details */}
     </div>
   );
 };
 
-export default PortalDetail;
+export default PortalDetails;

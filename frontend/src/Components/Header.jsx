@@ -1,5 +1,6 @@
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../slices/userApiSlice";
@@ -10,7 +11,9 @@ import { clearUserProfile } from "../slices/profileSlice";
 
 const Header = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const isEmailVerified = useSelector((state) => state.auth.isEmailVerified);  
+  const isEmailVerified = useSelector((state) => state.auth.isEmailVerified);
+  const [logoutError, setLogoutError] = useState(null);
+
   const { user } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -24,12 +27,13 @@ const Header = () => {
       navigate("/login");
     } catch (err) {
       console.error(err);
+      setLogoutError("Failed to log out. Please try again.");
     }
   };
 
   return (
     <header className="header">
-      <Navbar bg="" expand="lg" collapseOnSelect >
+      <Navbar bg="" expand="lg" collapseOnSelect>
         <Container>
           <LinkContainer to="/">
             <Navbar.Brand className="logo">Hewaya Link</Navbar.Brand>
@@ -55,7 +59,6 @@ const Header = () => {
               <LinkContainer to="/about">
                 <Nav.Link>About</Nav.Link>
               </LinkContainer>
-             
             </Nav>
             <Nav className="ms-auto">
               {isAuthenticated ? (
@@ -75,7 +78,9 @@ const Header = () => {
                       {user.username}
                     </>
                   }
+
                   id="username"
+                  className="custom-dropdown"
                 >
                   <LinkContainer to="/profile">
                     <NavDropdown.Item>Profile</NavDropdown.Item>
@@ -98,6 +103,10 @@ const Header = () => {
                   </LinkContainer>
                 </>
               )}
+              {logoutError && <p>{logoutError}</p>}
+
+              <br/>
+
               <ThemeToggle />
             </Nav>
           </Navbar.Collapse>
