@@ -4,13 +4,12 @@
   align-items: center;
   width: 80px;
   height: 80px;
-  border: 3px solid var(--secondary-color);
+  border: 2px solid var(--primary-color); 
   cursor: pointer;
   transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   border-radius: 50%;
   overflow: hidden;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: var(--primary-color);
 }
 
 .avatar-selection-box img {
@@ -22,7 +21,7 @@
 
 .avatar-selection-box:hover,
 .avatar-selection-box:focus {
-  border-color: var(--hover-color);
+  border-color: var(--hover-color); 
   transform: scale(1.1);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   outline: none;
@@ -33,12 +32,13 @@
   flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
+  border-radius: 5px;
 }
 
 .avatar-image {
-  width: 90px;
-  height: 90px;
-  border: 1px solid var(--secondary-color);
+  width: 70px;
+  height: 70px;
+  border: 2px solid var(--primary-color); 
   cursor: pointer;
   transition: border-color 0.3s, transform 0.3s;
   border-radius: 50%;
@@ -47,31 +47,12 @@
 
 .avatar-image:hover,
 .avatar-image:focus {
-  border-color: var(--hover-color);
+  border-color: var(--hover-color); 
   transform: scale(1.05);
 }
 
 .avatar-image.active {
-  border-color: var(--active-color);
+  border-color: var(--accent-color); 
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-.user-avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border-style:dotted;
-  border-width: 2px;
-  border-color: var(--secondary-color);
-}
-
-.notification-badge {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 10px;
-  height: 10px;
-  background-color: red;
-  border-radius: 50%;
-  border: 2px solid white;
-}

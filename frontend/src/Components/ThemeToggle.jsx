@@ -16,10 +16,10 @@ const ThemeToggle = () => {
   };
 
   return (
-    <span onClick={handleToggle} style={{ cursor: 'pointer' }}>
+    <span onClick={handleToggle} style={{ cursor: 'pointer' , padding:'20px'}}>
       {theme === 'light' ? 
-        <BsMoon size={18} color="#fff" /> :  
-        <BsSun size={18} color="#fff" />    
+        <BsMoon size={24} color= "#65344c" /> :  
+        <BsSun size={24} color="#cb9ab2" />    
       }
     </span>
   );

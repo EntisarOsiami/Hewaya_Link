@@ -18,7 +18,7 @@ import GalleryScreen from './Screens/GalleryScreen.jsx';
 import AdminScreen from './Screens/AdminScreen.jsx';
 import BlogScreen from './Screens/BlogScreen.jsx';
 import PortalList from './Components/PortalList.jsx';
-import PortalDetail from './Components/PortalDetail.jsx';
+import PortalDetails from './Components/PortalDetails.jsx';
 import { setInitialTheme } from './slices/themeSlice';
 
 const container = document.getElementById('root');
@@ -45,8 +45,8 @@ root.render(
             <Route path="gallery" element={<GalleryScreen />} />
             <Route path="reset-password/:passwordResetToken" element={<ResetPassword />} />
             <Route path="/portal"  element={<PortalList/>} />
+            <Route path="/portals/:portalId" element={<PortalDetails />} />
             <Route path="/admin" element={<AdminScreen />} />
-        <Route path="/portal/:id" element={<PortalDetail/>} />
             <Route element={<PrivateRoute />}>
               <Route path="profile" element={<UserProfileScreen />} />
             </Route>
