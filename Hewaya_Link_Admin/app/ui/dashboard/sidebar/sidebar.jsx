@@ -20,8 +20,18 @@ const menuItems = [
         icon: <MdSupervisedUserCircle />,
       },
       {
-        title: "Products",
-        path: "/dashboard/products",
+        title: "Portals",
+        path: "/dashboard/portals",
+        icon: <MdShoppingBag />,
+      },
+      {
+        title: "Category",
+        path: "/dashboard/category",
+        icon: <MdShoppingBag />,
+      },
+      {
+        title: "Tags",
+        path: "/dashboard/tags",
         icon: <MdShoppingBag />,
       },
       {
@@ -35,13 +45,13 @@ const menuItems = [
     title: "Analytics",
     list: [
       {
-        title: "Revenue",
-        path: "/dashboard/revenue",
+        title: "Portals",
+        path: "/dashboard/portals",
         icon: <MdWork />,
       },
       {
-        title: "Reports",
-        path: "/dashboard/reports",
+        title: "Category",
+        path: "/dashboard/Category",
         icon: <MdAnalytics />,
       },
       {
