@@ -2,9 +2,7 @@ import React from 'react';
 
 const PortalPage = () => {
   return (
-    <div>
-        <h1>Portal Page</h1>
-    </div>
+    <div>portal</div>
   );
 };
 
