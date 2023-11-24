@@ -28,19 +28,19 @@ const Portals = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="portals-container">
-      <h1>Portals</h1>
-          {portals.map((portal) => (
-            <div
-              key={portal._id}
-              className="portal-card"
-              onClick={() => navigate(`/portals/${portal._id}`)}
-            >
-              <h3>{portal.name}</h3>
-              <p>{portal.shortDescription}</p> 
-            </div>
-          ))}
-    </div>
+      <><h1 className="headerPortal">Portals</h1><div className="portals-container">
+
+      {portals.map((portal) => (
+        <div
+          key={portal._id}
+          className="portal-card"
+          onClick={() => navigate(`/portals/${portal._id}`)}
+        >
+          <h3>{portal.name}</h3>
+          <p>{portal.shortDescription}</p>
+        </div>
+      ))}
+    </div></>
   );
 };
 
