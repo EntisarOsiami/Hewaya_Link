@@ -5,7 +5,6 @@ import Rightbar from '../ui/dashboard/rightbar/rightbar';
 import Transactions from '../ui/dashboard/transactions/transactions';
 import Chart from '../ui/dashboard/chart/chart';
 import { cards } from '../lib/data';
-
 const Dashboard = () => {
   return (
     <div>
