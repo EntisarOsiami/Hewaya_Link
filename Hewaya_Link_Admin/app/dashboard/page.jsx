@@ -1,9 +1,9 @@
 import React from 'react';
 import styles from '../ui/dashboard/dashboard.module.css';
 import Card from '../ui/dashboard/card/card';
-import Chart from '../ui/dashboard/chart/chart';
 import Rightbar from '../ui/dashboard/rightbar/rightbar';
 import Transactions from '../ui/dashboard/transactions/transactions';
+import Chart from '../ui/dashboard/chart/chart';
 import { cards } from '../lib/data';
 
 const Dashboard = () => {
