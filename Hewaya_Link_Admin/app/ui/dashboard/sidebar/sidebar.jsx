@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from '../sidebar/sidebar.module.css';
 import { MdWork, MdAnalytics, MdPeople, MdDashboard, 
-  MdAttachMoney,MdSupervisedUserCircle, 
+  MdAttachMoney,MdSupervisedUserCircle, MdLogout,
   MdShoppingBag,MdHelpCenter ,MdOutlineSettings} from "react-icons/md";
 import MenuLink from '../sidebar/menuLink/menuLink';
 import Image from 'next/image'
@@ -89,6 +89,7 @@ const Sidebar = () => {
           </li>
         ))}
       </ul>
+      <button className={styles.logout}> <MdLogout/> Logout</button>
     </div>
   );
 };
