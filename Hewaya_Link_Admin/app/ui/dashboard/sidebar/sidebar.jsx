@@ -3,6 +3,8 @@ import styles from '../sidebar/sidebar.module.css';
 import { MdWork, MdAnalytics, MdPeople, MdDashboard, 
   MdAttachMoney,MdSupervisedUserCircle, 
   MdShoppingBag,MdHelpCenter ,MdOutlineSettings} from "react-icons/md";
+import MenuLink from '../sidebar/menuLink/menuLink';
+import Image from 'next/image'
 const menuItems = [
   {
     title: "Pages",
@@ -69,9 +71,26 @@ const menuItems = [
 const Sidebar = () => {
   return (
     <div className={styles.container}>
-      <h1>Sidebar</h1>
+      <div className={styles.user}>
+        <Image src="/noavatar.png" className={styles.userImage} width={50} height={50} /> 
+      </div>
+      <div className={styles.userDetail}>
+        <span className={styles.username}>John Doe</span>
+        <span className={styles.userTitle}>Admin</span>
+
+      </div>
+      <ul className={styles.list}>
+        {menuItems.map((cat) => (
+          <li key={cat.title}>
+            <span className={styles.cat}>{cat.title}</span>
+            {cat.list.map(item => (
+              <MenuLink item={item} key={item.title} />
+            ))}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
-
 export default Sidebar;
+
