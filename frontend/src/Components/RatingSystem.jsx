@@ -9,8 +9,20 @@ const RatingSystem = ({ itemId, onModel }) => {
   const [averageRating, setAverageRating] = useState(0);
   const [ratingCount, setRatingCount] = useState(0);
   const [error, setError] = useState(null);
-
   const userId = useSelector((state) => state.auth.userId);
+
+
+
+
+  
+  const modelDisplayText = {
+    Blog: "Rate this post",
+    Gallery: "Rate this image",
+    Portal: "Rate this portal",
+  };
+
+  const displayText = modelDisplayText[onModel] || "Rate this item";
+
 
   const fetchAverageRating = useCallback(async () => {
     setError(null);
@@ -81,7 +93,7 @@ const RatingSystem = ({ itemId, onModel }) => {
         )}
       </div>
       <div>
-        <h3>Rate this {onModel}:</h3>
+      <h3>{displayText}:</h3>
         {error && <p className="error">{error}</p>}
         <Rating
           count={5}
@@ -90,7 +102,7 @@ const RatingSystem = ({ itemId, onModel }) => {
           isHalf={true}
           activeColor="#ffd700"
           value={ratingValue}
-          minValue={1}           
+          minValue={1}
         />
       </div>
     </div>

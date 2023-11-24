@@ -16,6 +16,7 @@ import {
   faEyeSlash,
   faUpload,
   faSearch,
+  faComment,
 } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -32,15 +33,48 @@ const UserGallery = () => {
   const [filterOption, setFilterOption] = useState("all");
   const [portals, setPortals] = useState([]);
   const [selectedPortal, setSelectedPortal] = useState({});
-
+  const [expandedComments, setExpandedComments] = useState(null);
   useEffect(() => {
     const fetchImages = async () => {
       setLoading(true);
       try {
-        const response = await axios.get("/api/gallery/images");
-        setAllImages(response.data.data.images);
-        setFilteredImages(response.data.data.images);
-        setError("");
+        const imagesResponse = await axios.get("/api/gallery/images");
+        const images = imagesResponse.data.data.images;
+
+        const imagesWithRatingsAndComments = await Promise.all(
+          images.map(async (image) => {
+            try {
+              const ratingResponse = await axios.get(
+                `/api/ratings/average/Gallery/${image._id}`
+              );
+              const commentsResponse = await axios.get(
+                `/api/comments/Gallery/${image._id}`
+              );
+
+              return {
+                ...image,
+                averageRating: ratingResponse.data.data.averageRating,
+                ratingCount: ratingResponse.data.data.ratingCount,
+                comments: commentsResponse.data.data,
+              };
+            } catch (err) {
+              console.error(
+                "Error fetching additional data for image",
+                image._id,
+                err
+              );
+              return {
+                ...image,
+                averageRating: "Not Rated",
+                ratingCount: "Not rated",
+                comments: [],
+              };
+            }
+          })
+        );
+
+        setAllImages(imagesWithRatingsAndComments);
+        setFilteredImages(imagesWithRatingsAndComments);
       } catch (error) {
         console.error("Error fetching images", error);
         setError("Failed to fetch images.");
@@ -48,7 +82,6 @@ const UserGallery = () => {
         setLoading(false);
       }
     };
-
     const fetchPortals = async () => {
       try {
         const response = await axios.get("/api/portals");
@@ -61,7 +94,6 @@ const UserGallery = () => {
     fetchImages();
     fetchPortals();
   }, []);
-
   useEffect(() => {
     let images = [...allImages];
 
@@ -123,7 +155,13 @@ const UserGallery = () => {
       setError("Failed to update favorite status.");
     }
   };
-
+  const toggleComments = (imageId) => {
+    if (expandedComments === imageId) {
+      setExpandedComments(null);
+    } else {
+      setExpandedComments(imageId);
+    }
+  };
   const handleDelete = async (id) => {
     try {
       await axios.delete(`/api/gallery/images/${id}`);
@@ -140,24 +178,30 @@ const UserGallery = () => {
       return;
     }
     try {
-      const response = await axios.patch(`/api/gallery/images/${imageId}/publish`, { portalId });
+      const response = await axios.patch(
+        `/api/gallery/images/${imageId}/publish`,
+        { portalId }
+      );
       console.log(response.data.message);
-  
+
       const updatedImages = allImages.map((img) =>
         img._id === imageId ? { ...img, published: !img.published } : img
       );
-  
+
       setAllImages(updatedImages);
-      setFilteredImages(updatedImages.filter(image =>
-        filterOption === "all" ||
-        (filterOption === "fav" && image.isFavorite) ||
-        (filterOption === "published" && image.published)
-      ));
+      setFilteredImages(
+        updatedImages.filter(
+          (image) =>
+            filterOption === "all" ||
+            (filterOption === "fav" && image.isFavorite) ||
+            (filterOption === "published" && image.published)
+        )
+      );
     } catch (error) {
       console.error("Error publishing image", error);
     }
   };
-  
+
   const formatFileSize = (bytes) => {
     const KB = 1024;
     const MB = 1024 * KB;
@@ -188,16 +232,13 @@ const UserGallery = () => {
     }
   };
 
-
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   if (loading) return <div className="text-center">Loading images...</div>;
   if (error) return <div className="text-danger">Error: {error}</div>;
 
   return (
-    
     <div className="UserGallery-container">
-      
       <InputGroup className="search-input">
         <InputGroup.Text>
           <FontAwesomeIcon icon={faSearch} />
@@ -233,131 +274,155 @@ const UserGallery = () => {
         <option value="published">Published</option>
       </Form.Select>
       <div className="card-container scrollable-gallery">
-      <div className="card-container">
-        {currentImages.map((image) => (
-          <Card key={image._id} className="image-card">
-            <Card.Img
-              variant="top"
-              src={image.imageUrl}
-              alt={image.imageName}
-            />
-            <Card.Body>
-              <Card.Title className="card-title">{image.imageName}</Card.Title>
+        <div className="card-container">
+          {currentImages.map((image) => (
+            <Card key={image._id} className="image-card">
+              <Card.Img
+                variant="top"
+                src={image.imageUrl}
+                alt={image.imageName}
+              />
+              <Card.Body>
+                <Card.Title className="card-title">
+                  {image.imageName}
+                </Card.Title>
 
-              <div className="card-actions-container">
-                <Button
-                  variant="outline-warning"
-                  onClick={() => handleFavoriteToggle(image._id)}
-                >
-                  <FontAwesomeIcon
-                    icon={image.isFavorite ? faStarSolid : faStarRegular}
-                  />
-                </Button>
-                <Button
-                  variant="outline-secondary"
-                  onClick={() =>
-                    handleVisibilityToggle(image._id, image.visibility)
-                  }
-                >
-                  <FontAwesomeIcon
-                    icon={image.visibility === "public" ? faEye : faEyeSlash}
-                  />
-                </Button>
-
-                <Button
-                  variant="outline-danger"
-                  onClick={() => handleDelete(image._id)}
-                >
-                  <FontAwesomeIcon icon={faTrashAlt} />
-                </Button>
-              </div>
-              <p className="text-center mt-4">
-                To share an image, select a portal from the dropdown and then
-                click the Publish button.
-              </p>
-              <div className="card-publish-side">
-                <div>
-                  <Form.Select
-                    className="card-publish-dropdown"
-                    aria-label="Select portal"
-                    value={selectedPortal[image._id] || ""}
-                    onChange={(e) =>
-                      setSelectedPortal({
-                        ...selectedPortal,
-                        [image._id]: e.target.value,
-                      })
-                    }
-                  >
-                    <option value="">Select a Portal</option>
-                    {portals.map((portal) => (
-                      <option key={portal._id} value={portal._id}>
-                        {portal.name}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </div>
-                <div className="">
+                <div className="card-actions-container">
                   <Button
-                    variant={
-                      image.published ? "outline-danger" : "outline-success"
-                    }
-                    onClick={() => handlePublish(image._id)}
-                    className="w-100 card-publish-button"
-                    disabled={!selectedPortal[image._id]}
+                    variant="outline-warning"
+                    onClick={() => handleFavoriteToggle(image._id)}
                   >
                     <FontAwesomeIcon
-                      icon={image.published ? faEyeSlash : faUpload}
+                      icon={image.isFavorite ? faStarSolid : faStarRegular}
                     />
-                    {image.published ? " Unpublish" : " Publish"}
+                  </Button>
+                  <Button
+                    variant="outline-secondary"
+                    onClick={() =>
+                      handleVisibilityToggle(image._id, image.visibility)
+                    }
+                  >
+                    <FontAwesomeIcon
+                      icon={image.visibility === "public" ? faEye : faEyeSlash}
+                    />
+                  </Button>
+
+                  <Button
+                    variant="outline-danger"
+                    onClick={() => handleDelete(image._id)}
+                  >
+                    <FontAwesomeIcon icon={faTrashAlt} />
                   </Button>
                 </div>
-              </div>
-            </Card.Body>
-            
-            <Accordion className="accordion-container">
-              <Accordion.Item eventKey="0">
-                <Accordion.Header>Details</Accordion.Header>
-                <Accordion.Body>
-                  <strong>Description:</strong> {image.description}
-                  <br />
-                  {image.published && (
-                    <>
-                      <strong>Points:</strong> {image.points}
-                      <br />
-                      <strong>Rating:</strong>{" "}
-                      {image.rating ? `${image.rating}/5` : "Not rated"}
-                      <br />
-                    </>
-                  )}
-                  <strong>Metadata:</strong>
-                  <ul>
-                    <li>
-                      Resolution: {image.metadata.resolution.width} x{" "}
-                      {image.metadata.resolution.height} pixels
-                    </li>
-                    <li>File Type: {image.metadata.fileType}</li>
-                    <li>
-                      File Size: {formatFileSize(image.metadata.fileSize)}
-                    </li>{" "}
-                  </ul>
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
-          </Card>
-        ))}
-        <Pagination className="justify-content-center my-4">
-          {[...Array(totalPages).keys()].map((number) => (
-            <Pagination.Item
-              key={number + 1}
-              active={number + 1 === currentPage}
-              onClick={() => paginate(number + 1)}
-            >
-              {number + 1}
-            </Pagination.Item>
+                <p className="text-center mt-4">
+                  To share an image, select a portal from the dropdown and then
+                  click the Publish button.
+                </p>
+                <div className="card-publish-side">
+                  <div>
+                    <Form.Select
+                      className="card-publish-dropdown"
+                      aria-label="Select portal"
+                      value={selectedPortal[image._id] || ""}
+                      onChange={(e) =>
+                        setSelectedPortal({
+                          ...selectedPortal,
+                          [image._id]: e.target.value,
+                        })
+                      }
+                    >
+                      <option value="">Select a Portal</option>
+                      {portals.map((portal) => (
+                        <option key={portal._id} value={portal._id}>
+                          {portal.name}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </div>
+                  <div className="">
+                    <Button
+                      variant={
+                        image.published ? "outline-danger" : "outline-success"
+                      }
+                      onClick={() => handlePublish(image._id)}
+                      className="w-100 card-publish-button"
+                      disabled={!selectedPortal[image._id]}
+                    >
+                      <FontAwesomeIcon
+                        icon={image.published ? faEyeSlash : faUpload}
+                      />
+                      {image.published ? " Unpublish" : " Publish"}
+                    </Button>
+                  </div>
+                </div>
+              </Card.Body>
+
+              <Accordion className="accordion-container">
+                <Accordion.Item eventKey="0">
+                  <Accordion.Header>Details</Accordion.Header>
+                  <Accordion.Body>
+                    <strong>Description:</strong> {image.description}
+                    <br />
+                    {image.published && (
+                      <>
+                        <strong>Points:</strong> {image.points}
+                        <br />
+                        <strong>Average Rating:</strong>{" "}
+                        {image.averageRating
+                          ? `${image.averageRating.toFixed(1)}/5`
+                          : "Not Rated"}{" "}
+                        <br />
+                        <strong>Rating Count:</strong> {image.ratingCount}
+                        <b />
+                        <Button
+                          variant="outline-secondary"
+                          onClick={() => toggleComments(image._id)}
+                        >
+                          <FontAwesomeIcon icon={faComment} /> Comments
+                        </Button>
+                        {expandedComments === image._id && (
+                          <div className="comments-section">
+                            <h5>Comments:</h5>
+                            {image.comments.map((comment) => (
+                              <p key={comment._id}>
+                                <strong>{comment.author.username}:</strong>{" "}
+                                {comment.text}
+                              </p>
+                            ))}
+                          </div>
+                        )}
+                        <br />
+                      </>
+                    )}
+                    <strong>Metadata:</strong>
+                    <ul>
+                      <li>
+                        Resolution: {image.metadata.resolution.width} x{" "}
+                        {image.metadata.resolution.height} pixels
+                      </li>
+                      <li>File Type: {image.metadata.fileType}</li>
+                      <li>
+                        File Size: {formatFileSize(image.metadata.fileSize)}
+                      </li>{" "}
+                    </ul>
+                  </Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
+            </Card>
           ))}
-        </Pagination>
+          <Pagination className="justify-content-center my-4">
+            {[...Array(totalPages).keys()].map((number) => (
+              <Pagination.Item
+                key={number + 1}
+                active={number + 1 === currentPage}
+                onClick={() => paginate(number + 1)}
+              >
+                {number + 1}
+              </Pagination.Item>
+            ))}
+          </Pagination>
+        </div>
       </div>
-    </div>
     </div>
   );
 };
