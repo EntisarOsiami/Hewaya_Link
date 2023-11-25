@@ -1,18 +1,20 @@
 import mongoose from 'mongoose';
-import {Tag, Category} from './backend/models/index.js';
-
+import { Category, Tag } from './backend/models/index.js';
 import connectDB from './backend/config/db.js';
 import dotenv from 'dotenv';
 
 dotenv.config({ path: './backend/.env' });
-
-
 const categories = [
   { name: "Photography" },
   { name: "Painting" },
   { name: "Sculpture" },
   { name: "Digital Art" },
-  { name: "Drawing" }
+  { name: "Drawing" },
+  { name: "Music" },
+  { name: "Literature" },
+  { name: "Calligraphy" },
+  { name: "Graphic Design" },
+  { name: "Ceramics" }
 ];
 
 const tags = [
@@ -20,22 +22,36 @@ const tags = [
   { name: "Abstract" },
   { name: "Portrait" },
   { name: "Modern" },
-  { name: "Landscape" }
+  { name: "Landscape" },
+  { name: "Cityscape" },
+  { name: "Wildlife" },
+  { name: "Street Art" },
+  { name: "Vintage" },
+  { name: "Minimalism" }
 ];
-
+const insertIfNotExist = async (Model, items) => {
+  const newItems = [];
+  for (const item of items) {
+    const exists = await Model.findOne(item);
+    if (!exists) {
+      newItems.push(item);
+    }
+  }
+  if (newItems.length > 0) {
+    await Model.insertMany(newItems);
+  }
+  return newItems.length;
+};
 
 const seedDatabase = async () => {
-    connectDB();
+  connectDB();
 
   try {
-    await Category.deleteMany({});
-    await Tag.deleteMany({});
+    const newCategoriesCount = await insertIfNotExist(Category, categories);
+    console.log(`${newCategoriesCount} new categories seeded successfully.`);
 
-    await Category.insertMany(categories);
-    console.log('Categories seeded successfully.');
-
-    await Tag.insertMany(tags);
-    console.log('Tags seeded successfully.');
+    const newTagsCount = await insertIfNotExist(Tag, tags);
+    console.log(`${newTagsCount} new tags seeded successfully.`);
   } catch (error) {
     console.error('Error seeding database:', error);
   } finally {

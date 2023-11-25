@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import {
-  Card,
   Button,
-  Accordion,
   Pagination,
   Form,
   InputGroup,
+  Container,
+  Row,
+  Col,
+  Offcanvas,
 } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -17,6 +19,7 @@ import {
   faUpload,
   faSearch,
   faComment,
+  faStarHalfAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -25,7 +28,7 @@ const UserGallery = () => {
   const [allImages, setAllImages] = useState([]);
   const [filteredImages, setFilteredImages] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortOption, setSortOption] = useState("name-asc");
+  const [sortOption, setSortOption] = useState("date-desc");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,7 +36,12 @@ const UserGallery = () => {
   const [filterOption, setFilterOption] = useState("all");
   const [portals, setPortals] = useState([]);
   const [selectedPortal, setSelectedPortal] = useState({});
+  const [selectedImage, setSelectedImage] = useState(null);
+  const handleCloseOffcanvas = () => setSelectedImage(null);
   const [expandedComments, setExpandedComments] = useState(null);
+
+  // @description : useEffect hook to fetch images and portals when the component mounts
+
   useEffect(() => {
     const fetchImages = async () => {
       setLoading(true);
@@ -94,6 +102,9 @@ const UserGallery = () => {
     fetchImages();
     fetchPortals();
   }, []);
+
+  // @description : useEffect hook to filter images based on search term, sort option, and filter option
+
   useEffect(() => {
     let images = [...allImages];
 
@@ -136,41 +147,40 @@ const UserGallery = () => {
     setFilteredImages(images);
   }, [searchTerm, sortOption, filterOption, allImages]);
 
-  const currentImages = filteredImages.slice(
-    (currentPage - 1) * imagesPerPage,
-    currentPage * imagesPerPage
-  );
-  const totalPages = Math.ceil(filteredImages.length / imagesPerPage);
+  // @description : functions to handle image actions - favorite, delete, publish,  visibility and  Comments toggles
 
   const handleFavoriteToggle = async (imageId) => {
     try {
       await axios.patch(`/api/gallery/images/${imageId}/favorite`);
-      setAllImages(
-        allImages.map((img) =>
-          img._id === imageId ? { ...img, isFavorite: !img.isFavorite } : img
-        )
+      const updatedImages = allImages.map((img) =>
+        img._id === imageId ? { ...img, isFavorite: !img.isFavorite } : img
       );
+
+      setAllImages(updatedImages);
+      if (selectedImage && selectedImage._id === imageId) {
+        setSelectedImage({
+          ...selectedImage,
+          isFavorite: !selectedImage.isFavorite,
+        });
+      }
     } catch (error) {
       console.error("Error toggling favorite status", error);
       setError("Failed to update favorite status.");
-    }
-  };
-  const toggleComments = (imageId) => {
-    if (expandedComments === imageId) {
-      setExpandedComments(null);
-    } else {
-      setExpandedComments(imageId);
     }
   };
   const handleDelete = async (id) => {
     try {
       await axios.delete(`/api/gallery/images/${id}`);
       setAllImages(allImages.filter((image) => image._id !== id));
+      if (selectedImage && selectedImage._id === id) {
+        setSelectedImage(null);
+      }
     } catch (error) {
       console.error("Error deleting image", error);
       setError("Failed to delete image.");
     }
   };
+
   const handlePublish = async (imageId) => {
     const portalId = selectedPortal[imageId];
     if (!portalId) {
@@ -189,18 +199,49 @@ const UserGallery = () => {
       );
 
       setAllImages(updatedImages);
-      setFilteredImages(
-        updatedImages.filter(
-          (image) =>
-            filterOption === "all" ||
-            (filterOption === "fav" && image.isFavorite) ||
-            (filterOption === "published" && image.published)
-        )
-      );
+      if (selectedImage && selectedImage._id === imageId) {
+        setSelectedImage({
+          ...selectedImage,
+          published: !selectedImage.published,
+        });
+      }
     } catch (error) {
       console.error("Error publishing image", error);
     }
   };
+
+  const handleVisibilityToggle = async (imageId, currentVisibility) => {
+    try {
+      await axios.patch(`/api/gallery/images/${imageId}/visibility`);
+      const updatedImages = allImages.map((img) =>
+        img._id === imageId
+          ? {
+              ...img,
+              visibility: currentVisibility === "public" ? "private" : "public",
+            }
+          : img
+      );
+
+      setAllImages(updatedImages);
+      if (selectedImage && selectedImage._id === imageId) {
+        setSelectedImage({
+          ...selectedImage,
+          visibility: currentVisibility === "public" ? "private" : "public",
+        });
+      }
+    } catch (error) {
+      console.error("Error toggling visibility", error);
+      setError("Failed to update image visibility.");
+    }
+  };
+  const toggleComments = (imageId) => {
+    if (expandedComments === imageId) {
+      setExpandedComments(null);
+    } else {
+      setExpandedComments(imageId);
+    }
+  };
+  // @description : function to format file size in KB or MB
 
   const formatFileSize = (bytes) => {
     const KB = 1024;
@@ -212,33 +253,23 @@ const UserGallery = () => {
     }
   };
 
-  const handleVisibilityToggle = async (imageId, currentVisibility) => {
-    try {
-      await axios.patch(`/api/gallery/images/${imageId}/visibility`);
-      setAllImages(
-        allImages.map((img) =>
-          img._id === imageId
-            ? {
-                ...img,
-                visibility:
-                  currentVisibility === "public" ? "private" : "public",
-              }
-            : img
-        )
-      );
-    } catch (error) {
-      console.error("Error toggling visibility", error);
-      setError("Failed to update image visibility.");
-    }
-  };
+  // @ description functions to handle pagination
 
+  const currentImages = filteredImages.slice(
+    (currentPage - 1) * imagesPerPage,
+    currentPage * imagesPerPage
+  );
+  const totalPages = Math.ceil(filteredImages.length / imagesPerPage);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  // @ description : return statement to render the component
   if (loading) return <div className="text-center">Loading images...</div>;
   if (error) return <div className="text-danger">Error: {error}</div>;
 
   return (
-    <div className="UserGallery-container">
+    <Container className="UserGallery-container">
+      <h1 className="UserGallery-header">My Gallery</h1>
+
       <InputGroup className="search-input">
         <InputGroup.Text>
           <FontAwesomeIcon icon={faSearch} />
@@ -264,166 +295,199 @@ const UserGallery = () => {
       </Form.Select>
 
       <Form.Select
+        className="filter-select"
         aria-label="Filter images"
         value={filterOption}
         onChange={(e) => setFilterOption(e.target.value)}
-        className="filter-select"
       >
         <option value="all">All Images</option>
         <option value="fav">Favorites</option>
         <option value="published">Published</option>
       </Form.Select>
-      <div className="card-container scrollable-gallery">
-        <div className="card-container">
-          {currentImages.map((image) => (
-            <Card key={image._id} className="image-card">
-              <Card.Img
-                variant="top"
-                src={image.imageUrl}
-                alt={image.imageName}
-              />
-              <Card.Body>
-                <Card.Title className="card-title">
-                  {image.imageName}
-                </Card.Title>
 
-                <div className="card-actions-container">
-                  <Button
-                    variant="outline-warning"
-                    onClick={() => handleFavoriteToggle(image._id)}
-                  >
-                    <FontAwesomeIcon
-                      icon={image.isFavorite ? faStarSolid : faStarRegular}
-                    />
-                  </Button>
-                  <Button
-                    variant="outline-secondary"
-                    onClick={() =>
-                      handleVisibilityToggle(image._id, image.visibility)
-                    }
-                  >
-                    <FontAwesomeIcon
-                      icon={image.visibility === "public" ? faEye : faEyeSlash}
-                    />
-                  </Button>
+      <Row xs={1} md={2} lg={3} className="g-4 mt-3">
+        {currentImages.map((image) => (
+          <Col key={image._id} className="text-center">
+            <img
+              src={image.imageUrl}
+              alt={image.imageName}
+              className="img-fluid mb-2"
+              onClick={() => setSelectedImage(image)}
+              style={{ cursor: "pointer" }}
+            />
+          </Col>
+        ))}
+      </Row>
 
-                  <Button
-                    variant="outline-danger"
-                    onClick={() => handleDelete(image._id)}
-                  >
-                    <FontAwesomeIcon icon={faTrashAlt} />
-                  </Button>
-                </div>
-                <p className="text-center mt-4">
-                  To share an image, select a portal from the dropdown and then
-                  click the Publish button.
-                </p>
-                <div className="card-publish-side">
-                  <div>
-                    <Form.Select
-                      className="card-publish-dropdown"
-                      aria-label="Select portal"
-                      value={selectedPortal[image._id] || ""}
-                      onChange={(e) =>
-                        setSelectedPortal({
-                          ...selectedPortal,
-                          [image._id]: e.target.value,
-                        })
-                      }
-                    >
-                      <option value="">Select a Portal</option>
-                      {portals.map((portal) => (
-                        <option key={portal._id} value={portal._id}>
-                          {portal.name}
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </div>
-                  <div className="">
-                    <Button
-                      variant={
-                        image.published ? "outline-danger" : "outline-success"
-                      }
-                      onClick={() => handlePublish(image._id)}
-                      className="w-100 card-publish-button"
-                      disabled={!selectedPortal[image._id]}
-                    >
-                      <FontAwesomeIcon
-                        icon={image.published ? faEyeSlash : faUpload}
-                      />
-                      {image.published ? " Unpublish" : " Publish"}
-                    </Button>
-                  </div>
-                </div>
-              </Card.Body>
+      <Pagination className="justify-content-center my-4">
+        {[...Array(totalPages).keys()].map((number) => (
+          <Pagination.Item
+            key={number + 1}
+            active={number + 1 === currentPage}
+            onClick={() => paginate(number + 1)}
+          >
+            {number + 1}
+          </Pagination.Item>
+        ))}
+      </Pagination>
 
-              <Accordion className="accordion-container">
-                <Accordion.Item eventKey="0">
-                  <Accordion.Header>Details</Accordion.Header>
-                  <Accordion.Body>
-                    <strong>Description:</strong> {image.description}
-                    <br />
-                    {image.published && (
-                      <>
-                        <strong>Points:</strong> {image.points}
-                        <br />
-                        <strong>Average Rating:</strong>{" "}
-                        {image.averageRating
-                          ? `${image.averageRating.toFixed(1)}/5`
-                          : "Not Rated"}{" "}
-                        <br />
-                        <strong>Rating Count:</strong> {image.ratingCount}
-                        <b />
-                        <Button
-                          variant="outline-secondary"
-                          onClick={() => toggleComments(image._id)}
-                        >
-                          <FontAwesomeIcon icon={faComment} /> Comments
-                        </Button>
-                        {expandedComments === image._id && (
-                          <div className="comments-section">
-                            <h5>Comments:</h5>
-                            {image.comments.map((comment) => (
-                              <p key={comment._id}>
-                                <strong>{comment.author.username}:</strong>{" "}
-                                {comment.text}
-                              </p>
-                            ))}
-                          </div>
-                        )}
-                        <br />
-                      </>
-                    )}
-                    <strong>Metadata:</strong>
-                    <ul>
-                      <li>
-                        Resolution: {image.metadata.resolution.width} x{" "}
-                        {image.metadata.resolution.height} pixels
-                      </li>
-                      <li>File Type: {image.metadata.fileType}</li>
-                      <li>
-                        File Size: {formatFileSize(image.metadata.fileSize)}
-                      </li>{" "}
-                    </ul>
-                  </Accordion.Body>
-                </Accordion.Item>
-              </Accordion>
-            </Card>
-          ))}
-          <Pagination className="justify-content-center my-4">
-            {[...Array(totalPages).keys()].map((number) => (
-              <Pagination.Item
-                key={number + 1}
-                active={number + 1 === currentPage}
-                onClick={() => paginate(number + 1)}
+      {selectedImage && (
+        <Offcanvas show={true} onHide={handleCloseOffcanvas} placement="end">
+          <Offcanvas.Header closeButton>
+            <Offcanvas.Title className="offcanvas-title">
+              {" "}
+              {selectedImage.imageName}
+            </Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body>
+            <div className="card-actions-container">
+              <Button
+                variant="outline-warning"
+                onClick={() => handleFavoriteToggle(selectedImage._id)}
               >
-                {number + 1}
-              </Pagination.Item>
-            ))}
-          </Pagination>
-        </div>
-      </div>
-    </div>
+                <FontAwesomeIcon
+                  icon={selectedImage.isFavorite ? faStarSolid : faStarRegular}
+                />
+              </Button>
+              <Button
+                variant="outline-secondary"
+                onClick={() =>
+                  handleVisibilityToggle(
+                    selectedImage._id,
+                    selectedImage.visibility
+                  )
+                }
+              >
+                <FontAwesomeIcon
+                  icon={
+                    selectedImage.visibility === "public" ? faEye : faEyeSlash
+                  }
+                />
+              </Button>
+
+              <Button
+                variant="outline-danger"
+                onClick={() => handleDelete(selectedImage._id)}
+              >
+                <FontAwesomeIcon icon={faTrashAlt} />
+              </Button>
+            </div>
+            <strong className="Bold_meta">Description:</strong>{" "}
+            <p className="p_meta">{selectedImage.description}</p>
+            {selectedImage.published && (
+              <>
+                <div className="rating-container_star">
+                  <strong className="Bold_meta">Average Rating:</strong>
+
+                  {[...Array(5)].map((star, index) => {
+                    const ratingValue = index + 1;
+                    return (
+                      <FontAwesomeIcon
+                        key={index}
+                        icon={
+                          selectedImage.averageRating >= ratingValue
+                            ? faStarSolid
+                            : selectedImage.averageRating >= ratingValue - 0.5
+                            ? faStarHalfAlt
+                            : faStarRegular
+                        }
+                        className={
+                          selectedImage.averageRating >= ratingValue
+                            ? "star filled"
+                            : selectedImage.averageRating >= ratingValue - 0.5
+                            ? "star half-filled"
+                            : "star"
+                        }
+                      />
+                    );
+                  })}
+                  <p className="p_meta">
+                    {selectedImage.averageRating
+                      ? `${selectedImage.averageRating.toFixed(1)}/5`
+                      : "Not Rated"}
+                  </p>
+                </div>
+                <strong className="Bold_meta">Rating Count:</strong>
+                <p className="p_meta">{selectedImage.ratingCount} </p>
+              </>
+            )}
+            <strong className="Bold_meta">Metadata:</strong>
+            <ul className="list_meta">
+              <li>
+                Resolution: {selectedImage.metadata.resolution.width} x{" "}
+                {selectedImage.metadata.resolution.height} pixels
+              </li>
+              <li>File Type: {selectedImage.metadata.fileType}</li>
+              <li>
+                File Size: {formatFileSize(selectedImage.metadata.fileSize)}
+              </li>{" "}
+            </ul>
+            <strong className="Bold_meta">Points:</strong>{" "}
+            <p className="p_meta">{selectedImage.points} </p>
+            <p className="PortalTips">
+              To share an image, select a portal from the dropdown and then
+              click the Publish button.
+            </p>
+            <div className="card-publish-side">
+              <div>
+                <Form.Select
+                  className="card-publish-dropdown"
+                  aria-label="Select portal"
+                  value={selectedPortal[selectedImage._id] || ""}
+                  onChange={(e) =>
+                    setSelectedPortal({
+                      ...selectedPortal,
+                      [selectedImage._id]: e.target.value,
+                    })
+                  }
+                >
+                  <option value="">Select a Portal</option>
+                  {portals.map((portal) => (
+                    <option key={portal._id} value={portal._id}>
+                      {portal.name}
+                    </option>
+                  ))}
+                </Form.Select>
+              </div>
+              <div className="card-publish-button">
+                <Button
+                  variant={
+                    selectedImage.published
+                      ? "outline-danger"
+                      : "outline-success"
+                  }
+                  onClick={() => handlePublish(selectedImage._id)}
+                  disabled={!selectedPortal[selectedImage._id]}
+                >
+                  <FontAwesomeIcon
+                    icon={selectedImage.published ? faEyeSlash : faUpload}
+                  />
+                  {selectedImage.published ? " Unpublish" : " Publish"}
+                </Button>
+              </div>
+            </div>
+            <br />
+            <Button
+              className="comments-button"
+              variant="outline-secondary"
+              onClick={() => toggleComments(selectedImage._id)}
+            >
+              <FontAwesomeIcon icon={faComment} /> Comments
+            </Button>
+            {expandedComments === selectedImage._id && (
+              <div className="comments-section">
+                <h5>Comments:</h5>
+                {selectedImage.comments.map((comment) => (
+                  <p key={comment._id}>
+                    <strong>{comment.author.username}:</strong> {comment.text}
+                  </p>
+                ))}
+              </div>
+            )}
+          </Offcanvas.Body>
+        </Offcanvas>
+      )}
+    </Container>
   );
 };
 
