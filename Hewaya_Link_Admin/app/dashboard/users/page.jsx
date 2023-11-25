@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from "next/image";
-import { deleteUser } from "@/app/lib/actions";
+// import { deleteUser } from "@/app/lib/actions";
 import styles from "../../ui/dashboard/users/users.module.css";
 import Link from 'next/link';
 import { fetchUsers } from "@/app/lib/data";
