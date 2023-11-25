@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 import {Portal} from './backend/models/index.js';
+import {Tag, Category} from './backend/models/index.js';
+
 import connectDB from './backend/config/db.js';
 import dotenv from 'dotenv';
 
@@ -76,18 +78,57 @@ const portalsData = [
   }
 ];
 
+const categories = [
+  { name: "Photography" },
+  { name: "Painting" },
+  { name: "Sculpture" },
+  { name: "Digital Art" },
+  { name: "Drawing" }
+];
 
+const tags = [
+  { name: "Nature" },
+  { name: "Abstract" },
+  { name: "Portrait" },
+  { name: "Modern" },
+  { name: "Landscape" }
+];
+
+const seedCategoriesAndTags = async () => {
+  const insertedCategories = await Category.insertMany(categories);
+  const insertedTags = await Tag.insertMany(tags);
+
+  return {
+    categoryIds: insertedCategories.map(cat => cat._id),
+    tagIds: insertedTags.map(tag => tag._id),
+  };
+};
+
+// Modify the seedPortals function to use the category and tag IDs
 const seedPortals = async () => {
   try {
     await Portal.deleteMany({});
+    await Category.deleteMany({});
+    await Tag.deleteMany({});
 
-    await Portal.insertMany(portalsData);
+    const { categoryIds, tagIds } = await seedCategoriesAndTags();
+
+    // Assuming you want to randomly assign categories and tags to each portal
+    const updatedPortalsData = portalsData.map(portal => ({
+      ...portal,
+      categories: [categoryIds[Math.floor(Math.random() * categoryIds.length)]],
+      tags: [tagIds[Math.floor(Math.random() * tagIds.length)]],
+    }));
+
+    await Portal.insertMany(updatedPortalsData);
     console.log('Portals seeded successfully.');
   } catch (error) {
-    console.error('Error seeding portals:', error);
+    console.error('Error seeding data:', error);
   } finally {
     mongoose.connection.close();
   }
 };
 
 seedPortals();
+
+

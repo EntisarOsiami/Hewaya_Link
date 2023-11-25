@@ -65,9 +65,7 @@ const UploadComponent = ({ onImageUpload }) => {
   );
 
   return (
-    <div className="UploadComponent-container">
-    <h1 className="GalleryScreen-header">Gallery</h1>
-    <h2 className="GalleryScreen-subheader">Upload New Image</h2>
+    <div className="UploadComponent-container">   
     <Form onSubmit={handleSubmit} className="UploadComponent-form">
       <Form.Group controlId="formFile" className="mb-3">
         <Form.Label>Image</Form.Label>

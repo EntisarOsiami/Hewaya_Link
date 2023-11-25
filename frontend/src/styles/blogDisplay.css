@@ -3,12 +3,13 @@
   padding: 10px;
   display: flex;
   flex-direction: column;
-  background-color: var(--bg-color);}
+  background-color: var(--bg-color);
+}
 
-
-.app-blog-header, .app-blog-nav {
+.app-blog-header,
+.app-blog-nav {
   display: flex;
-  
+
   justify-content: space-between;
 
   align-items: center;
@@ -17,9 +18,6 @@
   border: var(--primary-color);
   border-width: 4px;
   border-style: solid;
-
-
-  
 }
 
 .app-blog-nav ul {
@@ -40,36 +38,41 @@ a:hover {
   color: var(--hover-color);
 }
 
-button, .app-create-blog-btn {
+button,
+.app-create-blog-btn {
   background-color: var(--primary-color);
   color: white;
   border: none;
-  padding: 10px 20px; 
+  padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
-button:hover, .app-create-blog-btn:hover {
+button:hover,
+.app-create-blog-btn:hover {
   background-color: var(--hover-color);
 }
 
-.app-blog-hero, .app-blog-post, .blog-card {
+.app-blog-hero,
+.app-blog-post,
+.blog-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-radius: 10px; 
+  border-radius: 10px;
   text-shadow: var(--text-shadow);
 }
-.blog-card:focus-within, .blog-card:active {
+.blog-card:focus-within,
+.blog-card:active {
   outline: none;
-  border: 2px solid var(--primary-color); 
+  border: 2px solid var(--primary-color);
 }
 .blog-card {
-  background-color:var( --secondary-color-transparent) 
+  background-color: var(--secondary-color-transparent);
 }
 .app-blog-hero {
-  background-image: url('/assets/home-bg.jpg');
+  background-image: url("/assets/home-bg.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -80,20 +83,29 @@ button:hover, .app-create-blog-btn:hover {
   border-style: solid;
 }
 
-.blog-article, .blog-card {
+.blog-article,
+.blog-card {
   background: #fff;
   padding: 20px;
   box-shadow: var(--shadow-light);
 }
 
-.app-blog-title, .app-blog-post h2, .blog-article h2, .app-blog-excerpt, .blog-excerpt {
-  color:black;
-
-  
+.app-blog-title,
+.app-blog-post h2,
+.blog-article h2,
+.app-blog-excerpt,
+.blog-excerpt {
+  color: black;
 }
 
-.app-blog-meta, .blog-content, .blog-author, .star-rating p, .comment-text, .comment-date, .comment-author {
-  font-size: 16px; 
+.app-blog-meta,
+.blog-content,
+.blog-author,
+.star-rating p,
+.comment-text,
+.comment-date,
+.comment-author {
+  font-size: 16px;
   color: #777;
   margin-top: 10px;
 }
@@ -104,17 +116,22 @@ button:hover, .app-create-blog-btn:hover {
   object-fit: cover;
 }
 
-.blog-list-container, .article-container {
+.blog-list-container,
+.article-container {
   padding: 20px;
   max-width: 800px;
   margin: auto;
 }
 
-.comments-section, .rating-input-section, .comments-list, .comment {
+.comments-section,
+.rating-input-section,
+.comments-list,
+.comment {
   margin-top: 20px;
 }
 
-.comments-section, .rating-input-section {
+.comments-section,
+.rating-input-section {
   border-top: 1px solid #eee;
   padding-top: 20px;
 }
@@ -154,7 +171,7 @@ button:hover, .app-create-blog-btn:hover {
 
 .blog-card:hover {
   transform: translateY(-5px);
-  box-shadow: var(--shadow-dark); 
+  box-shadow: var(--shadow-dark);
 }
 
 .blog-card img {
@@ -162,7 +179,7 @@ button:hover, .app-create-blog-btn:hover {
 }
 
 .blog-card:hover img {
-  transform: scale(1.03); 
+  transform: scale(1.03);
 }
 
 button {
@@ -171,7 +188,7 @@ button {
 }
 
 button::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 100%;
   height: 100%;
@@ -190,7 +207,8 @@ button span {
   z-index: 1;
 }
 
-.card-title, .card-text {
+.card-title,
+.card-text {
   transition: color 0.3s;
 }
 
@@ -199,7 +217,8 @@ button span {
   color: var(--accent-color);
 }
 
-.loading-message, .error-message {
+.loading-message,
+.error-message {
   color: var(--primary-color);
   font-weight: var(--bold-text);
   text-align: center;
@@ -218,15 +237,13 @@ button span {
   }
 
   .blog-card img {
-    height: auto; 
+    height: auto;
   }
 }
-
 
 @media (max-width: 768px) {
   .app-blog-nav ul {
-      flex-direction: column;
-      gap: 15px;
+    flex-direction: column;
+    gap: 15px;
   }
 }
-

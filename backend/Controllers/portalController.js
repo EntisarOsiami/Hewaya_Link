@@ -5,14 +5,19 @@ const PortalController = {
 
   async getAllPortals(req, res) {
     try {
-      const portals = await Portal.find({}).populate('Images');
+      const portals = await Portal.find({})
+        .populate('Images')
+        .populate('categories')
+        .populate('tags')
+        .populate('subscribers')
+        .populate('moderators');
       sendResponse(res, portals, 'Portals retrieved successfully');
-      
     } catch (error) {
       console.error('Error fetching portals:', error);
       sendResponse(res, null, 'Failed to fetch portals', false);
     }
   },
+  
 
   async addPortal(req, res) {
     try {
@@ -54,24 +59,38 @@ const PortalController = {
       sendResponse(res, null, 'Failed to delete portal', false);
     }
   },
+
   async getPortalById(req, res) {
     const { id } = req.params;
-
+  
     try {
-      const portal = await Portal.findById(id).populate('Images');
+      const portal = await Portal.findById(id)
+        .populate({
+          path: 'Images',
+          populate: {
+            path: 'user',
+            model: 'User'
+          }
+        })
+        .populate('categories')
+        .populate('tags')
+        .populate('subscribers')
+        .populate('moderators');
+  
       if (!portal) {
         return sendResponse(res, null, 'Portal not found', false);
       }
+  
       sendResponse(res, portal, 'Portal retrieved successfully');
     } catch (error) {
       console.error('Error fetching portal by ID:', error);
       sendResponse(res, null, 'Failed to fetch portal', false);
     }
-  },
+  },  
 
   async toggleSubscription(req, res) {
     const { id } = req.params; 
-    const userId = req.user._id; 
+    const userId = req.userId; 
 
     try {
       const portal = await Portal.findById(id);
@@ -94,7 +113,6 @@ const PortalController = {
     }
   }
 
-  // Other controller methods can be added here
 
 };
 
