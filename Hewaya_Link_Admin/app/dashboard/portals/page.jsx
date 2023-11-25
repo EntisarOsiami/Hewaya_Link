@@ -1,15 +1,13 @@
 import React from 'react';
-import Image from "next/image";
-import Pagination from "@/app/ui/dashboard/pagination/pagination";
-import Search from "@/app/ui/dashboard/search/search";
 import styles from "../../ui/dashboard/portals/portals.module.css";
 import Link from 'next/link';
+import { fetchPortals, fetchCategoryName } from "@/app/lib/data";
 
-const PortalPage = () => {
+const PortalPage = async () => {
+const portals = await fetchPortals();
   return (
     <div className={styles.container}>
       <div className={styles.top}>
-        <Search placeholder="search for portals"/>
         <Link href="/dashboard/portals/add">
            <button className={styles.addButton}>Add New</button>
         </Link>
@@ -18,34 +16,17 @@ const PortalPage = () => {
         <thead>
           <tr>
             <th>Name</th>
-            <th>Description</th>
-            <th>Category</th>
-            <th>Tags</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
+        {portals.map((portal) => (
+          <tr key={portal.id}>
             <td>
-              <div className={styles.portal}>
-                <Image
-                  src="/noproduct.jpg"
-                  width={40}
-                  height={40}
-                  className={styles.portalImage}
-                />
-                <span className={styles.name}>John Doe</span>
-              </div>
+                {portal.name}
             </td>
-
-            <td>
-              portal one
-            </td>
-            <td>cdscsdcscsdc</td>
-            <td>test</td>
-            <td>test,test</td>
             <td>
               <div className={styles.buttons}>
-              <Link href="/dasboard/users/test">
+              <Link href="/dashboard/portals/test">
                 <button className={`${styles.button} ${styles.view}`}>
                   View
                 </button>
@@ -56,9 +37,9 @@ const PortalPage = () => {
               </div>
             </td>
           </tr>
+        ))}
         </tbody>
       </table>
-      <Pagination count={10} />
     </div>
   );
 };

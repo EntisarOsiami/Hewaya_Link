@@ -11,7 +11,7 @@ const Search = ({ placeholder }) => {
   const pathname = usePathname();
 
   const handleSearch = useDebouncedCallback((e) => {
-    const params = new URLSearchParams(searchParams);
+  const params = new URLSearchParams(searchParams);
 
     params.set("page", 1);
 

@@ -1,18 +1,15 @@
 import React from 'react';
 import Image from "next/image";
 import { deleteUser } from "@/app/lib/actions";
-import Pagination from "@/app/ui/dashboard/pagination/pagination";
-import Search from "@/app/ui/dashboard/search/search";
 import styles from "../../ui/dashboard/users/users.module.css";
 import Link from 'next/link';
+import { fetchUsers } from "@/app/lib/data";
 
-const UsersPage = () => {
-  
-
+const UsersPage = async () => {
+const users = await fetchUsers();
   return (
     <div className={styles.container}>
       <div className={styles.top}>
-        <Search placeholder="search for users"/>
         <Link href="/dashboard/users/add">
            <button className={styles.addButton}>Add New</button>
         </Link>
@@ -28,7 +25,8 @@ const UsersPage = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
+          {users.map((user) => (
+          <tr key={user.id}>
             <td>
               <div className={styles.user}>
                 <Image
@@ -37,32 +35,32 @@ const UsersPage = () => {
                   height={40}
                   className={styles.userImage}
                 />
-                <span className={styles.name}>John Doe</span>
+                <span className={styles.name}>{user.name.firstName} {user.name.lastName}</span>
               </div>
             </td>
 
             <td>
-              some@some.com
+              {user.email}
             </td>
-            <td>2012</td>
-            <td>admin</td>
-            <td>active</td>
+            <td>{new Date(user.createdAt).toLocaleDateString()}</td>
+            <td>{user.role}</td>
+            <td>{user.disabled ? 'Disabled' : 'Active'}</td>
             <td>
               <div className={styles.buttons}>
-              <Link href="/dashboard/users/test">
+              <Link href={`/dashboard/users/${user.id}`}>
                 <button className={`${styles.button} ${styles.view}`}>
                   View
                 </button>
               </Link>
               <button className={`${styles.button} ${styles.delete}`}>
-                  View
+                  Delete
                 </button>
               </div>
             </td>
           </tr>
+          ))}
         </tbody>
       </table>
-      <Pagination count={10} />
     </div>
   );
 };
