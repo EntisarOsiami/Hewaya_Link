@@ -1,7 +1,6 @@
 "use client"
 import styles from './chart.module.css'
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { data } from '../../../lib/data';
 const Chart = ({ item }) => {
   return (
     <div className={styles.container}>
@@ -10,7 +9,7 @@ const Chart = ({ item }) => {
       <LineChart
         width={500}
         height={300}
-        data={data}
+        data={0}
         margin={{
           top: 5,
           right: 30,

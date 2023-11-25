@@ -16,10 +16,6 @@ const SingleUserPage = () => {
         <form className={styles.form}>
         <label>Username</label>
         <input type="text" name="username" placeholder="username" />
-        <label>First Name</label>
-        <input type="text" name="firstname" placeholder="firstname" />
-        <label>Last Name</label>
-        <input type="text" name="lastname" placeholder="lastname" />
         <label>Email</label>
         <input type="text" name="email" placeholder="email" />
         <label>Password</label>

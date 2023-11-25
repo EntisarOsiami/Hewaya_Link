@@ -41,41 +41,7 @@ const menuItems = [
       },
     ],
   },
-  {
-    title: "Analytics",
-    list: [
-      {
-        title: "Portals",
-        path: "/dashboard/portals",
-        icon: <MdWork />,
-      },
-      {
-        title: "Category",
-        path: "/dashboard/Category",
-        icon: <MdAnalytics />,
-      },
-      {
-        title: "Teams",
-        path: "/dashboard/teams",
-        icon: <MdPeople />,
-      },
-    ],
-  },
-  {
-    title: "User",
-    list: [
-      {
-        title: "Settings",
-        path: "/dashboard/settings",
-        icon: <MdOutlineSettings />,
-      },
-      {
-        title: "Help",
-        path: "/dashboard/help",
-        icon: <MdHelpCenter />,
-      },
-    ],
-  },
+
 ];
 
 const Sidebar = () => {
