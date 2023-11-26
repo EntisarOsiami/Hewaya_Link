@@ -5,7 +5,7 @@
   padding: 5px ; }
 
 .footer a {
-  color: var(--primary-color);
+  color: var(--accent-color);
   text-decoration: none;
   font-size:medium;
 }

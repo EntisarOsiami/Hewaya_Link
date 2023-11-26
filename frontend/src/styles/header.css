@@ -9,6 +9,8 @@
   border-radius: 0 0 5px 5px;
   font-size: x-large;
   font-weight: 400;
+  color: var(--text-color)!; 
+
 }
 
 .navbar-brand {
@@ -32,6 +34,10 @@
   margin-right: 20px;
   transition: color 0.3s, transform 0.3s;
 }
+
+.header a:active {
+  color: var(--text-color);
+  transform: translateY(2px);}
 
 .header a:hover {
   color: var(--hover-color);
