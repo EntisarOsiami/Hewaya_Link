@@ -12,6 +12,10 @@ const PortalSchema = new Schema({
     type: String,
     required: true
   },
+  background:{
+    type: String,
+  },
+  
   categories: [{
     type: Schema.Types.ObjectId,
     ref: 'Category' 

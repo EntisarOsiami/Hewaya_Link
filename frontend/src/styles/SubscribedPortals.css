@@ -1,0 +1,79 @@
+/* SubscribedPortals.css */
+
+/* General Styles */
+.container-subscribed {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    align-items: center;
+    justify-content: center;
+
+  }
+  
+  .nav-tabs .nav-link {
+    color: var(--text-color);
+    background-color:var(--primary-color-transparent);
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    margin-right: 2px;
+  }
+  
+  .nav-tabs .nav-link.active {
+    color: #495057;
+    background-color: #fff;
+    border-color: #dee2e6 #dee2e6 #fff;
+  }
+  
+  .scrollbars-custom-track {
+    background-color: #f1f1f1;
+    border-radius: 6px;
+  }
+  
+  .scrollbars-custom-thumb {
+    background-color: #888;
+    border-radius: 6px;
+  }
+  
+  .scrollbars-custom-thumb:hover {
+    background-color: #555;
+  }
+  
+  .card {
+    margin-bottom: 30px;
+    width:50%;
+    margin-left: auto;
+    margin-right: auto;
+    height:300px;
+
+    
+
+  }
+  
+  .card-img-top {
+    height:auto;
+    object-fit: cover;
+    
+
+    
+  }
+  
+  .card-body {
+    background-color: #f8f9fa;
+  }
+  
+  .card-title {
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .card-text {
+    color: var(--text-color);
+  }
+  
+  .toggle-comments-btn {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
