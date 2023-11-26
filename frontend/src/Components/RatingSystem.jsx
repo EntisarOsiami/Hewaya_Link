@@ -83,11 +83,8 @@ const RatingSystem = ({ itemId, onModel }) => {
               Rating: {averageRating.toFixed(1)} out of 5 ({ratingCount}{" "}
               {ratingCount === 1 ? "vote" : "votes"})
             </p>
-          </div>
-        )}
-      </div>
-      <div>
-        <h5>{displayText}:</h5>
+            
+            <h5>{displayText}:</h5>
         {error && <p className="error">{error}</p>}
         <Rating
           count={5}
@@ -98,7 +95,10 @@ const RatingSystem = ({ itemId, onModel }) => {
           value={ratingValue}
           minValue={1}
         />
+          </div>
+        )}
       </div>
+     
     </div>
   );
 };

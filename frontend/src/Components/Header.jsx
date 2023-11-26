@@ -35,9 +35,13 @@ const Header = () => {
     <header className="header">
       <Navbar bg="" expand="lg" collapseOnSelect>
         <Container>
-          <LinkContainer to="/">
-            <Navbar.Brand className="logo">Hewaya Link</Navbar.Brand>
-          </LinkContainer>
+            <Navbar.Brand className="logo">
+              <img
+                src="/assets/logo.png"
+                alt="Hewaya Link Logo"
+                style={{ maxHeight: "100px" }}
+              />
+            </Navbar.Brand>{" "}
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="menu mx-auto">
@@ -45,16 +49,16 @@ const Header = () => {
                 <Nav.Link>Home</Nav.Link>
               </LinkContainer>
               <LinkContainer to="/explore">
-                <Nav.Link>Explore</Nav.Link>
+                <Nav.Link>Explore Hobbies</Nav.Link>
               </LinkContainer>
               <LinkContainer to="/blog">
-                <Nav.Link>Blog</Nav.Link>
+                <Nav.Link>Hobbyists Blog</Nav.Link>
               </LinkContainer>
               <LinkContainer to="/gallery">
-                <Nav.Link>Gallery</Nav.Link>
+                <Nav.Link>My Gallery</Nav.Link>
               </LinkContainer>
-              <LinkContainer to="/portal">
-                <Nav.Link>Portal</Nav.Link>
+              <LinkContainer to="/subscriptions">
+                <Nav.Link>My Portals</Nav.Link>
               </LinkContainer>
               <LinkContainer to="/about">
                 <Nav.Link>About</Nav.Link>
@@ -78,7 +82,6 @@ const Header = () => {
                       {user.username}
                     </>
                   }
-
                   id="username"
                   className="custom-dropdown"
                 >
@@ -105,7 +108,7 @@ const Header = () => {
               )}
               {logoutError && <p>{logoutError}</p>}
 
-              <br/>
+              <br />
 
               <ThemeToggle />
             </Nav>

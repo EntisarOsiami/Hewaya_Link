@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Pagination, Row, Col, Button } from "react-bootstrap";
@@ -16,11 +16,12 @@ const PortalDetails = () => {
   const [error, setError] = useState("");
   const { portalId } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
-  const imagesPerPage = 6;
+  const imagesPerPage = 10;
   const [selectedImage, setSelectedImage] = useState(null);
   const [showComments, setShowComments] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const userId = useSelector(state => state.auth.userId);
+  const userId = useSelector((state) => state.auth.userId);
+  const detailsRef = useRef(null);
 
   useEffect(() => {
     const fetchPortalDetails = async () => {
@@ -28,6 +29,8 @@ const PortalDetails = () => {
       try {
         const response = await axios.get(`/api/portals/${portalId}`);
         setPortal(response.data.data);
+        setIsSubscribed(response.data.data.subscribers.includes(userId));
+        console.log(response.data.data.subscribers.includes(userId));
         setError("");
       } catch (err) {
         setError(err.message);
@@ -37,7 +40,8 @@ const PortalDetails = () => {
     };
 
     fetchPortalDetails();
-  }, [portalId]);
+  }, [portalId, userId]);
+
   const breakpointColumnsObj = {
     default: 3,
     1100: 2,
@@ -53,24 +57,41 @@ const PortalDetails = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  //function to toggle comments
   const toggleComments = () => {
     setShowComments(!showComments);
   };
-  const randomHeight = () => {
-    return Math.floor(Math.random() * (400 - 250 + 1)) + 250;
-  };
 
+  //function to generate random height for images
+
+  const randomHeight = () => {
+    return Math.floor(Math.random() * (500 - 100 + 1)) + 250;
+  };
+  //function to generate random url for dummy images
   const generateDummyUrl = (id) => {
     const width = Math.floor(Math.random() * (300 - 200 + 1)) + 200;
     const height = Math.floor(Math.random() * (400 - 150 + 1)) + 150;
 
     return `https://picsum.photos/seed/${id}/${width}/${height}`;
   };
+
+  //function to scroll to details of selected image
+  const scrollToDetails = () => {
+    detailsRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleImageClick = (image) => {
+    setSelectedImage(image);
+    scrollToDetails();
+  };
+
+  //Function to handle subscribe button click
   const handleSubscribeClick = async () => {
     try {
-       await axios.patch(`/api/portals/${portalId}/subscribe`, { userId });
-      setIsSubscribed(!isSubscribed);
-
+      const response = await axios.patch(`/api/portals/${portalId}/subscribe`, {
+        userId: userId,
+      });
+      setIsSubscribed(response.data.data.includes(userId));
     } catch (error) {
       console.error("Error toggling subscription:", error);
     }
@@ -85,13 +106,16 @@ const PortalDetails = () => {
       <div className="header-area">
         <h2>{portal.name}</h2>
         <p>{portal.description}</p>
-        <Button onClick={handleSubscribeClick}>
+        <Button
+          onClick={handleSubscribeClick}
+          variant={isSubscribed ? "danger" : "success"}
+        >
           {isSubscribed ? "Unsubscribe" : "Subscribe"}
         </Button>
       </div>
 
       {selectedImage && (
-        <div className="selected-image-details">
+        <div ref={detailsRef} className="selected-image-details">
           <Row>
             <Col md={6}>
               <img
@@ -132,7 +156,7 @@ const PortalDetails = () => {
         {currentImages.map((image) => (
           <div
             key={image._id}
-            onClick={() => setSelectedImage(image)}
+            onClick={() => handleImageClick(image)}
             style={{ maxHeight: `${randomHeight()}px`, overflow: "hidden" }}
           >
             <img

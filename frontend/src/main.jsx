@@ -12,6 +12,7 @@ import PrivateRoute from './Components/PrivateRoute.jsx';
 import UserProfileScreen from './Screens/UserProfileScreen.jsx';
 import ExploreScreen from './Screens/ExploreScreen.jsx';
 import About from './Screens/AboutScreen.jsx';
+import SubscriptionsPortals from './Screens/SubscriptionsScreen.jsx';
 import CombinedVerificationPage from './Screens/VerifyEmailPage.jsx';
 import ResetPassword from './Screens/ResetPasswordScreen.jsx';
 import GalleryScreen from './Screens/GalleryScreen.jsx';
@@ -46,6 +47,7 @@ root.render(
             <Route path="reset-password/:passwordResetToken" element={<ResetPassword />} />
             <Route path="/portal"  element={<PortalList/>} />
             <Route path="/portals/:portalId" element={<PortalDetails />} />
+            <Route path="/subscriptions" element={<SubscriptionsPortals />} />
             <Route path="/admin" element={<AdminScreen />} />
             <Route element={<PrivateRoute />}>
               <Route path="profile" element={<UserProfileScreen />} />

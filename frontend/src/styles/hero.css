@@ -14,7 +14,7 @@
   margin-bottom: 15px;
   width: 90%;
   border: 10px solid transparent;
-  border-image: linear-gradient(to bottom, rgba(100, 52, 75, 1), rgba(100, 52, 75, 0)) 1 stretch;
+  border-image: linear-gradient(to bottom, rgba(188, 172, 75, 164), rgba(100, 52, 75, 0)) 1 stretch;
 }
 
 .hero-section h1 {
@@ -65,8 +65,4 @@
   to {
     opacity: 1;
   }
-}
-
-.home-screen {
-  background-color: var(--bg-color); 
 }

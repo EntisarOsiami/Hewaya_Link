@@ -53,6 +53,7 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.1",
     "react-bootstrap-icons": "^1.10.3",
+    "react-chatbot-kit": "^2.1.2",
     "react-custom-scrollbars-2": "^4.5.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",
