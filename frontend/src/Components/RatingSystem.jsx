@@ -9,8 +9,15 @@ const RatingSystem = ({ itemId, onModel }) => {
   const [averageRating, setAverageRating] = useState(0);
   const [ratingCount, setRatingCount] = useState(0);
   const [error, setError] = useState(null);
-
   const userId = useSelector((state) => state.auth.userId);
+
+  const modelDisplayText = {
+    Blog: "Rate this post",
+    Gallery: "Rate this image",
+    Portal: "Rate this portal",
+  };
+
+  const displayText = modelDisplayText[onModel] || "Rate this item";
 
   const fetchAverageRating = useCallback(async () => {
     setError(null);
@@ -26,11 +33,11 @@ const RatingSystem = ({ itemId, onModel }) => {
       setError("Failed to fetch average rating.");
       console.error(err);
     }
-  }, [itemId, onModel]); 
+  }, [itemId, onModel]);
 
   useEffect(() => {
     fetchAverageRating();
-  }, [fetchAverageRating]); 
+  }, [fetchAverageRating]);
   const ratingChanged = (newRating) => {
     setRatingValue(newRating);
     handleSubmit(newRating);
@@ -58,7 +65,6 @@ const RatingSystem = ({ itemId, onModel }) => {
 
   return (
     <div>
-      
       <div>
         {averageRating !== null && (
           <div className="star-rating">
@@ -70,29 +76,29 @@ const RatingSystem = ({ itemId, onModel }) => {
               isHalf={true}
               activeColor="#ffd700"
               value={averageRating}
-              edit={false} 
+              edit={false}
             />
 
-            <p>Rating: {averageRating.toFixed(1)} out of 5</p>
             <p>
-              ({ratingCount} {ratingCount === 1 ? "vote" : "votes"})
+              Rating: {averageRating.toFixed(1)} out of 5 ({ratingCount}{" "}
+              {ratingCount === 1 ? "vote" : "votes"})
             </p>
-          </div>
-        )}
-      </div>
-      <div>
-        <h3>Rate this {onModel}:</h3>
+            
+            <h5>{displayText}:</h5>
         {error && <p className="error">{error}</p>}
         <Rating
           count={5}
           onChange={ratingChanged}
-          size={40}
+          size={30}
           isHalf={true}
           activeColor="#ffd700"
           value={ratingValue}
-          minValue={1}           
+          minValue={1}
         />
+          </div>
+        )}
       </div>
+     
     </div>
   );
 };

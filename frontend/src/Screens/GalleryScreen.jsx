@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import UserGallery from "../Components/UserGallery.jsx";
 import UploadComponent from "../Components/UploadImage.jsx";
 import { useSelector } from "react-redux";
+import { Offcanvas } from 'react-bootstrap';
+
 import axios from "axios";
 
 const GalleryScreen = () => {
@@ -9,6 +11,8 @@ const GalleryScreen = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showUpload, setShowUpload] = useState(false);
+
 
   const fetchImages = async () => {
     setLoading(true);
@@ -28,18 +32,27 @@ const GalleryScreen = () => {
   useEffect(() => {
     fetchImages();
   }, []);
+  const handleShowUpload = () => setShowUpload(true);
+const handleCloseUpload = () => setShowUpload(false);
+
 
   return (
     <div className="GalleryScreen-container">
-      <div>
-        {isAuthenticated && (
-          <>
-            <UploadComponent onImageUpload={fetchImages} />{" "}
-          </>
-        )}
-      </div>
-      <UserGallery images={images} loading={loading} error={error} />
-    </div>
+    {isAuthenticated && (
+      <>
+        <button className="btn-custom-side"  onClick={handleShowUpload}>Upload Image</button>
+        <Offcanvas show={showUpload} onHide={handleCloseUpload} placement="start">
+          <Offcanvas.Header closeButton>
+            <Offcanvas.Title>Upload Image</Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body>
+            <UploadComponent onImageUpload={fetchImages} />
+          </Offcanvas.Body>
+        </Offcanvas>
+      </>
+    )}
+    <UserGallery images={images} loading={loading} error={error} />
+  </div>
   );
 };
 

@@ -10,6 +10,14 @@ const CommentSystem = ({ itemId, onModel }) => {
   const [error, setError] = useState('');
   const userId = useSelector((state) => state.auth.userId);
 
+  const modelDisplayText = {
+    Blog: "Post",
+    Gallery: "Image",
+    Portal: "Portal",
+  };
+
+  const displayText = modelDisplayText[onModel] || "Item";
+
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -62,7 +70,7 @@ const CommentSystem = ({ itemId, onModel }) => {
           className="comment-textarea"
           value={commentText}
           onChange={(e) => setCommentText(e.target.value)}
-          placeholder="Write your comment here..."
+          placeholder={`Write your comment about this ${displayText.toLowerCase()}...`}
           required
           disabled={submitting}
         />
@@ -73,7 +81,6 @@ const CommentSystem = ({ itemId, onModel }) => {
       {error && <p className="error-message">{error}</p>}
     </div>
   );
-  
 };
 
 CommentSystem.propTypes = {

@@ -16,6 +16,8 @@ router.delete('/:id', PortalController.deletePortal);
 
 router.patch('/:id/subscribe', PortalController.toggleSubscription);
 
+router.get('/:userId/userSubs', PortalController.getUserSubscribedPortals);
+
 export default router;
 
 

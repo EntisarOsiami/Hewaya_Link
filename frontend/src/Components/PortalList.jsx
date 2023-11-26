@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { Row } from "react-bootstrap";
 
 const Portals = () => {
   const [portals, setPortals] = useState([]);
-  const [selectedPortal, setSelectedPortal] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPortals = async () => {
@@ -23,39 +25,41 @@ const Portals = () => {
     fetchPortals();
   }, []);
 
-  const fetchPortalDetails = async (id) => {
-    try {
-      const response = await axios.get(`/api/portals/${id}`);
-      setSelectedPortal(response.data.data);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+  function handleJoin() {
+    navigate("/register");
+  }
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div>
-      <h1>Portals</h1>
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
-        {portals.map((portal) => (
-          <div key={portal._id} onClick={() => fetchPortalDetails(portal._id)} style={{ border: "1px solid black", margin: "10px", padding: "10px", cursor: "pointer" }}>
-            <h3>{portal.name}</h3>
-            <div style={{ width: "100px", height: "100px", backgroundColor: "#ddd" }}></div>
-            <p>{portal.description}</p>
-          </div>
-        ))}
-      </div>
+      <><h1 className="headerPortal">Discover Your Next Hobby</h1><div className="portals-container">
 
-      {selectedPortal && (
-        <div style={{ marginTop: "20px", border: "1px solid blue", padding: "10px" }}>
-          <h2>Details of {selectedPortal.name}</h2>
-          <p>{selectedPortal.description}</p>
-          {/* Additional details can be added here */}
+      {portals.map((portal) => (
+        <div
+          key={portal._id}
+          className="portal-card"
+          onClick={() => navigate(`/portals/${portal._id}`)}
+        >
+          <h3>{portal.name}</h3>
+          <p>{portal.shortDescription}</p>
         </div>
-      )}
+      ))}
     </div>
+    <Row className="join-section">
+        <div className="join-content">
+          <h5>Join Our Community!</h5>
+          <p>
+            Discover more hobbies, share your experiences, and connect with
+            like-minded people.
+          </p>
+          <div className="button-container">
+            <button className="btn-custom" onClick={handleJoin}>
+              Join Now
+            </button>{" "}
+          </div>
+        </div>
+      </Row></>
   );
 };
 

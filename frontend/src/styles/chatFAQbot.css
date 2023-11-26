@@ -1,0 +1,52 @@
+.faq-chatbot-container {
+    position: fixed;
+    bottom:70px;
+    right: 20px;
+    z-index: 1000; 
+  }
+  
+  .faq-chatbot-button {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    z-index: 1001;
+    background-color: var(--primary-color); 
+    border: none;
+    border-radius: 50%;
+    padding: 15px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    outline: none;
+  }
+  
+  .faq-chatbot-button:hover {
+    opacity: 0.9;
+  }
+  
+  .faq-chatbot-button svg {
+    color: white;
+    font-size: 24px;
+  }
+  
+  /* styles.css */
+
+.options-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .option-button {
+    margin: 5px 0;
+    padding: 10px 15px;
+    background-color:var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  .option-button:hover {
+    background-color:var(--hover-color);
+  }
+  
