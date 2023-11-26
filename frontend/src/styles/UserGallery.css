@@ -1,37 +1,138 @@
-/* UserGallery.css */
 .UserGallery-container {
+  padding: 20px;
+  background-color: var(--secondary-color-transparent);
+  border: 2px solid var(--primary-color);
+  border-radius: 5px;
+  box-shadow: var(--shadow);
+  max-width: 1200px;
+  margin: 20px auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  border-style: solid;
-  border-color: var(--secondary-color);
-  border-width: 2px;
-  background-color: var(--secondary-color-transparent);
-  border-radius: 5px;
-  box-shadow:var(--shadow) ;
-  flex-basis: 80%; 
-  max-width: auto;
-  padding: 20px;
-  margin: 20px auto;
-  max-width: 1000px;
-
-  
+  justify-content: center;
 }
 
-.image-card {
-
-  margin: 0.5rem; 
-
-}
-
-.card-container {
+.UserGallery-header {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  margin-bottom: 15px;
+  color: var(--text-color);
+  font-weight: bolder;
+  font-size: 40px;
+}
+.PortalTips{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+  color: var(--accent-color);
+  font-size: 20px;
+}
+.search-input, .sort-select, .filter-select {
+  margin: 10px;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+}
+
+.img-fluid {
   width: 100%;
+  height: auto;
+  cursor: pointer;
+}
+
+.card-actions-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin: 20px 0 30px 0;
+}
+
+.card-actions-container button, .comments-button {
+  padding: 10px 15px;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.card-actions-container button:hover, .comments-button:hover {
+  color: var(--hover-color);
+  transform: scale(1.1);
+}
+
+.card-publish-dropdown, .card-publish-button {
+  display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin: 20px 0;
+}
 
+.comment, .comments-section {
+  margin: 15px 0;
+}
 
+.Bold_meta {
+  font-weight: bolder;
+  font-size: 1.1rem;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.p_meta {
+  font-size: 1rem;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+.rating-container, .rating-container_star {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 20px 0 0.5rem 0;
+  font-size: 1.2rem;
+  color: var(--primary-color);
+}
+
+.rating-container .star {
+  color: var(--secondary-color);
+}
+
+.rating-container .filled {
+  color: var(--primary-color);
+}
+
+.rating-container .half-filled {
+  color: var(--accent-color);
+}
+
+.offcanvas {
+  background-color: var(--secondary-color-transparent);
+}
+
+.offcanvas-body {
+  background-color: var(--secondary-color-transparent);
+}
+.offcanvas-header {
+  background-color: var(--secondary-color-transparent);
+}
+.offcanvas-title {
+  font-size: 36px !important; 
+  font-weight: bolder !important;
+  color: var(--text-color) !important;
+  margin-bottom: 10px !important;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  }
+  
+.list_meta{
+  font-size: 15px;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
 }

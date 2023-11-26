@@ -1,0 +1,118 @@
+.portal-details {
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: auto;
+  margin-top: 50px;
+
+}
+
+.header-area {
+  text-align: center;
+  margin-bottom: 50px;
+  font-size: large;
+  font-family: cursive;
+  color: var(--text-color);
+}
+
+.selected-image-details {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border: 1px solid var(--secondary-color-transparent);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  margin-bottom: 30px;
+}
+
+.selected-image-details img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.selected-image-details p {
+  color: var(--text-color);
+  font-size: 18px;
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.selected-image-details .rating-system {
+  display: flex;
+  align-items: center;
+
+}
+
+.selected-image-details .toggle-comments-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 40px;
+  transition: background-color 0.3s ease;
+}
+
+.selected-image-details .toggle-comments-btn:hover {
+  background-color: var(--accent-color);
+}
+
+.my-masonry-grid {
+  display: flex;
+  margin-left: -30px;
+  width: auto;
+}
+
+.my-masonry-grid_column {
+  padding-left: 30px;
+  background-clip: content-box;
+}
+
+.my-masonry-grid_column > div {
+  background: grey;
+  margin-bottom: 30px;
+  margin-bottom: 30px;
+  transition: transform 0.3s ease;
+}
+
+.my-masonry-grid_column > div:hover {
+  transform: scale(1.03);
+}
+.pagination {
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.my-masonry-grid img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.description-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: auto;
+  font-size: large;
+  font-weight: bold;
+  color: var(--text-color);
+
+  font-family:'Times New Roman', Times, serif;
+  margin-bottom: 40px;
+  
+}
+
+.rating-image {
+  align-items: center;
+  width: 100%;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+}

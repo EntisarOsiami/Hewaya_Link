@@ -23,7 +23,7 @@ const commentSchema = new Schema({
   onModel: { 
     type: String,
     required: true,
-    enum: ['Blog', 'Gallery', 'Portal', /* other model names */],
+    enum: ['Blog', 'Gallery', 'Portal',]
   },
 });
 

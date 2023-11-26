@@ -9,7 +9,7 @@
   margin-top: 15px; 
   margin-bottom: 15px;
   border: 10px solid transparent;
-  border-image: linear-gradient(to top, rgba(100, 52, 75, 1), rgba(100, 52, 75, 0)) 1 stretch;
+  border-image: linear-gradient(to top, rgba(188, 172, 75, 164), rgba(100, 52, 75, 0)) 1 stretch;
 }
 
 .carousel-item {

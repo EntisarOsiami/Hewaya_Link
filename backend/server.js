@@ -7,12 +7,16 @@ import blogRoutes from "./routes/blogRoutes.js";
 import CommentRoutes from './routes/CommentRoutes.js';
 import RatingRoutes from './routes/RatingRoutes.js'
 import adminRoutes from './routes/adminRoutes.js'
-import galleryRoutes from './routes/galleryRoutes.js'
+import galleryRoutes from './routes/galleryRoutes.js';
+import portalRoutes from './routes/portalRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
+import tagRoutes from './routes/tagRoutes.js';
 import { notFound,errorHandler } from "./middleware/errorMiddleware.js";
 import connectDB from "./config/db.js";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import { configureCloudinary } from './config/cloudinaryConfig.js';
+
 configureCloudinary();
 
 
@@ -33,6 +37,9 @@ app.use('/api/comments', CommentRoutes);
 app.use('/api/ratings', RatingRoutes);
 app.use('/api/gallery',galleryRoutes);  
 app.use('/api/admin', adminRoutes);
+app.use('/api/portals', portalRoutes);
+app.use('/api', categoryRoutes);
+app.use('/api', tagRoutes);
 app.use(notFound);
 app.use(errorHandler);
 

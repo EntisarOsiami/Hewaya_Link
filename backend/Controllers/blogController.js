@@ -2,7 +2,7 @@ import { Blog } from '../models/index.js';
 import Joi from 'joi';
 import { JSDOM } from 'jsdom';
 
-import sendResponse from "../Utils/responseHandler.js";
+import sendResponse from "../Utils/sendResponse.js";
 
 
 // A schema to validate blog data
@@ -11,7 +11,7 @@ const createBlogSchema = Joi.object({
   title: Joi.string().required(),
   content: Joi.string().required(),
   author: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
-  tags: Joi.string().required()
+  category: Joi.string().required()
 });
 
 // stripHtml function to generate an excerpt from the blog content
@@ -49,9 +49,9 @@ const createBlog = async (req, res) => {
       return sendResponse(res, null, error.details[0].message, false);
     }
 
-    const { title, content, author, tags } = req.body;
+    const { title, content, author, tags, category } = req.body;
     const parsedTags = tags.split(',').map((tag) => tag.trim());
-    const blog = new Blog({ title, content, author, tags: parsedTags });
+    const blog = new Blog({ title, content, author, tags: parsedTags, category }); // Include category
     await blog.save();
 
     sendResponse(res, blog, "Blog created successfully.");
@@ -105,12 +105,12 @@ const getAllBlogs = async (req, res) => {
 
 const updateBlog = async (req, res) => {
   try {
-    const { title, content, tags, } = req.body;
+    const { title, content, tags, category } = req.body;
 
     const parsedTags = tags ? tags.split(',').map(tag => tag.trim()) : undefined;
 
     const updateObject = Object.fromEntries(
-      Object.entries({ title, content, tags: parsedTags }).filter(([, val]) => val !== undefined)
+      Object.entries({ title, content, tags: parsedTags, category }).filter(([, val]) => val !== undefined)
     );
 
     const updatedBlog = await Blog.findByIdAndUpdate(
@@ -129,6 +129,7 @@ const updateBlog = async (req, res) => {
     sendResponse(res, null, "Server error.", false);
   }
 };
+
 
 
 //@dec     Get a blog by id
