@@ -26,7 +26,7 @@ export const addUser = async (formData) => {
         value: hashedPassword
       },
       disabled: disabled,
-      role,
+      role: role,
     });
 
     await newUser.save();
@@ -40,20 +40,24 @@ export const addUser = async (formData) => {
 };
 
 export const updateUser = async (formData) => {
-  const { id, username, email, password, phone, address, isAdmin, isActive } =
+  const { id, username, email, password, disabled, role } =
     Object.fromEntries(formData);
 
   try {
     connectToDB();
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
     const updateFields = {
       username,
-      email,
-      password,
-      phone,
-      address,
-      isAdmin,
-      isActive,
+      email: {
+        address : email,
+      },
+      password: {
+        value: hashedPassword
+      },
+      disabled: disabled,
+      role: role,
     };
 
     Object.keys(updateFields).forEach(

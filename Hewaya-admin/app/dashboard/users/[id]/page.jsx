@@ -22,22 +22,21 @@ const SingleUserPage = async ({ params }) => {
           <label>Username</label>
           <input type="text" name="username" placeholder={user.username} />
           <label>Email</label>
-          <input type="email" name="email" placeholder={user.email} />
+          <input type="email" name="email" placeholder={user.email.address} />
           <label>Password</label>
           <input type="password" name="password" />
-          <label>Phone</label>
-          <input type="text" name="phone" placeholder={user.phone} />
-          <label>Address</label>
-          <textarea type="text" name="address" placeholder={user.address} />
-          <label>Is Admin?</label>
-          <select name="isAdmin" id="isAdmin">
-            <option value={true} selected={user.isAdmin}>Yes</option>
-            <option value={false} selected={!user.isAdmin}>No</option>
-          </select>
+          <select name="isAdmin" id="isAdmin" value={user.role}>
+          <option value={false}>
+            Role
+          </option>
+          <option value="admin">Admin</option>
+          <option value="user">User</option>
+          <option value="moderator">Moderator</option>
+        </select>
           <label>Is Active?</label>
-          <select name="isActive" id="isActive">
-            <option value={true} selected={user.isActive}>Yes</option>
-            <option value={false} selected={!user.isActive}>No</option>
+          <select name="disabled" id="disabled">
+            <option value={true} selected={user.disabled}>Yes</option>
+            <option value={false} selected={!user.disabled}>No</option>
           </select>
           <button>Update</button>
         </form>
