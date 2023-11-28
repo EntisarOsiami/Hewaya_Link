@@ -20,7 +20,7 @@
   "language": "اللغة",
 
   "hero": {
-    "title": "هوايا لينك",
+    "title": "هواية لينك",
     "subtitle": "بوابتك لاستكشاف عالم الهوايات",
     "signIn": "تسجيل الدخول",
     "signUp": "إنشاء حساب",
@@ -177,7 +177,115 @@
 
       "emailVerificationBanner": {
       "message": ".يرجى التحقق من عنوان بريدك الإلكتروني. تحقق من صندوق الوارد للحصول على بريد التحقق. إذا لم تجد البريد، يرجى التحقق من مجلد البريد العشوائي"
-    }
+    },
+
+    
+      "footer": {
+        "contactUs": "اتصل بنا",
+        "contactDescription": "يمكنك الوصول إلينا عبر",
+        "followUs": "تابعنا",
+        "facebook": "فيسبوك",
+        "twitter": "تويتر",
+        "instagram": "إنستغرام",
+        "termsOfService": "شروط الخدمة",
+        "privacyPolicy": "سياسة الخصوصية",
+        "copyright": "© {{year}} هواية لينك. جميع الحقوق محفوظة."      },
+
+        
+          "registerScreen": {
+            "createAccount": "إنشاء حساب",
+            "firstName": "الاسم الأول",
+            "firstNamePlaceholder": "أدخل الاسم الأول",
+            "lastName": "الاسم الأخير",
+            "lastNamePlaceholder": "أدخل الاسم الأخير",
+            "username": "اسم المستخدم",
+            "usernamePlaceholder": "أدخل اسم المستخدم",
+            "emailAddress": "عنوان البريد الإلكتروني",
+            "emailPlaceholder": "أدخل البريد الإلكتروني",
+            "password": "كلمة المرور",
+            "passwordPlaceholder": "أدخل كلمة المرور",
+            "confirmPassword": "تأكيد كلمة المرور",
+            "confirmPasswordPlaceholder": "تأكيد كلمة المرور",
+            "dateOfBirth": "تاريخ الميلاد",
+            "chooseAvatar": "اختر صورة رمزية",
+            "createAccountButton": "إنشاء الحساب",
+            "haveAccount": "هل لديك حساب بالفعل؟",
+            "signIn": "تسجيل الدخول",
+            "passwordsNotMatch": "كلمات المرور غير متطابقة",
+            "registerError": "خطأ في التسجيل:"
+          },
+          
+            "loginScreen": {
+              "title": "تسجيل الدخول",
+              "emailOrUsernameLabel": "عنوان البريد الإلكتروني أو اسم المستخدم",
+              "emailOrUsernamePlaceholder": "أدخل البريد الإلكتروني أو اسم المستخدم",
+              "passwordLabel": "كلمة المرور",
+              "passwordPlaceholder": "أدخل كلمة المرور",
+              "signInButton": "تسجيل الدخول",
+              "newMember": "عضو جديد؟",
+              "registerLink": "تسجيل",
+              "forgotPasswordLink": "نسيت كلمة المرور؟",
+              "forgotPasswordModal": {
+                "title": "نسيت كلمة المرور",
+                "emailLabel": "أدخل بريدك الإلكتروني:",
+                "emailPlaceholder": "أدخل البريد الإلكتروني",
+                "closeButton": "إغلاق",
+                "sendLinkButton": "إرسال رابط إعادة التعيين"
+              },
+              "loader": {
+                "loadingText": "جار التحميل..."
+              },
+              "toast": {
+                "loginError": "خطأ في تسجيل الدخول. الرجاء المحاولة مرة أخرى."
+              }
+            },
+          
+              "userProfileScreen": {
+                "profileHeader": "ملفك الشخصي",
+                "profileDetails": {
+                  "username": "اسم المستخدم",
+                  "email": "البريد الإلكتروني",
+                  "resetPasswordButton": "إعادة تعيين كلمة المرور",
+                  "updateProfileButton": "تحديث الملف الشخصي"
+                },
+                "updateInformation": {
+                  "header": "تحديث المعلومات",
+                  "labels": {
+                    "firstName": "الاسم الأول",
+                    "lastName": "الاسم الأخير",
+                    "username": "اسم المستخدم",
+                    "emailAddress": "عنوان البريد الإلكتروني",
+                    "chooseAvatar": "اختر صورة رمزية"
+                  },
+                  "placeholders": {
+                    "firstName": "الاسم الأول",
+                    "lastName": "الاسم الأخير",
+                    "username": "اسم المستخدم",
+                    "email": "البريد الإلكتروني"
+                  },
+                  "buttons": {
+                    "update": "تحديث",
+                    "cancel": "إلغاء"
+                  }
+                },
+                "confirmations": {
+                  "resetPassword": "هل أنت متأكد أنك تريد إعادة تعيين كلمة المرور؟"
+                },
+                "toast": {
+                  "profileUpdateSuccess": "تم تحديث الملف الشخصي بنجاح",
+                  "profileUpdateError": "خطأ في تحديث الملف الشخصي. الرجاء المحاولة مرة أخرى."
+                },
+                "loader": {
+                  "loadingText": "جار التحميل..."
+                }
+              }
+            }
+            
+          
+          
+            
+    
+    
   
   
-}
+
