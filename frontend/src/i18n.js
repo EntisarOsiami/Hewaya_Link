@@ -22,6 +22,9 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
         galleryScreen: en.galleryScreen,
         emailVerificationBanner: en.emailVerificationBanner,
         footer: en.footer,
+        registerScreen: en.registerScreen,
+        loginScreen: en.loginScreen,
+        userProfileScreen: en.userProfileScreen,
         // ...
       },
       ar: {
@@ -39,6 +42,9 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
         galleryScreen: ar.galleryScreen,
         emailVerificationBanner: ar.emailVerificationBanner,
         footer: ar.footer,
+        registerScreen: ar.registerScreen,
+        loginScreen: ar.loginScreen,
+        userProfileScreen: ar.userProfileScreen,
         // ...
       },
     },

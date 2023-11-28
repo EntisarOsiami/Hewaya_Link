@@ -1,10 +1,8 @@
 @import './header.css';
 @import './footer.css';
-@import './card.css';
 @import './carousel.css';
 @import'./model.css';
 @import './ExploreScreen.css';
-@import './CardContainer.css';
 @import'./about.css';
 @import './base.css';
 @import './hero.css';
@@ -21,4 +19,7 @@
 @import './PortalDetails.css';
 @import './SubscribedPortals.css';
 @import './chatFAQbot.css';
+@import './profileScreen.css';
+@import './RegisterScreen.css';
+
 

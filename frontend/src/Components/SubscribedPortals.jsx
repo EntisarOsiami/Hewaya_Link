@@ -17,55 +17,60 @@ const SubscribedPortals = ({ userId }) => {
   const [subscriptionStatus, setSubscriptionStatus] = useState({});
 
   useEffect(() => {
-    const fetchSubscribedPortals = async () => {
-      try {
-        const response = await axios.get(`/api/portals/${userId}/userSubs`);
-        const portals = response.data.data;
-        setSubscribedPortals(portals);
 
-        const newSubscriptionStatus = {};
-        portals.forEach((portal) => {
-          newSubscriptionStatus[portal._id] =
-            portal.subscribers.includes(userId);
-        });
-        setSubscriptionStatus(newSubscriptionStatus);
+const fetchSubscribedPortals = async () => {
+  try {
+    const response = await axios.get(`/api/portals/${userId}/userSubs`);
+    const portals = response.data.data;
+    setSubscribedPortals(portals);
 
-        if (portals.length > 0) {
-          setActiveKey(portals[0]._id);
-        }
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+    const newSubscriptionStatus = portals.reduce((status, portal) => {
+      status[portal._id] = portal.subscribers.includes(userId);
+      return status;
+    }, {});
+    setSubscriptionStatus(newSubscriptionStatus);
 
+    if (portals.length > 0) {
+      setActiveKey(portals[0]._id);
+    }
+  } catch (error) {
+    setError(error.message);
+  } finally {
+    setLoading(false);
+  }
+};
     fetchSubscribedPortals();
   }, [userId]);
 
-  const formatFileSize = (bytes) => {
-    const KB = 1024;
-    const MB = 1024 * KB;
-    return bytes < MB
-      ? (bytes / KB).toFixed(2) + " KB"
-      : (bytes / MB).toFixed(2) + " MB";
-  };
+const KB = 1024;
+const MB = 1024 * KB;
+
+const formatFileSizeInKBorMB = (bytes) => {
+  // Check if the size is less than 1 MB
+  if (bytes < MB) {
+    // Convert bytes to kilobytes and round to 2 decimal places
+    return `${(bytes / KB).toFixed(2)} KB`;
+  } else {
+    // Convert bytes to megabytes and round to 2 decimal places
+    return `${(bytes / MB).toFixed(2)} MB`;
+  }
+};
 
   const toggleComments = () => {
     setShowComments(!showComments);
   };
 
-  const handleSubscribeClick = async (portalId) => {
-    try {
-      await axios.patch(`/api/portals/${portalId}/subscribe`, { userId });
-      setSubscriptionStatus((prevStatus) => ({
-        ...prevStatus,
-        [portalId]: !prevStatus[portalId],
-      }));
-    } catch (error) {
-      console.error("Error toggling subscription:", error);
-    }
-  };
+const handleSubscribeClick = async (portalId) => {
+  try {
+    await axios.patch(`/api/portals/${portalId}/subscribe`, { userId });
+    setSubscriptionStatus(prevStatus => ({
+      ...prevStatus,
+      [portalId]: !prevStatus[portalId]
+    }));
+  } catch (error) {
+    console.error("Error toggling subscription:", error);
+  }
+};
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -103,7 +108,7 @@ const SubscribedPortals = ({ userId }) => {
                       </li>
                       <li>File Type: {image.metadata.fileType}</li>
                       <li>
-                        File Size: {formatFileSize(image.metadata.fileSize)}
+                        File Size: {formatFileSizeInKBorMB(image.metadata.fileSize)}
                       </li>
                     </ul>
                     <br />

@@ -12,37 +12,46 @@ import { useTranslation } from 'react-i18next';
 
 
 const BlogScreen = () => {
-    const { t } = useTranslation();
-  
-    return (
-      <div className="app-container">
-        <div className="app-blog-hero">
-          <h1>{t('blogScreen:heroTitle')}</h1>
-          <p>{t('blogScreen:heroSubtitle')}</p>
-        </div>
-  
-        <Navbar collapseOnSelect className="blog-header" expand="lg">
-          <Container>
-            <Navbar.Brand as={Link} to="/blog/">{t('blogScreen:navbarBrand')}</Navbar.Brand>
-            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-            <Navbar.Collapse id="responsive-navbar-nav">
-              <Nav className="me-auto">
-                <Nav.Link as={Link} to="/blog/">{t('blogScreen:navHome')}</Nav.Link>
-                <Nav.Link as={Link} to="/blog/create">{t('blogScreen:navCreateNew')}</Nav.Link>
-              </Nav>
-            </Navbar.Collapse>
-          </Container>
-        </Navbar>
+  const { t } = useTranslation();
 
-            <main className="Blog-screen">
-                <Routes>
-                    <Route index element={<BlogList />} />
-                    <Route path="create" element={<CreateBlog />} />
-                    <Route path=":blogId" element={<BlogDisplay />}/>
-                </Routes>
-            </main>
-        </div>
-    );
+  return (
+    <div className="app-container">
+      <div className="app-blog-hero">
+        <h1>{t('blogScreen:heroTitle')}</h1>
+        <p>{t('blogScreen:heroSubtitle')}</p>
+      </div>
+
+      <Navbar collapseOnSelect className="blog-header" expand="lg">
+        <Container>
+          <Navbar.Brand as={Link} to="/blog/">
+            {t('blogScreen:navbarBrand')}
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Link as={Link} to="/blog/">
+                {t('blogScreen:navHome')}
+              </Nav.Link>
+              <Nav.Link as={Link} to="/blog/create">
+                {t('blogScreen:navCreateNew')}
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+
+      <main className="Blog-screen">
+        <Routes>
+          <Route index element={<BlogList />} />
+          <Route path="create" element={<CreateBlog />} />
+          <Route path=":blogId" element={<BlogDisplay />} />
+          {/* <Route path="categories" element={<Categories />} />
+          <Route path="latest-posts" element={<LatestPosts />} />
+          <Route path="popular" element={<Popular />} /> */}
+        </Routes>
+      </main>
+    </div>
+  );
 };
 
 export default BlogScreen;

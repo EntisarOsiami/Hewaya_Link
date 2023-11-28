@@ -44,53 +44,44 @@ const UserGallery = () => {
   // @description : useEffect hook to fetch images and portals when the component mounts
 
   useEffect(() => {
-    const fetchImages = async () => {
-      setLoading(true);
-      try {
-        const imagesResponse = await axios.get("/api/gallery/images");
-        const images = imagesResponse.data.data.images;
 
-        const imagesWithRatingsAndComments = await Promise.all(
-          images.map(async (image) => {
-            try {
-              const ratingResponse = await axios.get(
-                `/api/ratings/average/Gallery/${image._id}`
-              );
-              const commentsResponse = await axios.get(
-                `/api/comments/Gallery/${image._id}`
-              );
+const fetchImages = async () => {
+  setLoading(true);
+  try {
+    const imagesResponse = await axios.get("/api/gallery/images");
+    const images = imagesResponse.data.data.images;
+    const imagesWithRatingsAndComments = await Promise.all(
+      images.map(async (image) => {
+        try {
+          const ratingResponse = await axios.get(`/api/ratings/average/Gallery/${image._id}`);
+          const commentsResponse = await axios.get(`/api/comments/Gallery/${image._id}`);
+          return {
+            ...image,
+            averageRating: ratingResponse.data.data.averageRating,
+            ratingCount: ratingResponse.data.data.ratingCount,
+            comments: commentsResponse.data.data,
+          };
+        } catch (err) {
+          console.error("Error fetching additional data for image", image._id, err);
+          return {
+            ...image,
+            averageRating: "Not Rated",
+            ratingCount: "Not rated",
+            comments: [],
+          };
+        }
+      })
+    );
 
-              return {
-                ...image,
-                averageRating: ratingResponse.data.data.averageRating,
-                ratingCount: ratingResponse.data.data.ratingCount,
-                comments: commentsResponse.data.data,
-              };
-            } catch (err) {
-              console.error(
-                "Error fetching additional data for image",
-                image._id,
-                err
-              );
-              return {
-                ...image,
-                averageRating: "Not Rated",
-                ratingCount: "Not rated",
-                comments: [],
-              };
-            }
-          })
-        );
-
-        setAllImages(imagesWithRatingsAndComments);
-        setFilteredImages(imagesWithRatingsAndComments);
-      } catch (error) {
-        console.error("Error fetching images", error);
-        setError("Failed to fetch images.");
-      } finally {
-        setLoading(false);
-      }
-    };
+    setAllImages(imagesWithRatingsAndComments);
+    setFilteredImages(imagesWithRatingsAndComments);
+  } catch (error) {
+    console.error("Error fetching images", error);
+    setError("Failed to fetch images.");
+  } finally {
+    setLoading(false);
+  }
+};
     const fetchPortals = async () => {
       try {
         const response = await axios.get("/api/portals");
@@ -157,10 +148,9 @@ const handleFavoriteToggle = async (imageId) => {
     const updatedImages = allImages.map((img) =>
       img._id === imageId ? { ...img, isFavorite: !img.isFavorite } : img
     );
-
     setAllImages(updatedImages);
 
-    if (selectedImage?._id === imageId) {
+    if (selectedImage && selectedImage._id === imageId) {
       setSelectedImage({
         ...selectedImage,
         isFavorite: !selectedImage.isFavorite,
@@ -189,6 +179,7 @@ const handleDelete = async (id) => {
 
 const handlePublish = async (imageId) => {
   const portalId = selectedPortal[imageId];
+  
   if (!portalId) {
     throw new Error("No portal selected for publishing");
   }
@@ -218,6 +209,7 @@ const handlePublish = async (imageId) => {
 const handleVisibilityToggle = async (imageId, currentVisibility) => {
   try {
     await axios.patch(`/api/gallery/images/${imageId}/visibility`);
+    
     const updatedImages = allImages.map((img) => {
       if (img._id === imageId) {
         return {

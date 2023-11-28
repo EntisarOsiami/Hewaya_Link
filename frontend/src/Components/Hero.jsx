@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
-import { Card, Container, Row, Col } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { LinkContainer } from 'react-router-bootstrap';
+import { Container, Row, Col, Card } from 'react-bootstrap';
 
 const Hero = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
