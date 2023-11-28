@@ -1,0 +1,83 @@
+{
+  "nav": {
+    "home": "Home",
+    "exploreHobbies": "Explore Hobbies",
+    "hobbyistsBlog": "Hobbyists Blog",
+    "myGallery": "My Gallery",
+    "myPortals": "My Portals",
+    "about": "About",
+    "profile": "Profile",
+    "logout": "Logout",
+    "signIn": "Sign In",
+    "signUp": "Sign Up"
+  },
+  "user": {
+    "greeting": "Hello"
+  },
+  "errors": {
+    "logoutFailed": "Failed to log out. Please try again."
+  },
+  "language": "Language",
+  "hero": {
+    "title": "Hewaya Link",
+    "subtitle": "Your gateway to exploring the world of hobbies",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "reducedStress": "Reduced Stress",
+    "stressText": "Hobbies are a great way to relax and reduce stress in your life.",
+    "improvedCreativity": "Improved Creativity",
+    "creativityText": "Exploring hobbies can unlock your creativity and inspire new ideas.",
+    "enhancedWellbeing": "Enhanced Well-being",
+    "wellbeingText": "Engaging in hobbies contributes to an overall sense of well-being.",
+    "socialConnections": "Social Connections",
+    "connectionsText": "Many hobbies provide opportunities to connect with others."
+  },
+  "carousel": {
+    "slide1": {
+      "title": "Unleash Your Creativity",
+      "description": "Dive into a world where your creativity knows no bounds. Join a vibrant community eager to explore and share.",
+      "alt": "Artistic hobbies canvas"
+    },
+    "slide2": {
+      "title": "Cultivate Your Passion",
+      "description": "Let your love for gardening bloom. Connect with fellow green thumbs and grow your hobby together.",
+      "alt": "Gardening hobbyists"
+    },
+    "slide3": {
+      "title": "Capture the Moment",
+      "description": "Embark on a photographic journey with us. Improve your skills and share your vision with a community that cares.",
+      "alt": "Photography adventure"
+    },
+    "slide4": {
+      "title": "Craft Your Story",
+      "description": "Join our circle of storytellers. Whether you're a writer or a reader, there's a chapter here for everyone.",
+      "alt": "Creative writing and reading"
+    },
+    "slide5": {
+      "title": "Create with Your Hands",
+      "description": "Discover the joy of DIY. Share your unique creations and get inspired by a community of crafters.",
+      "alt": "DIY and crafting"
+    }
+  }, 
+    "portals": {
+    "loading": "Loading...",
+    "error": "Error",
+    "discoverHeader": "Discover Your Next Hobby",
+    "joinTitle": "Join Our Community!",
+    "joinDescription": "Discover more hobbies, share your experiences, and connect with like-minded people.",
+    "joinButton": "Join Now"
+  },
+  "blogList": {
+    "loading": "Loading...",
+    "error": "Error",
+    "noBlogs": "No blogs to display.",
+    "readMore": "Read More"
+  },
+  "blogScreen": {
+    "heroTitle": "Hewaya Blog",
+    "heroSubtitle": "A blog for hobbyists by hobbyists",
+    "navbarBrand": "Hewaya Blog",
+    "navHome": "Home",
+    "navCreateNew": "Create New Blog"
+  }
+}

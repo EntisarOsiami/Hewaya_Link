@@ -1,4 +1,4 @@
-import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav,  NavDropdown } from "react-bootstrap";
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,11 +8,13 @@ import { logoutRedux } from "../slices/authSlice";
 import { LinkContainer } from "react-router-bootstrap";
 import ThemeToggle from "./ThemeToggle";
 import { clearUserProfile } from "../slices/profileSlice";
+import { useTranslation } from "react-i18next";
 
 const Header = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isEmailVerified = useSelector((state) => state.auth.isEmailVerified);
   const [logoutError, setLogoutError] = useState(null);
+  const { t, i18n } = useTranslation();
 
   const { user } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
@@ -27,44 +29,53 @@ const Header = () => {
       navigate("/login");
     } catch (err) {
       console.error(err);
-      setLogoutError("Failed to log out. Please try again.");
+      setLogoutError(t("errors:logoutFailed"));
     }
   };
+  console.log(t("nav:hobbyistsBlog"));
 
   return (
-    <header className="header">
+    <header className={`header ${i18n.language === "ar" ? "rtl" : ""}`}>
       <Navbar bg="" expand="lg" collapseOnSelect>
-        <Container>
-            <Navbar.Brand className="logo">
-              <img
-                src="/assets/logo.png"
-                alt="Hewaya Link Logo"
-                style={{ maxHeight: "100px" }}
-              />
-            </Navbar.Brand>{" "}
+          <Navbar.Brand className="logo">
+            <img className="img-logo"
+              src="/assets/logo.png"
+              alt={t("nav:hewayaLinkLogo")}
+            />
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="menu mx-auto">
+            <Nav className="menu">
               <LinkContainer to="/">
-                <Nav.Link>Home</Nav.Link>
+                <Nav.Link>{t("nav:home")}</Nav.Link>
               </LinkContainer>
               <LinkContainer to="/explore">
-                <Nav.Link>Explore Hobbies</Nav.Link>
+                <Nav.Link>{t("nav:exploreHobbies")}</Nav.Link>
               </LinkContainer>
               <LinkContainer to="/blog">
-                <Nav.Link>Hobbyists Blog</Nav.Link>
+                <Nav.Link>{t("nav:hobbyistsBlog")}</Nav.Link>
               </LinkContainer>
               <LinkContainer to="/gallery">
-                <Nav.Link>My Gallery</Nav.Link>
+                <Nav.Link>{t("nav:myGallery")}</Nav.Link>
               </LinkContainer>
               <LinkContainer to="/subscriptions">
-                <Nav.Link>My Portals</Nav.Link>
+                <Nav.Link>{t("nav:myPortals")}</Nav.Link>
               </LinkContainer>
               <LinkContainer to="/about">
-                <Nav.Link>About</Nav.Link>
+                <Nav.Link>{t("nav:about")}</Nav.Link>
               </LinkContainer>
             </Nav>
-            <Nav className="ms-auto">
+                  
+              <Nav className="Nav-secondary">
+              <ThemeToggle />
+              {/* Language Toggle */}
+              <Nav.Link className="eng-toggle" onClick={() => i18n.changeLanguage("en")}>
+                English
+              </Nav.Link>
+              <Nav.Link  className="ar-toggle" onClick={() => i18n.changeLanguage("ar")}>
+                العربية
+              </Nav.Link>
+             
               {isAuthenticated ? (
                 <NavDropdown
                   title={
@@ -73,7 +84,7 @@ const Header = () => {
                         <img
                           className="user-avatar avatar"
                           src={user.profilePicture}
-                          alt="User Avatar"
+                          alt={t("user:greeting")}
                         />
                         {!isEmailVerified && (
                           <div className="notification-badge"></div>
@@ -86,34 +97,29 @@ const Header = () => {
                   className="custom-dropdown"
                 >
                   <LinkContainer to="/profile">
-                    <NavDropdown.Item>Profile</NavDropdown.Item>
+                    <NavDropdown.Item>{t("nav:profile")}</NavDropdown.Item>
                   </LinkContainer>
                   <NavDropdown.Item onClick={logoutHandler}>
-                    Logout
+                    {t("nav:logout")}
                   </NavDropdown.Item>
                 </NavDropdown>
               ) : (
                 <>
                   <LinkContainer to="/login">
                     <Nav.Link>
-                      <FaSignInAlt /> Sign In
+                      <FaSignInAlt /> {t("nav:signIn")}
                     </Nav.Link>
                   </LinkContainer>
                   <LinkContainer to="/register">
                     <Nav.Link>
-                      <FaSignOutAlt /> Sign Up
+                      <FaSignOutAlt /> {t("nav:signUp")}
                     </Nav.Link>
                   </LinkContainer>
                 </>
               )}
               {logoutError && <p>{logoutError}</p>}
-
-              <br />
-
-              <ThemeToggle />
             </Nav>
           </Navbar.Collapse>
-        </Container>
       </Navbar>
     </header>
   );

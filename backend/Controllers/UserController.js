@@ -100,12 +100,13 @@ const registerUser = asyncHandler(async (req, res, next) => {
       await user.save();
 
 // send a verification email to the user email address
+
 const transporter = nodemailer.createTransport({
   host: 'smtp.elasticemail.com',
   port: 2525,
   auth: {
     user: process.env.ELASTIC_EMAIL_USERNAME,
-    pass: process.env.ELASTIC_EMAIL_API_KEY,
+    pass: process.env.ELASTIC_EMAIL_PASSWORD,
   },
 });
       const verificationURL = `${process.env.CLIENT_URL}/verify/${emailVerificationToken}`;
@@ -171,7 +172,7 @@ const resendVerificationEmail = asyncHandler(async (req, res, next) => {
       port: 2525,
       auth: {
         user: process.env.ELASTIC_EMAIL_USERNAME,
-        pass: process.env.ELASTIC_EMAIL_API_KEY,
+        pass: process.env.ELASTIC_EMAIL_PASSWORD,
       },
     });
     
@@ -370,7 +371,7 @@ const resetPassword = asyncHandler(async (req, res, next) => {
       port: 2525,
       auth: {
         user: process.env.ELASTIC_EMAIL_USERNAME,
-        pass: process.env.ELASTIC_EMAIL_API_KEY,
+        pass: process.env.ELASTIC_EMAIL_PASSWORD,
       },
     });
     const resetPasswordURL = `${process.env.CLIENT_URL}/reset-password/${passwordResetToken}`;
