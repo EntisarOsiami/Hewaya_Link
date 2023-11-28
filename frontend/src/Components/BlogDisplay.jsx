@@ -4,6 +4,7 @@ import CommentSystem from "./CommentSystem.jsx";
 import RatingSystem from "./RatingSystem.jsx";
 import { useParams, useNavigate } from 'react-router-dom';
 
+
 const BlogDisplay = () => {
   const { blogId } = useParams(); 
   const navigate = useNavigate();
@@ -38,39 +39,44 @@ const BlogDisplay = () => {
     return () => (isMounted = false);
   }, [blogId]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  const renderBlog = () => {
+    return (
+      <article className="blog-article">
+        <h2>{blog.title}</h2>
+        <div className="blog-content" dangerouslySetInnerHTML={{ __html: blog.content }} />
+        <p className="blog-author">Author: {blog.author.username}</p>
+    
+        <section className="comments-section">
+          <h3>Comments:</h3>
+          <CommentSystem itemId={blogId} onModel="Blog" />
+        </section>
+
+        <RatingSystem itemId={blogId} onModel="Blog" />
+        
+        <ul className="blog-tags">
+          {blog.tags.map((tag) => (
+            <li className="blog-tag-item" key={tag}>{tag}</li>
+          ))}
+        </ul>
+       
+        <button onClick={() => navigate(-1)}>Back to Blog List</button>
+      </article>
+    );
+  };
 
   return (
     <div className="article-container">
-      {blog && (
-        <article className="blog-article">
-          <h2>{blog.title}</h2>
-          <div className="blog-content" dangerouslySetInnerHTML={{ __html: blog.content }} />
-          <p className="blog-author">Author: {blog.author.username}</p>
-      
-          <section className="comments-section">
-            <h3>Comments:</h3>
-            <CommentSystem itemId={blogId} onModel="Blog" />
-          </section>
-
-
-        
-          <RatingSystem itemId={blogId} onModel="Blog" />
-          
-          <ul className="blog-tags">
-            {blog.tags.map((tag) => (
-              <li className="blog-tag-item" key={tag}>{tag}</li>
-            ))}
-          </ul>
-         
-          
-          <button onClick={() => navigate(-1)}>Back to Blog List</button>
-        </article>
-      )}
+      {blog && renderBlog()}
     </div>
-);
+  );
 };
-
 
 export default BlogDisplay;

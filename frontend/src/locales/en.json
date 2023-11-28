@@ -58,8 +58,8 @@
       "description": "Discover the joy of DIY. Share your unique creations and get inspired by a community of crafters.",
       "alt": "DIY and crafting"
     }
-  }, 
-    "portals": {
+  },
+  "portals": {
     "loading": "Loading...",
     "error": "Error",
     "discoverHeader": "Discover Your Next Hobby",
@@ -79,5 +79,114 @@
     "navbarBrand": "Hewaya Blog",
     "navHome": "Home",
     "navCreateNew": "Create New Blog"
+  },
+
+  "UserGallery": {
+    "header": "My Gallery",
+    "searchPlaceholder": "Search images...",
+    "sortOptions": {
+      "nameAsc": "Name Ascending",
+      "nameDesc": "Name Descending",
+      "dateAsc": "Date Ascending",
+      "dateDesc": "Date Descending"
+    },
+    "filterOptions": {
+      "all": "All Images",
+      "favorites": "Favorites",
+      "published": "Published"
+    },
+    "loading": "Loading images...",
+    "error": "Error: Failed to fetch images.",
+    "offcanvas": {
+      "description": "Description:",
+      "averageRating": "Average Rating:",
+      "ratingCount": "Rating Count:",
+      "metadata": "Metadata:",
+      "points": "Points:",
+      "publishTip": "To share an image, select a portal from the dropdown and then click the Publish button.",
+      "comments": "Comments",
+      "resolution": "Resolution",
+      "fileType": "File Type",
+      "fileSize": "File Size",
+      "publishButton": {
+        "unpublish": "Unpublish",
+        "publish": "Publish"
+      },
+      "selectPortal": "Select a Portal"
+    }
+  },
+
+  "about": {
+    "header": "About Hewaya Link",
+    "description": "Welcome to Hewaya Link! If you’re embarking on a journey of self-improvement and skill development, you’ve come to the right place.",
+    "visionTitle": "Our Vision",
+    "visionDescription": "We aim to be a sanctuary for hobbyists. Whether you’re a beginner or intermediate, this platform is crafted for you. Dive into a community filled with passionate individuals and showcase your unique works.",
+    "coreFeaturesTitle": "Core Features",
+    "coreFeatures": {
+      "skillShowcasing": "Skill Showcasing: Share your projects and creations with a community that understands and appreciates your effort.",
+      "feedbackLoop": "Feedback Loop: Benefit from user ratings and comments. Know where you shine and where you need to polish.",
+      "growthPrivileges": "Growth & Privileges: As you progress, unlock new tiers that come with their own set of privileges, making your journey not just fruitful but also rewarding.",
+      "bloggingTutorials": "Blogging & Tutorials: Got knowledge to share or an interesting story related to your hobby? Pen it down in our dedicated blogging section. Or, if you're seeking wisdom, find tutorials curated by our community members."
+    },
+    "closingStatement": "At its heart, Hewaya Link is more than just a platform. We're about growth through guided socialization. As a proud senior project, we're redefining how hobbyists learn and progress. Join us on this exciting journey and let's grow together!",
+    "communityGuidelinesTitle": "Community Guidelines",
+    "communityGuidelines": {
+      "respectEachOther": "Respect Each Other: Be polite and respectful in all interactions. Personal attacks, hate speech, harassment, or discrimination will not be tolerated.",
+      "noSpamming": "No Spamming: Avoid posting irrelevant content or promoting external links. Repetitive posting or flooding the forum is prohibited.",
+      "keepItSafe": "Keep it Safe: Do not share personal information. Avoid harmful or illegal content.",
+      "noTrollingOrFlameWars": "No Trolling or Flame Wars: Be constructive in discussions. Do not post inflammatory comments.",
+      "contentRestrictions": "Content Restrictions: Graphic, obscene, or NSFW content is prohibited.",
+      "reportMisbehavior": "Report Misbehavior: Report violations and trust our moderators to handle disruptive behavior.",
+      "consequencesForViolations": "Consequences for Violations: Users violating guidelines may face consequences, ranging from warnings to bans.",
+      "constructiveFeedback": "Constructive Feedback: Offer constructive criticism and appreciate others' effort.",
+      "avoidFalseInformation": "Avoid False Information: Verify and avoid spreading misinformation.",
+      "respectIntellectualProperty": "Respect Intellectual Property: Only share content with proper rights and give credit where due."
+    },
+    "privacyPolicyTitle": "Privacy Policy Highlights",
+    "privacyPolicy": {
+      "dataCollection": "Data Collection: We collect data to improve the user experience and platform functionality.",
+      "dataUsage": "Data Usage: Data is used for personalizing content and addressing technical issues. We don't sell your data.",
+      "userControl": "User Control: Users can modify, delete, or retrieve their data at any time.",
+      "dataProtection": "Data Protection: We ensure data security and protection against breaches.",
+      "thirdPartyLinks": "Third-party Links: We're not responsible for third-party websites or their practices.",
+      "cookies": "Cookies: We use cookies for functionality and data analysis.",
+      "policyChanges": "Policy Changes: Policy updates will be posted on this page. Reviewing it regularly is recommended."
+    },
+    "additionalSectionTitle": "Why Choose Us?",
+    "additionalSectionDescription": "At Hewaya Link, we prioritize our community. With top-tier security measures, a friendly community, and a plethora of resources, we ensure that every member has a seamless experience. Whether you’re a newbie or an expert, there’s something for everyone here!"
+  },
+
+  "uploadComponent": {
+    "alertLogin": "Please log in to upload images.",
+    "labelImage": "Image",
+    "labelImageName": "Image Name",
+    "placeholderImageName": "Enter image name",
+    "labelDescription": "Description",
+    "placeholderDescription": "Enter image description",
+    "visibilityPublic": "Public",
+    "visibilityPrivate": "Private",
+    "tooltipVisibility": "Public images will be visible to all users viewing your gallery. Private images will only be visible to you.",
+    "buttonUpload": "Upload Image",
+    "uploadingMessage": "Uploading..."
+  },
+  "galleryScreen": {
+    "uploadButton": "Upload Image",
+    "uploadTitle": "Upload Image",
+    "fetchImagesError": "Failed to fetch images."
+  },
+  "emailVerificationBanner": {
+    "message": "Please verify your email address. Check your inbox for the verification email. If you don't see the email, please check your spam folder."
+  },
+
+  "footer": {
+    "contactUs": "Contact Us",
+    "contactDescription": "You can reach us at",
+    "followUs": "Follow Us",
+    "facebook": "Facebook",
+    "twitter": "Twitter",
+    "instagram": "Instagram",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "copyright": "&copy; {year} Hewaya Link. All rights reserved."
   }
 }
