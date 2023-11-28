@@ -2,12 +2,15 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Card } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 const BlogList = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -28,17 +31,17 @@ const BlogList = () => {
     fetchBlogs();
   }, []);
  
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) return <p>{t('blogList:loading')}</p>;
+  if (error) return <p>{t('blogList:error')}: {error}</p>;
 
-  if (!blogs.length) return <p>No blogs to display.</p>;
+  if (!blogs.length) return <p>{t('blogList:noBlogs')}</p>;
 
   return (
     <div className="blog-list-container">
-      <div className="row">
+      <div className="">
         {blogs.map(blog => (
-          <div key={blog._id} className="col-sm-12  mb-4">
-            <Card className="blog-card h-100 shadow-sm">
+          <div key={blog._id} className="">
+            <Card className="blog-card">
               <Card.Img variant="top" src={blog.image || '/assets/cloud.png'} alt="Blog post" />
               <Card.Body>
                 <Card.Title>{blog.title}</Card.Title>
@@ -49,8 +52,7 @@ const BlogList = () => {
                   Posted by {blog.author.username} on {new Date(blog.createdAt).toLocaleDateString()}
                 </Card.Text>
                 <button className="btn-custom" onClick={() => navigate(`/blog/${blog._id}`)}>
-  <span>Read More</span>
-</button>
+                <span>{t('blogList:readMore')}</span></button>
               </Card.Body>
             </Card>
           </div>

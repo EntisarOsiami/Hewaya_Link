@@ -23,6 +23,7 @@
         "JRMN",
         "lewa",
         "lineheight",
+        "MAILGUN",
         "mediaembed",
         "mergetags",
         "micheile",
@@ -53,7 +54,14 @@
         "wordcount",
         "XOWQ",
         "ychecker",
-        "zxcvbn"
+        "zxcvbn",
+        "استكشاف",
+        "التطبيق",
+        "الرئيسية",
+        "العربية",
+        "تطبيقنا",
+        "رائع",
+        "مرحبًا"
     ],
     "deepscan.enable": true
 }
