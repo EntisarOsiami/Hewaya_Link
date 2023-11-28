@@ -1,10 +1,12 @@
 import { Alert } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 const EmailVerificationBanner = () => {
+    const { t } = useTranslation();
+
     return (
         <Alert variant="warning">
-            Please verify your email address. Check your inbox for the verification email. If you don’t see the email, please check your spam folder.
-          
+            {t('emailVerificationBanner:message')}
         </Alert>
     );
 }

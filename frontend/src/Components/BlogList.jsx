@@ -4,13 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+
 const BlogList = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { t } = useTranslation();
-
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -30,7 +30,7 @@ const BlogList = () => {
     };
     fetchBlogs();
   }, []);
- 
+
   if (loading) return <p>{t('blogList:loading')}</p>;
   if (error) return <p>{t('blogList:error')}: {error}</p>;
 
@@ -39,20 +39,27 @@ const BlogList = () => {
   return (
     <div className="blog-list-container">
       <div className="">
-        {blogs.map(blog => (
+        {blogs.map((blog) => (
           <div key={blog._id} className="">
             <Card className="blog-card">
-              <Card.Img variant="top" src={blog.image || '/assets/cloud.png'} alt="Blog post" />
+              <Card.Img
+                variant="top"
+                src={blog.image || '/assets/cloud.png'}
+                alt="Blog post"
+              />
               <Card.Body>
                 <Card.Title>{blog.title}</Card.Title>
-                <Card.Text className="blog-excerpt">
-                  {blog.excerpt}
-                </Card.Text>
+                <Card.Text className="blog-excerpt">{blog.excerpt}</Card.Text>
                 <Card.Text className="text-muted">
-                  Posted by {blog.author.username} on {new Date(blog.createdAt).toLocaleDateString()}
+                  Posted by {blog.author.username} on{' '}
+                  {new Date(blog.createdAt).toLocaleDateString()}
                 </Card.Text>
-                <button className="btn-custom" onClick={() => navigate(`/blog/${blog._id}`)}>
-                <span>{t('blogList:readMore')}</span></button>
+                <button
+                  className="btn-custom"
+                  onClick={() => navigate(`/blog/${blog._id}`)}
+                >
+                  <span>{t('blogList:readMore')}</span>
+                </button>
               </Card.Body>
             </Card>
           </div>
@@ -60,7 +67,6 @@ const BlogList = () => {
       </div>
     </div>
   );
-  
 };
 
 export default BlogList;

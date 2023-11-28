@@ -4,11 +4,8 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import en from "../src/locales/en.json";
 import ar from "../src/locales/ar.json";
 
-i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
+i18n.use(LanguageDetector).use(initReactI18next).init({
 
-  .init({
     resources: {
       en: {
         nav: en.nav,
@@ -19,6 +16,12 @@ i18n
         portals: en.portals,
         blogList: en.blogList,
         blogScreen: en.blogScreen,
+        UserGallery: en.UserGallery,
+        about: en.about,
+        uploadComponent: en.uploadComponent,
+        galleryScreen: en.galleryScreen,
+        emailVerificationBanner: en.emailVerificationBanner,
+        footer: en.footer,
         // ...
       },
       ar: {
@@ -30,6 +33,12 @@ i18n
         portals: ar.portals,
         blogList: ar.blogList,
         blogScreen: ar.blogScreen,
+        UserGallery: ar.UserGallery,
+        about: ar.about,
+        uploadComponent: ar.uploadComponent,
+        galleryScreen: ar.galleryScreen,
+        emailVerificationBanner: ar.emailVerificationBanner,
+        footer: ar.footer,
         // ...
       },
     },
@@ -38,11 +47,9 @@ i18n
     interpolation: {
       escapeValue: false,
     },
+
   });
 
-i18n.on("languageChanged", (lng) => {
-  console.log(`Language changed to ${lng}`);
-  console.log(i18n.getDataByLanguage(lng));
-});
+
 
 export default i18n;
