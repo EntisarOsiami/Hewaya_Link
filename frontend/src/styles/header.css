@@ -1,17 +1,24 @@
 .header {
   width: 100%;
-  background-color: var(--bg-color); 
+  background-color: var(--bg-color);
+  padding: 10px 20px; 
   font-size: 21px;
   font-weight: 400;
+  color: var(--text-color);
+  display: flex;
+  justify-content: space-between; 
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   
   }
 
 .header .navbar {
   width: 100%;
-  padding: 0 20px; 
   display: flex;
   align-items: center;
+  margin: 0 20px;
+
+  justify-content: space-between;
+
 }
 
 .header .logo {
@@ -19,12 +26,14 @@
 }
 
 .header .menu {
-  margin-right: auto; 
+  margin: 0 20px;
+
 }
 
 .header .nav-link {
   color: var(--text-color); 
-  margin: 0 30px; }
+  margin: 0 10px;
+  }
 
 .header .nav-link:hover {
   color: var(--text-color); }
@@ -46,10 +55,12 @@
 
 .header.rtl {
   direction: rtl;
+  
+  
 }
 
 .header.rtl .nav-link, .header.rtl .custom-dropdown  {
-  margin: 0 40px;
+  margin: 0 20px;
 }
 
 .img-logo {
