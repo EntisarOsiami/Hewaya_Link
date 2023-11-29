@@ -1,4 +1,4 @@
-import {fetchCategories } from "@/app/lib/data";
+import {fetchCategories,getCounts } from "@/app/lib/data";
 import Pagination from "@/app/ui/dashboard/pagination/pagination";
 import Search from "@/app/ui/dashboard/search/search";
 import styles from "@/app/ui/dashboard/users/users.module.css";
@@ -10,7 +10,6 @@ const CategoryPage = async ({ searchParams }) => {
   const q = searchParams?.q || "";
   const page = searchParams?.page || 1;
   const {count , categories} = await fetchCategories(q, page);
-
 
   return (
     <div className={styles.container}>
