@@ -2,10 +2,11 @@ import styles from "./transactions.module.css";
 import {fetchLatestPortals } from "@/app/lib/data";
 
 
-const Transactions = async () => {
+const LatestPortals = async () => {
   const portals = await fetchLatestPortals();
   return (
     <div className={styles.container}>
+      <h3>Latest Portals</h3>
     <table className={styles.table}>
       <thead>
         <tr>
@@ -28,4 +29,4 @@ const Transactions = async () => {
   );
 };
 
-export default Transactions;
+export default LatestPortals;

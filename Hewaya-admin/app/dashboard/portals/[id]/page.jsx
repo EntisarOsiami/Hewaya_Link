@@ -13,8 +13,7 @@ const SinglePortalPage = async ({ params }) => {
         <form action={updatePortal} className={styles.form}>
           <input type="hidden" name="id" value={portal.id}/>
           <label>Name</label>
-          <input type="text" placeholder="name" name="name" 
-          value={portal.name} required />
+          <input type="text" placeholder={portal.name} name="name" required />
           <label>description</label>
         <textarea name="description" id="" cols="30" rows="10" 
         placeholder="description">
