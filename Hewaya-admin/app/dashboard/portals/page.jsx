@@ -3,6 +3,8 @@ import Pagination from "@/app/ui/dashboard/pagination/pagination";
 import Search from "@/app/ui/dashboard/search/search";
 import styles from "@/app/ui/dashboard/users/users.module.css";
 import Link from "next/link";
+import { deletePortal } from "@/app/lib/actions";
+
 
 const PortalsPage = async ({ searchParams }) => {
   const q = searchParams?.q || "";
@@ -40,6 +42,12 @@ const PortalsPage = async ({ searchParams }) => {
                       View
                     </button>
                   </Link>
+                  <form action={deletePortal}>
+                    <input type="hidden" name="id" value={(portal.id)} />
+                    <button className={`${styles.button} ${styles.delete}`}>
+                      Delete
+                    </button>
+                  </form>
                 </div>
               </td>
             </tr>
