@@ -99,6 +99,48 @@ export const addPortal = async (formData) => {
   redirect("/dashboard/portals");
 };
 
+
+export const updatePortal = async (formData) => {
+  const { id, name, description } =
+    Object.fromEntries(formData);
+
+  try {
+    connectToDB();
+    const updateFields = {
+      name: name,
+      description: description,
+    };
+
+    Object.keys(updateFields).forEach(
+      (key) =>
+        (updateFields[key] === "" || undefined) && delete updateFields[key]
+    );
+
+    await Portal.findByIdAndUpdate(id, updateFields);
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to update user!");
+  }
+
+  revalidatePath("/dashboard/portals");
+  redirect("/dashboard/portals");
+};
+
+export const deletePortal = async (formData) => {
+  const { id } = Object.fromEntries(formData);
+
+  try {
+    connectToDB();
+    await Portal.findByIdAndDelete(id);
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to delete portal!");
+  }
+
+  revalidatePath("/dashboard/portals");
+};
+
+
 export const authenticate = async (prevState, formData) => {
   const { username, password } = Object.fromEntries(formData);
 
