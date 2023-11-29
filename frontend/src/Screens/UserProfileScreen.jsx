@@ -72,20 +72,20 @@ const UserProfileScreen = () => {
   return (
     <container className={`profileContainer ${isRtl() ? "rtl" : ""}`}>
       {!isEmailVerified && <EmailVerificationBanner />}
-      <h1 className="profile-header">{t('userProfileScreen:profileHeader')}</h1>
-      <Row className="profile-row">
-        <Col className="profile-col">
+      <h1 >{t('userProfileScreen:profileHeader')}</h1>
+      <Row>
+        <Col >
           <Card>
             <Card.Body>
               <Image
                 src={profilePicture || "/Avatars/defaultPlaceholder.jpg"}
                 thumbnail
-                className="ProfileImage"
+                
               />
-              <Card.Title className="profile-name">
+              <Card.Title >
                 {name.firstName} {name.lastName}
               </Card.Title>
-              <Card.Text className="profile-details">
+              <Card.Text>
                 <strong>{t('userProfileScreen:profileDetails.username')}:</strong> {username}
                 <br />
                 <strong>{t('userProfileScreen:profileDetails.email')}:</strong> {email}
@@ -122,7 +122,7 @@ const UserProfileScreen = () => {
           <Col lg={8} md={7}>
             <Card>
               <Card.Body>
-                <h3 className="profile-information">{t('userProfileScreen:updateInformation.header')}</h3>
+                <h3 >{t('userProfileScreen:updateInformation.header')}</h3>
                 <Form onSubmit={submitHandler}>
                   <Row>
                     <Col>
