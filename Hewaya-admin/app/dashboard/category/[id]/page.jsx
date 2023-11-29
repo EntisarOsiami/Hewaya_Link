@@ -2,7 +2,7 @@ import { updateCategory } from "@/app/lib/actions";
 import { fetchCategory } from "@/app/lib/data";
 import styles from "@/app/ui/dashboard/users/singleUser/singleUser.module.css";
 
-const SinglePortalPage = async ({ params }) => {
+const SingleCategoryPage = async ({ params }) => {
   
   const { id } = params;
   const category = await fetchCategory(id);
@@ -21,4 +21,4 @@ const SinglePortalPage = async ({ params }) => {
   );
 };
 
-export default SinglePortalPage;
+export default SingleCategoryPage;
