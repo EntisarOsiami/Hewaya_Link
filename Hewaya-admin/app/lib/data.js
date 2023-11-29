@@ -31,6 +31,20 @@ export const fetchUser = async (id) => {
   }
 };
 
+export const getCounts = async () => {
+  try {
+    connectToDB();
+    const usersCount = await User.find().count();
+    const portalsCount = await Portal.find().count();
+    const categoriesCount = await Category.find().count();
+    const tagsCount = await Tag.find().count();
+    return { usersCount, portalsCount, categoriesCount, tagsCount };
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to fetch counts!");
+  }
+}
+
 export const fetchPortals = async (q, page) => {
   const regex = new RegExp(q, "i");
 
@@ -46,6 +60,18 @@ export const fetchPortals = async (q, page) => {
   } catch (err) {
     console.log(err);
     throw new Error("Failed to fetch portals!");
+  }
+};
+
+// fetch portals based on latest date
+export const fetchLatestPortals = async () => {
+  try {
+    connectToDB();
+    const portals = await Portal.find().sort({ createdAt: -1 }).limit(5);
+    return portals;
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to fetch latest portals!");
   }
 };
 
@@ -95,7 +121,6 @@ export const fetchTag = async (id) => {
 
 // fetchCategories
 export const fetchCategories = async (q, page) => {
-  console.log(q);
   const regex = new RegExp(q, "i");
 
   const ITEM_PER_PAGE = 5;
@@ -124,24 +149,27 @@ export const fetchCategory = async (id) => {
     throw new Error("Failed to fetch Category!");
   }
 };
-
+const {usersCount, portalsCount, categoriesCount, tagsCount }  = await getCounts();
 export const cards = [
   {
     id: 1,
     title: "Total Users",
-    number: 10.928,
-    change: 12,
+    number: usersCount,
   },
   {
     id: 2,
-    title: "Stock",
-    number: 8.236,
-    change: -2,
+    title: "Portals",
+    number: portalsCount,
   },
   {
     id: 3,
-    title: "Revenue",
-    number: 6.642,
-    change: 18,
+    title: "Categories",
+    number: categoriesCount,
+  },
+  {
+    id: 4,
+    title: "Tags",
+    number: tagsCount,
   },
 ];
+
