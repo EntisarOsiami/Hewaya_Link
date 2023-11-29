@@ -1,10 +1,5 @@
-import { Product, Tag, User, Portal,Category } from "./models";
+import {Tag, User, Portal,Category } from "./models";
 import { connectToDB } from "./utils";
-
-const portalCount = 0;
-const tagCount = 0;
-const categoryCount = 0;
-const userCount = 0;
 
 export const fetchUsers = async (q, page) => {
   const regex = new RegExp(q, "i");
