@@ -123,58 +123,67 @@ const BlogScreen = () => {
         <p>{t("blogScreen:heroSubtitle")}</p>
       </div>
 
-      {/* Search and Filter Options */}
-      <div className="blog-controls">
-        {/* Search Input */}
-        <Form className="blog-search">
-          <FormControl
-            type="search"
-            placeholder="Search"
-            className="search-input"
-            value={searchTerm}
-            onChange={handleSearchChange}
-          />
-        </Form>
+      <div className="row">
+        {/* Left Column for Controls */}
+        <div className="col-md-3">
+          {/* Search and Filter Options */}
+          <div className="blog-controls">
+            {/* Search Input */}
+            <Form className="blog-search">
+              <FormControl
+                type="search"
+                placeholder="Search"
+                className="search-input"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+            </Form>
 
-        {/* Category Filter Dropdown */}
-        <Form.Select
-          className="category-filter"
-          aria-label="Category filter"
-          value={selectedCategory}
-          onChange={handleCategoryChange}
-        >
-          <option value="All">All Categories</option>
-          {/* Dynamically generate category options */}
-        </Form.Select>
+            {/* Category Filter Dropdown */}
+            <Form.Select
+              className="category-filter"
+              aria-label="Category filter"
+              value={selectedCategory}
+              onChange={handleCategoryChange}
+            >
+              <option value="All">All Categories</option>
+              {/* Dynamically generate category options */}
+            </Form.Select>
 
-        {/* Sort Type Dropdown */}
-        <Form.Select
-          className="sort-type"
-          aria-label="Sort type"
-          value={sortType}
-          onChange={handleSortTypeChange}
-        >
-          <option value="dateDesc">Newest First</option>
-          <option value="dateAsc">Oldest First</option>
-          <option value="nameAsc">Name Ascending</option>
-          <option value="nameDesc">Name Descending</option>
-        </Form.Select>
+            {/* Sort Type Dropdown */}
+            <Form.Select
+              className="sort-type"
+              aria-label="Sort type"
+              value={sortType}
+              onChange={handleSortTypeChange}
+            >
+              <option value="dateDesc">Newest First</option>
+              <option value="dateAsc">Oldest First</option>
+              <option value="nameAsc">Name Ascending</option>
+              <option value="nameDesc">Name Descending</option>
+            </Form.Select>
+            <button
+            className="btn-custom mx-4"
+            onClick={() => navigate("/blog/create")}
+          >
+            {t("blogScreen:navCreateNew")}
+          </button>
+        </div>
+          </div>
+
+       
+
+        {/* Right Column for Blog List */}
+        <div className="col-md-9">
+          <main className="blog-screen">
+            <Routes>
+              <Route path="create" element={<CreateBlog />} />
+              <Route path=":blogId" element={<BlogDisplay />} />
+            </Routes>
+            <div className="blog-list">{renderBlogCards()}</div>
+          </main>
+        </div>
       </div>
-
-      <button
-        className="btn-custom"
-        onClick={() => navigate("/blog/create")}
-      >
-        {t("blogScreen:navCreateNew")}
-      </button>
-
-      <main className="blog-screen">
-        <Routes>
-          <Route path="create" element={<CreateBlog />} />
-          <Route path=":blogId" element={<BlogDisplay />} />
-        </Routes>
-        <div className="blog-list">{renderBlogCards()}</div>
-      </main>
     </div>
   );
 };
