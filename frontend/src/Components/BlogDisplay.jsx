@@ -49,6 +49,7 @@ const BlogDisplay = () => {
 
   const renderBlog = () => {
     return (
+      
       <article className="blog-article">
         <h2>{blog.title}</h2>
         <div className="blog-content" dangerouslySetInnerHTML={{ __html: blog.content }} />

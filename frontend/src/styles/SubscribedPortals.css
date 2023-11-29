@@ -1,6 +1,5 @@
 /* SubscribedPortals.css */
 
-/* General Styles */
 .container-subscribed {
     padding-top: 20px;
     padding-bottom: 20px;
@@ -39,28 +38,18 @@
     background-color: #555;
   }
   
-  .card {
-    margin-bottom: 30px;
-    width:50%;
-    margin-left: auto;
-    margin-right: auto;
-    height:300px;
 
-    
-
-  }
   
   .card-img-top {
     height:auto;
     object-fit: cover;
+    border-radius: 5px;
+    
     
 
     
   }
-  
-  .card-body {
-    background-color: #f8f9fa;
-  }
+ 
   
   .card-title {
     color: #333;
