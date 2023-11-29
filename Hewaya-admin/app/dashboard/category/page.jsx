@@ -15,7 +15,7 @@ const CategoryPage = async ({ searchParams }) => {
   return (
     <div className={styles.container}>
       <div className={styles.top}>
-        <Search placeholder="Search for a portals..." />
+        <Search placeholder="Search for a categories..." />
         <Link href="/dashboard/category/add">
           <button className={styles.addButton}>Add New</button>
         </Link>

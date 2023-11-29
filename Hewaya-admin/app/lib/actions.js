@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { Category, Portal, User } from "./models";
+import { Category, Portal, User,Tag } from "./models";
 import { connectToDB } from "./utils";
 import { redirect } from "next/navigation";
 import bcrypt from "bcrypt";
@@ -203,7 +203,7 @@ export const deleteCategory = async (formData) => {
 
 // add tag
 export const addTag = async (formData) => {
-  const { name} =
+  const {name} =
     Object.fromEntries(formData);
 
   try {
