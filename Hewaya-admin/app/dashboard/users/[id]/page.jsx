@@ -20,9 +20,9 @@ const SingleUserPage = async ({ params }) => {
         <form action={updateUser} className={styles.form}>
           <input type="hidden" name="id" value={user.id}/>
           <label>Username</label>
-          <input type="text" name="username" placeholder={user.username} />
+          <input type="text" name="username" placeholder={user.username} value={user.username} />
           <label>Email</label>
-          <input type="email" name="email" placeholder={user.email.address} />
+          <input type="email" name="email" placeholder={user.email.address} value={user.email.address} />
           <label>Password</label>
           <input type="password" name="password" />
           <select name="isAdmin" id="isAdmin" value={user.role}>
@@ -35,8 +35,8 @@ const SingleUserPage = async ({ params }) => {
         </select>
           <label>Is Active?</label>
           <select name="disabled" id="disabled">
-            <option value={true} selected={user.disabled}>Yes</option>
-            <option value={false} selected={!user.disabled}>No</option>
+            <option value={false} selected={user.disabled}>Yes</option>
+            <option value={true} selected={!user.disabled}>No</option>
           </select>
           <button>Update</button>
         </form>

@@ -1,5 +1,10 @@
-import { Product, User } from "./models";
+import { Product, Tag, User, Portal,Category } from "./models";
 import { connectToDB } from "./utils";
+
+const portalCount = 0;
+const tagCount = 0;
+const categoryCount = 0;
+const userCount = 0;
 
 export const fetchUsers = async (q, page) => {
   const regex = new RegExp(q, "i");
@@ -31,7 +36,38 @@ export const fetchUser = async (id) => {
   }
 };
 
-export const fetchProducts = async (q, page) => {
+export const fetchPortals = async (q, page) => {
+  const regex = new RegExp(q, "i");
+
+  const ITEM_PER_PAGE = 5;
+
+  try {
+    connectToDB();
+    const count = await Portal.find({ name: { $regex: regex } }).count();
+    const portals = await Portal.find({ name: { $regex: regex } })
+      .limit(ITEM_PER_PAGE)
+      .skip(ITEM_PER_PAGE * (page - 1));
+    return { count, portals };
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to fetch portals!");
+  }
+};
+
+export const fetchPortal = async (id) => {
+  try {
+    connectToDB();
+    const portal = await Portal.findById(id);
+    return portal;
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to fetch portal!");
+  }
+};
+
+
+// fetchTags
+export const fetchTags = async (q, page) => {
   console.log(q);
   const regex = new RegExp(q, "i");
 
@@ -39,29 +75,60 @@ export const fetchProducts = async (q, page) => {
 
   try {
     connectToDB();
-    const count = await Product.find({ title: { $regex: regex } }).count();
-    const products = await Product.find({ title: { $regex: regex } })
+    const count = await Tag.find({ name: { $regex: regex } }).count();
+    const tags = await Tag.find({ name: { $regex: regex } })
       .limit(ITEM_PER_PAGE)
       .skip(ITEM_PER_PAGE * (page - 1));
-    return { count, products };
+    return { count, tags };
   } catch (err) {
     console.log(err);
-    throw new Error("Failed to fetch products!");
+    throw new Error("Failed to fetch tags!");
   }
 };
 
-export const fetchProduct = async (id) => {
+
+export const fetchTag = async (id) => {
   try {
     connectToDB();
-    const product = await Product.findById(id);
-    return product;
+    const tag = await Tag.findById(id);
+    return tag;
   } catch (err) {
     console.log(err);
-    throw new Error("Failed to fetch product!");
+    throw new Error("Failed to fetch Tag!");
   }
 };
 
-// DUMMY DATA
+// fetchCategories
+export const fetchCategories = async (q, page) => {
+  console.log(q);
+  const regex = new RegExp(q, "i");
+
+  const ITEM_PER_PAGE = 2;
+
+  try {
+    connectToDB();
+    const count = await Category.find({ name: { $regex: regex } }).count();
+    const categories = await Category.find({ name: { $regex: regex } })
+      .limit(ITEM_PER_PAGE)
+      .skip(ITEM_PER_PAGE * (page - 1));
+    return { count, categories };
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to fetch categories!");
+  }
+};
+
+// fetchCategory
+export const fetchCategory = async (id) => {
+  try {
+    connectToDB();
+    const category = await Category.findById(id);
+    return category;
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to fetch Category!");
+  }
+};
 
 export const cards = [
   {

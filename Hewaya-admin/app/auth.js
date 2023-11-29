@@ -9,8 +9,6 @@ const login = async (credentials) => {
   try {
     connectToDB();
     const user = await User.findOne({ username: credentials.username });
-    console.log("=================");
-    console.log(user);
     if (!user) throw new Error("Wrong credentials!");
 
     const isPasswordCorrect = await bcrypt.compare(
