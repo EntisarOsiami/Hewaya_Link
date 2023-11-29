@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { Portal, User } from "./models";
+import { Category, Portal, User } from "./models";
 import { connectToDB } from "./utils";
 import { redirect } from "next/navigation";
 import bcrypt from "bcrypt";
@@ -140,6 +140,128 @@ export const deletePortal = async (formData) => {
   revalidatePath("/dashboard/portals");
 };
 
+
+export const addCategory = async (formData) => {
+  const { name} =
+    Object.fromEntries(formData);
+
+  try {
+    connectToDB();
+    const newCategory = new Category({
+      name: name,      
+    });
+
+    await newCategory.save();
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to create Portal !");
+  }
+
+  revalidatePath("/dashboard/category");
+  redirect("/dashboard/category");
+};
+
+export const updateCategory = async (formData) => {
+  const { id, name } =
+    Object.fromEntries(formData);
+
+  try {
+    connectToDB();
+    const updateFields = {
+      name: name,
+    };
+
+    Object.keys(updateFields).forEach(
+      (key) =>
+        (updateFields[key] === "" || undefined) && delete updateFields[key]
+    );
+
+    await Category.findByIdAndUpdate(id, updateFields);
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to update user!");
+  }
+
+  revalidatePath("/dashboard/category");
+  redirect("/dashboard/category");
+};
+
+// delete category
+export const deleteCategory = async (formData) => {
+  const { id } = Object.fromEntries(formData);
+
+  try {
+    connectToDB();
+    await Category.findByIdAndDelete(id);
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to delete category!");
+  }
+
+  revalidatePath("/dashboard/category");
+};
+
+// add tag
+export const addTag = async (formData) => {
+  const { name} =
+    Object.fromEntries(formData);
+
+  try {
+    connectToDB();
+    const newTag = new Tag({
+      name: name,      
+    });
+
+    await newTag.save();
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to create Tag !");
+  }
+
+  revalidatePath("/dashboard/tags");
+  redirect("/dashboard/tags");
+};
+
+// update tag
+export const updateTag = async (formData) => {
+  const { id, name } =
+    Object.fromEntries(formData);
+
+  try {
+    connectToDB();
+    const updateFields = {
+      name: name,
+    };
+
+    Object.keys(updateFields).forEach(
+      (key) =>
+        (updateFields[key] === "" || undefined) && delete updateFields[key]
+    );
+
+    await Tag.findByIdAndUpdate(id, updateFields);
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to update Tag!");
+  }
+
+  revalidatePath("/dashboard/tags");
+  redirect("/dashboard/tags");
+};
+
+// delete tag
+export const deleteTag = async (formData) => {
+  const { id } = Object.fromEntries(formData);
+
+  try {
+    connectToDB();
+    await Tag.findByIdAndDelete(id);
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to delete Tag!");
+  }
+
+  revalidatePath("/dashboard/tags");
+};
 
 export const authenticate = async (prevState, formData) => {
   const { username, password } = Object.fromEntries(formData);
