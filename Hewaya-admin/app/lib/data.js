@@ -66,7 +66,7 @@ export const fetchTags = async (q, page) => {
   console.log(q);
   const regex = new RegExp(q, "i");
 
-  const ITEM_PER_PAGE = 2;
+  const ITEM_PER_PAGE = 5;
 
   try {
     connectToDB();
@@ -98,7 +98,7 @@ export const fetchCategories = async (q, page) => {
   console.log(q);
   const regex = new RegExp(q, "i");
 
-  const ITEM_PER_PAGE = 2;
+  const ITEM_PER_PAGE = 5;
 
   try {
     connectToDB();
