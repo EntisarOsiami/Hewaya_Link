@@ -75,7 +75,7 @@ const CommentSystem = ({ itemId, onModel }) => {
           required
           disabled={submitting}
         />
-        <button type="submit" className="comment-submit-btn" disabled={submitting || !commentText.trim()}>
+        <button type="submit" className="btn-custom m-4" disabled={submitting || !commentText.trim()}>
           {submitting ? 'Submitting...' : 'Submit Comment'}
         </button>
       </form>

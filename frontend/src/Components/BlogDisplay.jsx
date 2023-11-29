@@ -47,31 +47,33 @@ const BlogDisplay = () => {
     return <p>{error}</p>;
   }
 
-  const renderBlog = () => {
-    return (
-      
-      <article className="blog-article">
-        <h2>{blog.title}</h2>
-        <div className="blog-content" dangerouslySetInnerHTML={{ __html: blog.content }} />
-        <p className="blog-author">Author: {blog.author.username}</p>
-    
-        <section className="comments-section">
-          <h3>Comments:</h3>
-          <CommentSystem itemId={blogId} onModel="Blog" />
-        </section>
 
-        <RatingSystem itemId={blogId} onModel="Blog" />
-        
-        <ul className="blog-tags">
-          {blog.tags.map((tag) => (
-            <li className="blog-tag-item" key={tag}>{tag}</li>
-          ))}
-        </ul>
-       
-        <button onClick={() => navigate(-1)}>Back to Blog List</button>
-      </article>
-    );
-  };
+const renderBlog = () => {
+  const { title, content, author, tags } = blog;
+
+  return (
+    <article className="blog-article">
+      <h2>{title}</h2>
+      <div className="blog-content" dangerouslySetInnerHTML={{ __html: content }} />
+      <p className="blog-author">Author: {author.username}</p>
+
+      <section className="comments-section">
+        <h3>Comments:</h3>
+        <CommentSystem itemId={blogId} onModel="Blog" />
+      </section>
+
+      <RatingSystem itemId={blogId} onModel="Blog" />
+
+      <ul className="blog-tags">
+        {tags.map((tag) => (
+          <li className="blog-tag-item" key={tag}>{tag}</li>
+        ))}
+      </ul>
+
+      <button  className="btn-custom" onClick={() => navigate(-1)}>Back to Blog List</button>
+    </article>
+  );
+};
 
   return (
     <div className="article-container">

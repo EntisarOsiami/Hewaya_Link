@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate,useLocation } from "react-router-dom";
 import { Card,Form,FormControl } from "react-bootstrap";
 import BlogDisplay from "../Components/BlogDisplay.jsx";
 import CreateBlog from "../Components/CreateBlog";
@@ -106,7 +106,7 @@ const BlogScreen = () => {
             </Card.Text>
             <button
               className="btn-custom"
-              onClick={() => navigate(`/blog/${blog._id}`)}
+              onClick={() => navigate(`${blog._id}`)}
             >
               <span>{t("blogList:readMore")}</span>
             </button>
@@ -115,6 +115,8 @@ const BlogScreen = () => {
       </div>
     ));
   };
+  const location = useLocation();
+  const isHomePage = location.pathname === '/blog' || location.pathname === '/blog/';
 
   return (
     <div className="app-container">
@@ -122,70 +124,69 @@ const BlogScreen = () => {
         <h1>{t("blogScreen:heroTitle")}</h1>
         <p>{t("blogScreen:heroSubtitle")}</p>
       </div>
-
+  
       <div className="row">
-        {/* Left Column for Controls */}
+        {/* Left Column for Controls and Home Button */}
         <div className="col-md-3">
-          {/* Search and Filter Options */}
-          <div className="blog-controls">
-            {/* Search Input */}
-            <Form className="blog-search">
-              <FormControl
-                type="search"
-                placeholder="Search"
-                className="search-input"
-                value={searchTerm}
-                onChange={handleSearchChange}
-              />
-            </Form>
-
-            {/* Category Filter Dropdown */}
-            <Form.Select
-              className="category-filter"
-              aria-label="Category filter"
-              value={selectedCategory}
-              onChange={handleCategoryChange}
-            >
-              <option value="All">All Categories</option>
-              {/* Dynamically generate category options */}
-            </Form.Select>
-
-            {/* Sort Type Dropdown */}
-            <Form.Select
-              className="sort-type"
-              aria-label="Sort type"
-              value={sortType}
-              onChange={handleSortTypeChange}
-            >
-              <option value="dateDesc">Newest First</option>
-              <option value="dateAsc">Oldest First</option>
-              <option value="nameAsc">Name Ascending</option>
-              <option value="nameDesc">Name Descending</option>
-            </Form.Select>
-            <button
-            className="btn-custom mx-4"
-            onClick={() => navigate("/blog/create")}
+          {isHomePage && (
+            <div className="blog-controls">
+              {/* Search Input */}
+              <Form className="blog-search">
+                <FormControl
+                  type="search"
+                  placeholder="Search"
+                  className="search-input"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                />
+              </Form>
+  
+              {/* Category Filter Dropdown */}
+              <Form.Select
+                className="category-filter"
+                aria-label="Category filter"
+                value={selectedCategory}
+                onChange={handleCategoryChange}
+              >
+                <option value="All">All Categories</option>
+                {/* Dynamically generate category options */}
+              </Form.Select>
+  
+              {/* Sort Type Dropdown */}
+              <Form.Select
+                className="sort-type"
+                aria-label="Sort type"
+                value={sortType}
+                onChange={handleSortTypeChange}
+              >
+                <option value="dateDesc">Newest First</option>
+                <option value="dateAsc">Oldest First</option>
+                <option value="nameAsc">Name Ascending</option>
+                <option value="nameDesc">Name Descending</option>
+              </Form.Select>
+            </div>
+          )}
+  
+          <button
+            className="btn-custom mx-5"
+            onClick={() => navigate(isHomePage ? "create" : "/blog")}
           >
-            {t("blogScreen:navCreateNew")}
+            {isHomePage ? t("blogScreen:navCreateNew") : t("blogScreen:navHome")}
           </button>
         </div>
-          </div>
-
-       
-
-        {/* Right Column for Blog List */}
+  
+        {/* Right Column for Blog Display and Create Blog */}
         <div className="col-md-9">
-          <main className="blog-screen">
-            <Routes>
-              <Route path="create" element={<CreateBlog />} />
-              <Route path=":blogId" element={<BlogDisplay />} />
-            </Routes>
-            <div className="blog-list">{renderBlogCards()}</div>
-          </main>
+          <Routes>
+            <Route path="/" element={<div className="blog-list">{renderBlogCards()}</div>} />
+            <Route path="create" element={<CreateBlog />} />
+            <Route path=":blogId" element={<BlogDisplay />} />
+          </Routes>
         </div>
       </div>
     </div>
   );
+  
 };
 
 export default BlogScreen;

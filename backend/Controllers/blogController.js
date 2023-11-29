@@ -51,7 +51,7 @@ const createBlog = async (req, res) => {
 
     const { title, content, author, tags, category } = req.body;
     const parsedTags = tags.split(',').map((tag) => tag.trim());
-    const blog = new Blog({ title, content, author, tags: parsedTags, category }); // Include category
+    const blog = new Blog({ title, content, author, tags: parsedTags, category }); 
     await blog.save();
 
     sendResponse(res, blog, "Blog created successfully.");
