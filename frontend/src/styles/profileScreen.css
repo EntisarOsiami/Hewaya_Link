@@ -1,0 +1,120 @@
+.profileContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: var(--secondary-color-transparent);
+  border: 2px solid var(--primary-color);
+  border-radius: 5px;
+  box-shadow: var(--shadow);
+  max-width: 1200px;
+  margin: 20px auto;
+
+}
+
+.profile-header {
+  text-align: center;
+  color: var(--text-color);
+  font-weight: bold;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  margin-bottom: 50px;
+  font-size: 40px;
+}
+
+.profile-row {
+  margin-top: 20px;
+}
+
+.profile-col {
+  margin-bottom: 20px;
+  ;
+}
+
+.ProfileImage {
+  width: 100%;
+  height: auto;
+  box-shadow: var(--shadow);
+  border: none;
+
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+
+
+
+.profile-name {
+  font-size: 20px;
+  font-weight: var(--bold-text);
+  color: var(--text-color);
+  margin-bottom: 5px;
+}
+
+.profile-email {
+  font-size: 14px;
+  color: var(--text-color);
+  margin-bottom: 10px;
+}
+
+.profile-details {
+  font-size: 14px;
+  color: var(--text-color);
+}
+
+.profile-information {
+  color: var(--text-color);
+  margin-bottom: 20px;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: var(--bold-text);
+  color: var(--text-color);
+  margin: auto;
+}
+
+.form-control {
+  border: none;
+  border-radius: 5px;
+  background-color: var(--input-background);
+  color: var(--text-color);
+  padding: 10px;
+}
+
+.avatar-selection-box {
+  cursor: pointer;
+  border: 1px solid #b9bf17;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin: 15px;
+}
+
+.avatars-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 10px;
+  justify-content: center;
+}
+
+.avatar-image {
+  width: 80px;
+  height: 80px;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.avatar-image.active {
+  border-color: var(--primary-color);
+}
+
+.profileContainer.rtl{
+  direction: rtl;
+  text-align: right;
+}

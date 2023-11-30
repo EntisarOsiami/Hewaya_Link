@@ -1,34 +1,35 @@
+/* eslint-disable no-unused-vars */
 import { Editor } from '@tinymce/tinymce-react';
 import PropTypes from 'prop-types';
 
-function BlogEditor({ handleEditorContent }) {
+const BlogEditor = ({ onEditorContentChange }) => {
   const handleEditorChange = (content, editor) => {
-    handleEditorContent(editor.getContent());
+    onEditorContentChange(content);
   };
 
   return (
-    <div className="BlogEditor-container">
-      <h2 className="BlogEditor-header">Blog Editor</h2>
-      <div className="BlogEditor-toolbar"></div>
-      <Editor
-        apiKey='ew5zscg4rgau6k5a3niqbkhuspvrtyl8y65uhkll5lucv5k6'
-        init={{
-          plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-          toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-          menubar: 'file edit view insert format tools table',
-          branding: false, 
-        }}
-        initialValue="<p>Start writing your blog here...</p>"
-        onChange={handleEditorChange}
-        className="BlogEditor-editor"
-        contentClassName="BlogEditor-editor-content"
-      />
-    </div>
+    <Editor
+      apiKey="lejilam28j10k9d8gs3qvltezrkqytd5o7ozmog3y4noisc5"
+      init={{
+        height: 500,
+        menubar: false,
+        plugins: [
+          'advlist autolink lists link image charmap print preview anchor',
+          'searchreplace visualblocks code fullscreen',
+          'insertdatetime media table paste code help wordcount'
+        ],
+        toolbar: 'undo redo | formatselect | ' +
+        'bold italic backcolor | alignleft aligncenter ' +
+        'alignright alignjustify | bullist numlist outdent indent | ' +
+        'removeformat | help'
+      }}
+      onEditorChange={handleEditorChange}
+    />
   );
-}
+};
 
 BlogEditor.propTypes = {
-  handleEditorContent: PropTypes.func.isRequired,
+  onEditorContentChange: PropTypes.func.isRequired
 };
 
 export default BlogEditor;

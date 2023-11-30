@@ -113,10 +113,14 @@
 
 .offcanvas {
   background-color: var(--secondary-color-transparent);
+  border: 2px solid var(--primary-color);
+  border-radius: 5px;
+  box-shadow: var(--shadow);
 }
 
 .offcanvas-body {
   background-color: var(--secondary-color-transparent);
+ 
 }
 .offcanvas-header {
   background-color: var(--secondary-color-transparent);
@@ -125,14 +129,49 @@
   font-size: 36px !important; 
   font-weight: bolder !important;
   color: var(--text-color) !important;
-  margin-bottom: 10px !important;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+
   }
   
 .list_meta{
   font-size: 15px;
   color: var(--text-color);
   margin-bottom: 0.5rem;
+}
+
+
+
+/* RTL Styles */
+.UserGallery-container.rtl,
+.UserGallery-container.rtl .UserGallery-header,
+.UserGallery-container.rtl .PortalTips,
+.UserGallery-container.rtl .search-input,
+.UserGallery-container.rtl .sort-select,
+.UserGallery-container.rtl .filter-select,
+.UserGallery-container.rtl .card-actions-container,
+.UserGallery-container.rtl .card-actions-container button,
+.UserGallery-container.rtl .comments-button,
+.UserGallery-container.rtl .card-publish-dropdown,
+.UserGallery-container.rtl .card-publish-button,
+.UserGallery-container.rtl .comment,
+.UserGallery-container.rtl .comments-section,
+.UserGallery-container.rtl .Bold_meta,
+.UserGallery-container.rtl .p_meta,
+.UserGallery-container.rtl .rating-container,
+.UserGallery-container.rtl .rating-container_star,
+.UserGallery-container.rtl .offcanvas,
+.UserGallery-container.rtl .offcanvas-body,
+.UserGallery-container.rtl .offcanvas-header,
+.UserGallery-container.rtl .offcanvas-title,
+.UserGallery-container.rtl .list_meta {
+  direction: rtl;
+  text-align: right;
+  
+
+}
+
+.UserGallery-container.rtl .card-actions-container {
+  flex-direction: row-reverse;
 }

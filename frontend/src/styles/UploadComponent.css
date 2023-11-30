@@ -1,50 +1,67 @@
 .UploadComponent-container {
   max-width: 600px;
-
   padding: 20px;
-
+  margin: 20px auto;
+  border: 1px solid var(--primary-color);
+  border-radius: 5px;
+  background-color: var(--secondary-color);
+  box-shadow: var(--shadow-light);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-  
-  .UploadComponent-form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .UploadComponent-input,
-  .UploadComponent-textarea {
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .UploadComponent-input::placeholder,
-  .UploadComponent-textarea::placeholder {
-    color: var(--primary-color);
-    opacity: 0.7;
-  }
-  
-  .UploadComponent-button {
-    padding: 10px 20px;
-    background-color: var(--accent-color);
-    color: var(--text-color);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .UploadComponent-button:hover {
-    background-color: var(--hover-color);
-  }
-  
-  .UploadComponent-alert {
-    padding: 10px;
-    background-color: var(--accent-color);
-    color: var(--text-color);
-    margin-bottom: 10px;
-    border-radius: 4px;
-    text-align: center;
-  }
-  
+.UploadComponent-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.UploadComponent-input,
+.UploadComponent-textarea {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.UploadComponent-input::placeholder,
+.UploadComponent-textarea::placeholder {
+  color: var(--primary-color);
+  opacity: 0.7;
+}
+
+.UploadComponent-button {
+  padding: 10px 20px;
+  background-color: var(--accent-color);
+  color: var(--text-color);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.UploadComponent-button:hover {
+  background-color: var(--hover-color);
+}
+
+.UploadComponent-alert {
+  padding: 10px;
+  background-color: var(--accent-color);
+  color: var(--text-color);
+  margin-bottom: 10px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+/* RTL Styles */
+.UploadComponent-container.rtl,
+.UploadComponent-container.rtl .UploadComponent-alert,
+.UploadComponent-container.rtl .UploadComponent-form,
+.UploadComponent-container.rtl .UploadComponent-input,
+.UploadComponent-container.rtl .UploadComponent-textarea,
+.UploadComponent-container.rtl .UploadComponent-button {
+  direction: rtl;
+  text-align: right;
+}

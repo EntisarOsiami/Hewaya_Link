@@ -1,6 +1,7 @@
-import { Blog } from '../models/index.js';
+import { Blog , Portal } from '../models/index.js';
 import Joi from 'joi';
 import { JSDOM } from 'jsdom';
+
 
 import sendResponse from "../Utils/sendResponse.js";
 
@@ -14,33 +15,36 @@ const createBlogSchema = Joi.object({
   category: Joi.string().required()
 });
 
-// stripHtml function to generate an excerpt from the blog content
+
 const stripHtml = (html) => {
   const dom = new JSDOM("");
-  const temporaryDiv = dom.window.document.createElement('div');
-  temporaryDiv.innerHTML = html;
-  return temporaryDiv.textContent || temporaryDiv.innerText || "";
+  const div = dom.window.document.createElement('div');
+  div.innerHTML = html;
+  return div.textContent || div.innerText || "";
 };
 
 const EXCERPT_LENGTH = 200; 
+
+
 const generateExcerpt = (htmlContent) => {
-  const text = stripHtml(htmlContent);
-  if (text.length <= EXCERPT_LENGTH) {
-    return text;
+  const strippedText = stripHtml(htmlContent);
+  if (strippedText.length <= EXCERPT_LENGTH) {
+    return strippedText;
   }
-  let end = text.lastIndexOf(' ', EXCERPT_LENGTH);
-  return `${text.substring(0, end)}...`;
+  const lastSpaceIndex = strippedText.lastIndexOf(' ', EXCERPT_LENGTH);
+  return `${strippedText.substring(0, lastSpaceIndex)}...`;
 };
 const extractFirstImage = (htmlContent) => {
   const dom = new JSDOM(htmlContent);
   const firstImage = dom.window.document.querySelector('img');
-  return firstImage ? firstImage.src : null; 
+  return firstImage?.src || null;
 };
 
 
 //@dec     Create a blog 
 //@route   POST /api/blogs
 //@access  Private
+
 
 const createBlog = async (req, res) => {
   try {
@@ -50,9 +54,28 @@ const createBlog = async (req, res) => {
     }
 
     const { title, content, author, tags, category } = req.body;
-    const parsedTags = tags.split(',').map((tag) => tag.trim());
-    const blog = new Blog({ title, content, author, tags: parsedTags, category }); // Include category
+
+    let parsedTags = [];
+    if (tags && tags.trim().length > 0) {
+      parsedTags = tags.split(',').map(tag => tag.trim());
+    }
+
+    const blog = new Blog({ 
+      title, 
+      content, 
+      author, 
+      tags: parsedTags,  
+      category 
+    }); 
+
     await blog.save();
+      // Find matching portals and update them
+      const matchingPortals = await Portal.find({ categories: { $in: [category] } });
+      for (const portal of matchingPortals) {
+        portal.blog.push(blog._id);
+        await portal.save();
+      }
+  
 
     sendResponse(res, blog, "Blog created successfully.");
   } catch (error) {
@@ -61,9 +84,11 @@ const createBlog = async (req, res) => {
   }
 };
 
+
 //@doc    Get all blogs
 //@route  GET /api/blogs
 //@access Public
+
 
 const getAllBlogs = async (req, res) => {
   try {
@@ -71,27 +96,22 @@ const getAllBlogs = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const startIndex = (page - 1) * limit;
 
-    const blogs = await Blog.find()
-      .populate('author', 'username') 
-      .sort({ createdAt: -1 })
-      .skip(startIndex)
-      .limit(limit);
+    const blogs = await findBlogs(startIndex, limit);
 
-      const blogsWithExcerptsAndImages = blogs.map(blog => {
-        return {
-          ...blog.toObject(), 
-          excerpt: generateExcerpt(blog.content),
-          image: extractFirstImage(blog.content) 
-        };
-      });
+    const blogsWithExcerptsAndImages = blogs.map(blog => ({
+      ...blog.toObject(),
+      excerpt: generateExcerpt(blog.content),
+      image: extractFirstImage(blog.content)
+    }));
 
-    const total = await Blog.countDocuments();
+    const total = await getBlogCount();
 
     const pagination = {
       currentPage: page,
       totalPages: Math.ceil(total / limit),
       totalItems: total
-    }; 
+    };
+
     sendResponse(res, { blogs: blogsWithExcerptsAndImages, pagination }, "Blogs retrieved successfully.");
   } catch (error) {
     console.error("Error fetching blogs:", error);
@@ -99,9 +119,22 @@ const getAllBlogs = async (req, res) => {
   }
 };
 
+const findBlogs = async (startIndex, limit) => {
+  return await Blog.find()
+    .populate('author', 'username')
+    .sort({ createdAt: -1 })
+    .skip(startIndex)
+    .limit(limit);
+};
+
+const getBlogCount = async () => {
+  return await Blog.countDocuments();
+};
+
 //@dec     Update a blog
 //@route   PUT /api/blogs/:id
 //@access  Private
+
 
 const updateBlog = async (req, res) => {
   try {
@@ -109,15 +142,14 @@ const updateBlog = async (req, res) => {
 
     const parsedTags = tags ? tags.split(',').map(tag => tag.trim()) : undefined;
 
-    const updateObject = Object.fromEntries(
-      Object.entries({ title, content, tags: parsedTags, category }).filter(([, val]) => val !== undefined)
-    );
+    const updateObject = {
+      ...(title && { title }),
+      ...(content && { content }),
+      ...(parsedTags && { tags: parsedTags }),
+      ...(category && { category })
+    };
 
-    const updatedBlog = await Blog.findByIdAndUpdate(
-      req.params.blogId,
-      updateObject,
-      { new: true }
-    );
+    const updatedBlog = await Blog.findByIdAndUpdate(req.params.blogId, updateObject, { new: true });
 
     if (!updatedBlog) {
       return sendResponse(res, null, "Blog not found.", false);
@@ -140,7 +172,9 @@ const getBlogById = async (req, res) => {
   try {
     const blogId = req.params.blogId;
     const blog = await Blog.findById(blogId)
-      .populate('author', 'username');
+      .populate('author', 'username',)
+      .populate('category', 'name')
+      .populate('tags', 'name');
 
     if (!blog) {
       return sendResponse(res, null, "Blog not found.", false);
