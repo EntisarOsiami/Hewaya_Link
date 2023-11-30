@@ -3,8 +3,7 @@ import {
   Form,
   Button,
   Row,
-  Col,
-  Container,
+  Col,  
   Card,
   Collapse,
 } from "react-bootstrap";
@@ -17,12 +16,13 @@ import { updateUserProfile } from "../slices/profileSlice.js";
 import defaultAvatars from "../Data/avatars";
 import EmailVerificationBanner from "../Components/EmailVerificationBanner.jsx";
 import { requestPasswordReset } from "../Components/requestPasswordReset.jsx";
+import { useTranslation } from "react-i18next";
 
 const UserProfileScreen = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState({ firstName: "", lastName: "" });
   const { isEmailVerified } = useSelector((state) => state.auth);
-
+  const { t, i18n } = useTranslation();
   const [profilePicture, setProfilePicture] = useState(
     "/Avatars/defaultPlaceholder.jpg"
   );
@@ -64,48 +64,56 @@ const UserProfileScreen = () => {
     }
   };
 
+  const isRtl = () => {
+    const rtlLanguages = ["ar", "he", "ur"];
+    return rtlLanguages.includes(i18n.language);
+  };
+
   return (
-    <Container>
+    <container className={`profileContainer ${isRtl() ? "rtl" : ""}`}>
       {!isEmailVerified && <EmailVerificationBanner />}
-      <h1 className="mt-5">Profile</h1>
+      <h1 >{t('userProfileScreen:profileHeader')}</h1>
       <Row>
-        <Col lg={4} md={5} className="mb-4">
+        <Col >
           <Card>
             <Card.Body>
               <Image
                 src={profilePicture || "/Avatars/defaultPlaceholder.jpg"}
                 thumbnail
-                className="mx-auto d-block"
+                
               />
-              <Card.Title className="text-center">
+              <Card.Title >
                 {name.firstName} {name.lastName}
               </Card.Title>
-              <Card.Text className="text-center">
-                <strong>Username:</strong> {username}
+              <Card.Text>
+                <strong>{t('userProfileScreen:profileDetails.username')}:</strong> {username}
                 <br />
-                <strong>Email:</strong> {email}
+                <strong>{t('userProfileScreen:profileDetails.email')}:</strong> {email}
                 <br />
                 <Button
                   variant="link"
                   size="sm"
                   onClick={() => {
-                    if (window.confirm("Are you sure you want to reset your password?")) {
-                        requestPasswordReset(email);
+                    if (
+                      window.confirm(
+                        t('userProfileScreen:confirmations.resetPassword')
+                      )
+                    ) {
+                      requestPasswordReset(email);
                     }
-                }}
-                
+                  }}
                 >
-                  Reset Password
+                  {t('userProfileScreen:profileDetails.resetPasswordButton')}
                 </Button>
               </Card.Text>
               {showUpdateFields ? null : (
-                <Button
+                <button
                   onClick={() => setShowUpdateFields(true)}
-                  variant="primary"
-                  className="w-100 mt-3"
+                  className="btn-custom"
+                  size="sm"
                 >
-                  Update Profile
-                </Button>
+                  {t('userProfileScreen:profileDetails.updateProfileButton')}
+                </button>
               )}
             </Card.Body>
           </Card>
@@ -114,15 +122,15 @@ const UserProfileScreen = () => {
           <Col lg={8} md={7}>
             <Card>
               <Card.Body>
-                <h3 className="mb-4">Update Information</h3>
+                <h3 >{t('userProfileScreen:updateInformation.header')}</h3>
                 <Form onSubmit={submitHandler}>
                   <Row>
                     <Col>
                       <Form.Group controlId="firstName">
-                        <Form.Label>First Name</Form.Label>
+                        <Form.Label>{t('userProfileScreen:updateInformation.labels.firstName')}</Form.Label>
                         <Form.Control
                           type="text"
-                          placeholder="First Name"
+                          placeholder={t('userProfileScreen:updateInformation.placeholders.firstName')}
                           value={name.firstName}
                           onChange={(e) =>
                             setName({ ...name, firstName: e.target.value })
@@ -132,10 +140,10 @@ const UserProfileScreen = () => {
                     </Col>
                     <Col>
                       <Form.Group controlId="lastName">
-                        <Form.Label>Last Name</Form.Label>
+                        <Form.Label>{t('userProfileScreen:updateInformation.labels.lastName')}</Form.Label>
                         <Form.Control
                           type="text"
-                          placeholder="Last Name"
+                          placeholder={t('userProfileScreen:updateInformation.placeholders.lastName')}
                           value={name.lastName}
                           onChange={(e) =>
                             setName({ ...name, lastName: e.target.value })
@@ -145,26 +153,26 @@ const UserProfileScreen = () => {
                     </Col>
                   </Row>
                   <Form.Group controlId="username">
-                    <Form.Label>Username</Form.Label>
+                    <Form.Label>{t('userProfileScreen:updateInformation.labels.username')}</Form.Label>
                     <Form.Control
                       type="text"
-                      placeholder="Username"
+                      placeholder={t('userProfileScreen:updateInformation.placeholders.username')}
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                     />
                   </Form.Group>
                   <Form.Group controlId="email">
-                    <Form.Label>Email Address</Form.Label>
+                    <Form.Label>{t('userProfileScreen:updateInformation.labels.emailAddress')}</Form.Label>
                     <Form.Control
                       type="email"
-                      placeholder="Email"
+                      placeholder={t('userProfileScreen:updateInformation.placeholders.email')}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                     />
                   </Form.Group>
-
+  
                   <Form.Group controlId="avatar">
-                    <Form.Label>Choose an Avatar</Form.Label>
+                    <Form.Label>{t('userProfileScreen:updateInformation.labels.chooseAvatar')}</Form.Label>
                     <div
                       className="avatar-selection-box"
                       onClick={() => setOpen(!open)}
@@ -187,17 +195,17 @@ const UserProfileScreen = () => {
                       </div>
                     </Collapse>
                   </Form.Group>
-
-                  <Button type="submit" variant="success" className="mt-4 me-4">
-                    Update
-                  </Button>
-                  <Button
-                    variant="secondary"
+  
+                  <button type="submit" className="btn-custom">
+                    {t('userProfileScreen:updateInformation.buttons.update')}
+                  </button>
+                  <button
+                    type="button"
+                    className="btn-custom-side"
                     onClick={() => setShowUpdateFields(false)}
-                    className="mt-4 me-4"
                   >
-                    Cancel
-                  </Button>
+                    {t('userProfileScreen:updateInformation.buttons.cancel')}
+                  </button>
                   {isLoading && <Loader />}
                 </Form>
               </Card.Body>
@@ -205,8 +213,8 @@ const UserProfileScreen = () => {
           </Col>
         )}
       </Row>
-    </Container>
-  );
-};
+    </container>
+  );}
+  
 
 export default UserProfileScreen;

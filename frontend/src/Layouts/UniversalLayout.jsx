@@ -1,17 +1,17 @@
 import Header from '../Components/Header'; 
 import Footer from '../Components/Footer'; 
-import { Container } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import FAQChatbot from '../Components/ChatBot/FAQChatbot.jsx'; 
 import 'react-chatbot-kit/build/main.css';
 
 const UniversalLayout = ({ children }) => {
+    // Renders a universal layout with a header, content, FAQ chatbot, and footer
     return (
         <div className="layout-wrapper">
-            <Header className="layout-header" />
-            <Container fluid className="layout-content">{children}</Container>
-            <FAQChatbot /> 
-            <Footer className="layout-footer" />
+            <Header />
+            {children}
+            <FAQChatbot />
+            <Footer />
         </div>
     );
 };

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { Card, Tabs, Tab, Button } from "react-bootstrap";
@@ -7,6 +7,7 @@ import RatingSystem from "./RatingSystem";
 import CommentSystem from "./CommentSystem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment, faTimes } from "@fortawesome/free-solid-svg-icons";
+import BlogCard from "./blogCard.jsx"; 
 
 const SubscribedPortals = ({ userId }) => {
   const [subscribedPortals, setSubscribedPortals] = useState([]);
@@ -23,32 +24,30 @@ const SubscribedPortals = ({ userId }) => {
         const portals = response.data.data;
         setSubscribedPortals(portals);
 
-        const newSubscriptionStatus = {};
-        portals.forEach((portal) => {
-          newSubscriptionStatus[portal._id] =
-            portal.subscribers.includes(userId);
-        });
+        const newSubscriptionStatus = portals.reduce((status, portal) => {
+          status[portal._id] = portal.subscribers.includes(userId);
+          return status;
+        }, {});
         setSubscriptionStatus(newSubscriptionStatus);
 
         if (portals.length > 0) {
           setActiveKey(portals[0]._id);
         }
-      } catch (err) {
-        setError(err.message);
+      } catch (error) {
+        setError(error.message);
       } finally {
         setLoading(false);
       }
     };
-
     fetchSubscribedPortals();
   }, [userId]);
 
-  const formatFileSize = (bytes) => {
-    const KB = 1024;
-    const MB = 1024 * KB;
-    return bytes < MB
-      ? (bytes / KB).toFixed(2) + " KB"
-      : (bytes / MB).toFixed(2) + " MB";
+  const formatFileSizeInKBorMB = (bytes) => {
+    if (bytes < 1024 * 1024) {
+      return `${(bytes / 1024).toFixed(2)} KB`;
+    } else {
+      return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+    }
   };
 
   const toggleComments = () => {
@@ -72,14 +71,11 @@ const SubscribedPortals = ({ userId }) => {
 
   return (
     <div className="container-subscribed">
-      <Tabs
-        activeKey={activeKey}
-        onSelect={(k) => setActiveKey(k)}
-        className="mb-3"
-      >
+      <Tabs activeKey={activeKey} onSelect={(k) => setActiveKey(k)} className="mb-3">
         {subscribedPortals.map((portal) => (
           <Tab eventKey={portal._id} title={portal.name} key={portal._id}>
             <Button
+              className="subscribe-btn"
               onClick={() => handleSubscribeClick(portal._id)}
               variant={subscriptionStatus[portal._id] ? "danger" : "success"}
             >
@@ -102,18 +98,11 @@ const SubscribedPortals = ({ userId }) => {
                         {image.metadata.resolution.height} pixels
                       </li>
                       <li>File Type: {image.metadata.fileType}</li>
-                      <li>
-                        File Size: {formatFileSize(image.metadata.fileSize)}
-                      </li>
+                      <li>File Size: {formatFileSizeInKBorMB(image.metadata.fileSize)}</li>
                     </ul>
                     <br />
-                    <Button
-                      onClick={toggleComments}
-                      className="toggle-comments-btn"
-                    >
-                      <FontAwesomeIcon
-                        icon={showComments ? faTimes : faComment}
-                      />
+                    <Button onClick={toggleComments} className="btn-custom">
+                      <FontAwesomeIcon icon={showComments ? faTimes : faComment} />
                       {showComments ? " Hide Comments" : " Show Comments"}
                     </Button>
                     {showComments && (
@@ -122,6 +111,13 @@ const SubscribedPortals = ({ userId }) => {
                     <br />
                   </Card.Body>
                 </Card>
+              ))}
+         
+              {/* Render blog cards */}
+              {portal.blog.map((blog) => (
+                <div key={blog._id} className="blog-card-container">
+                  <BlogCard blog={blog} />
+                </div>
               ))}
             </Scrollbars>
           </Tab>

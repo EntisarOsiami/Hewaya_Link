@@ -36,6 +36,12 @@ const PortalSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Gallery' 
   }],
+  blog: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Blog'
+    }
+  ],
   analytics: {
     views: { type: Number, default: 0 },
     interactions: { type: Number, default: 0 },
