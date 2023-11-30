@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import {
   Button,
   Pagination,
@@ -39,57 +40,48 @@ const UserGallery = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const handleCloseOffcanvas = () => setSelectedImage(null);
   const [expandedComments, setExpandedComments] = useState(null);
-
+  const { t, i18n } = useTranslation();
   // @description : useEffect hook to fetch images and portals when the component mounts
 
   useEffect(() => {
-    const fetchImages = async () => {
-      setLoading(true);
-      try {
-        const imagesResponse = await axios.get("/api/gallery/images");
-        const images = imagesResponse.data.data.images;
 
-        const imagesWithRatingsAndComments = await Promise.all(
-          images.map(async (image) => {
-            try {
-              const ratingResponse = await axios.get(
-                `/api/ratings/average/Gallery/${image._id}`
-              );
-              const commentsResponse = await axios.get(
-                `/api/comments/Gallery/${image._id}`
-              );
+const fetchImages = async () => {
+  setLoading(true);
+  try {
+    const imagesResponse = await axios.get("/api/gallery/images");
+    const images = imagesResponse.data.data.images;
+    const imagesWithRatingsAndComments = await Promise.all(
+      images.map(async (image) => {
+        try {
+          const ratingResponse = await axios.get(`/api/ratings/average/Gallery/${image._id}`);
+          const commentsResponse = await axios.get(`/api/comments/Gallery/${image._id}`);
+          return {
+            ...image,
+            averageRating: ratingResponse.data.data.averageRating,
+            ratingCount: ratingResponse.data.data.ratingCount,
+            comments: commentsResponse.data.data,
+          };
+        } catch (err) {
+          console.error("Error fetching additional data for image", image._id, err);
+          return {
+            ...image,
+            averageRating: "Not Rated",
+            ratingCount: "Not rated",
+            comments: [],
+          };
+        }
+      })
+    );
 
-              return {
-                ...image,
-                averageRating: ratingResponse.data.data.averageRating,
-                ratingCount: ratingResponse.data.data.ratingCount,
-                comments: commentsResponse.data.data,
-              };
-            } catch (err) {
-              console.error(
-                "Error fetching additional data for image",
-                image._id,
-                err
-              );
-              return {
-                ...image,
-                averageRating: "Not Rated",
-                ratingCount: "Not rated",
-                comments: [],
-              };
-            }
-          })
-        );
-
-        setAllImages(imagesWithRatingsAndComments);
-        setFilteredImages(imagesWithRatingsAndComments);
-      } catch (error) {
-        console.error("Error fetching images", error);
-        setError("Failed to fetch images.");
-      } finally {
-        setLoading(false);
-      }
-    };
+    setAllImages(imagesWithRatingsAndComments);
+    setFilteredImages(imagesWithRatingsAndComments);
+  } catch (error) {
+    console.error("Error fetching images", error);
+    setError("Failed to fetch images.");
+  } finally {
+    setLoading(false);
+  }
+};
     const fetchPortals = async () => {
       try {
         const response = await axios.get("/api/portals");
@@ -149,113 +141,117 @@ const UserGallery = () => {
 
   // @description : functions to handle image actions - favorite, delete, publish,  visibility and  Comments toggles
 
-  const handleFavoriteToggle = async (imageId) => {
-    try {
-      await axios.patch(`/api/gallery/images/${imageId}/favorite`);
-      const updatedImages = allImages.map((img) =>
-        img._id === imageId ? { ...img, isFavorite: !img.isFavorite } : img
-      );
+const handleFavoriteToggle = async (imageId) => {
+  try {
+    await axios.patch(`/api/gallery/images/${imageId}/favorite`);
 
-      setAllImages(updatedImages);
-      if (selectedImage && selectedImage._id === imageId) {
-        setSelectedImage({
-          ...selectedImage,
-          isFavorite: !selectedImage.isFavorite,
-        });
-      }
-    } catch (error) {
-      console.error("Error toggling favorite status", error);
-      setError("Failed to update favorite status.");
+    const updatedImages = allImages.map((img) =>
+      img._id === imageId ? { ...img, isFavorite: !img.isFavorite } : img
+    );
+    setAllImages(updatedImages);
+
+    if (selectedImage && selectedImage._id === imageId) {
+      setSelectedImage({
+        ...selectedImage,
+        isFavorite: !selectedImage.isFavorite,
+      });
     }
-  };
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`/api/gallery/images/${id}`);
-      setAllImages(allImages.filter((image) => image._id !== id));
-      if (selectedImage && selectedImage._id === id) {
-        setSelectedImage(null);
-      }
-    } catch (error) {
-      console.error("Error deleting image", error);
-      setError("Failed to delete image.");
+  } catch (error) {
+    console.error("Error toggling favorite status", error);
+    setError("Failed to update favorite status.");
+  }
+};
+
+
+const handleDelete = async (id) => {
+  try {
+    await axios.delete(`/api/gallery/images/${id}`);
+    setAllImages(allImages.filter((image) => image._id !== id));
+    
+    if (selectedImage?._id === id) {
+      setSelectedImage(null);
     }
-  };
+  } catch (error) {
+    console.error("Error deleting image:", error);
+    setError("Failed to delete image.");
+  }
+};
 
-  const handlePublish = async (imageId) => {
-    const portalId = selectedPortal[imageId];
-    if (!portalId) {
-      console.error("No portal selected for publishing");
-      return;
+const handlePublish = async (imageId) => {
+  const portalId = selectedPortal[imageId];
+  
+  if (!portalId) {
+    throw new Error("No portal selected for publishing");
+  }
+
+  try {
+    const response = await axios.patch(`/api/gallery/images/${imageId}/publish`, { portalId });
+    console.log(response.data.message);
+
+    const updatedImages = allImages.map((image) =>
+      image._id === imageId ? { ...image, published: !image.published } : image
+    );
+
+    setAllImages(updatedImages);
+
+    if (selectedImage?._id === imageId) {
+      setSelectedImage((prevSelectedImage) => ({
+        ...prevSelectedImage,
+        published: !prevSelectedImage.published,
+      }));
     }
-    try {
-      const response = await axios.patch(
-        `/api/gallery/images/${imageId}/publish`,
-        { portalId }
-      );
-      console.log(response.data.message);
+  } catch (error) {
+    console.error("Error publishing image", error);
+    throw new Error("Failed to publish image");
+  }
+};
 
-      const updatedImages = allImages.map((img) =>
-        img._id === imageId ? { ...img, published: !img.published } : img
-      );
-
-      setAllImages(updatedImages);
-      if (selectedImage && selectedImage._id === imageId) {
-        setSelectedImage({
-          ...selectedImage,
-          published: !selectedImage.published,
-        });
-      }
-    } catch (error) {
-      console.error("Error publishing image", error);
-    }
-  };
-
-  const handleVisibilityToggle = async (imageId, currentVisibility) => {
-    try {
-      await axios.patch(`/api/gallery/images/${imageId}/visibility`);
-      const updatedImages = allImages.map((img) =>
-        img._id === imageId
-          ? {
-              ...img,
-              visibility: currentVisibility === "public" ? "private" : "public",
-            }
-          : img
-      );
-
-      setAllImages(updatedImages);
-      if (selectedImage && selectedImage._id === imageId) {
-        setSelectedImage({
-          ...selectedImage,
+const handleVisibilityToggle = async (imageId, currentVisibility) => {
+  try {
+    await axios.patch(`/api/gallery/images/${imageId}/visibility`);
+    
+    const updatedImages = allImages.map((img) => {
+      if (img._id === imageId) {
+        return {
+          ...img,
           visibility: currentVisibility === "public" ? "private" : "public",
-        });
+        };
+      } else {
+        return img;
       }
-    } catch (error) {
-      console.error("Error toggling visibility", error);
-      setError("Failed to update image visibility.");
+    });
+
+    setAllImages(updatedImages);
+
+    if (selectedImage?._id === imageId) {
+      setSelectedImage((prevSelectedImage) => ({
+        ...prevSelectedImage,
+        visibility: currentVisibility === "public" ? "private" : "public",
+      }));
     }
-  };
-  const toggleComments = (imageId) => {
-    if (expandedComments === imageId) {
-      setExpandedComments(null);
-    } else {
-      setExpandedComments(imageId);
-    }
-  };
+  } catch (error) {
+    console.error("Error toggling visibility", error);
+    setError("Failed to update image visibility.");
+  }
+};
+
+const toggleComments = (imageId) => {
+  setExpandedComments(prevExpandedComments => prevExpandedComments === imageId ? null : imageId);
+};
+
   // @description : function to format file size in KB or MB
 
-  const formatFileSize = (bytes) => {
-    const KB = 1024;
-    const MB = 1024 * KB;
-    if (bytes < MB) {
-      return (bytes / KB).toFixed(2) + " KB";
-    } else {
-      return (bytes / MB).toFixed(2) + " MB";
-    }
-  };
+
+const formatFileSize = (bytes) => {
+  const KB = 1024;
+  const MB = 1024 * KB;
+  const size = bytes < MB ? (bytes / KB).toFixed(2) + " KB" : (bytes / MB).toFixed(2) + " MB";
+  return size;
+};
 
   // @ description functions to handle pagination
 
-  const currentImages = filteredImages.slice(
+const currentImages = filteredImages.slice(
     (currentPage - 1) * imagesPerPage,
     currentPage * imagesPerPage
   );
@@ -266,45 +262,55 @@ const UserGallery = () => {
   if (loading) return <div className="text-center">Loading images...</div>;
   if (error) return <div className="text-danger">Error: {error}</div>;
 
-  return (
-    <Container className="UserGallery-container">
-      <h1 className="UserGallery-header">My Gallery</h1>
 
+const rtlLanguages = ["ar"];
+
+const isRtlLanguage = () => rtlLanguages.includes(i18n.language);
+
+  return (
+    <Container
+      className={`UserGallery-container ${isRtlLanguage() ? "rtl" : ""}`}
+    >
+      {" "}
+      <h1 className="UserGallery-header">{t("UserGallery:header")}</h1>
       <InputGroup className="search-input">
         <InputGroup.Text>
           <FontAwesomeIcon icon={faSearch} />
         </InputGroup.Text>
         <Form.Control
           type="text"
-          placeholder="Search images..."
+          placeholder={t("UserGallery:searchPlaceholder")}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </InputGroup>
-
       <Form.Select
         className="sort-select"
         aria-label="Sort images"
         value={sortOption}
         onChange={(e) => setSortOption(e.target.value)}
       >
-        <option value="name-asc">Name Ascending</option>
-        <option value="name-desc">Name Descending</option>
-        <option value="date-asc">Date Ascending</option>
-        <option value="date-desc">Date Descending</option>
+        <option value="name-asc">{t("UserGallery:sortOptions:nameAsc")}</option>
+        <option value="name-desc">
+          {t("UserGallery:sortOptions:nameDesc")}
+        </option>
+        <option value="date-asc">{t("UserGallery:sortOptions:dateAsc")}</option>
+        <option value="date-desc">
+          {t("UserGallery:sortOptions:dateDesc")}
+        </option>
       </Form.Select>
-
       <Form.Select
         className="filter-select"
         aria-label="Filter images"
         value={filterOption}
         onChange={(e) => setFilterOption(e.target.value)}
       >
-        <option value="all">All Images</option>
-        <option value="fav">Favorites</option>
-        <option value="published">Published</option>
+        <option value="all">{t("UserGallery:filterOptions:all")}</option>
+        <option value="fav">{t("UserGallery:filterOptions:favorites")}</option>
+        <option value="published">
+          {t("UserGallery:filterOptions:published")}
+        </option>
       </Form.Select>
-
       <Row xs={1} md={2} lg={3} className="g-4 mt-3">
         {currentImages.map((image) => (
           <Col key={image._id} className="text-center">
@@ -318,7 +324,6 @@ const UserGallery = () => {
           </Col>
         ))}
       </Row>
-
       <Pagination className="justify-content-center my-4">
         {[...Array(totalPages).keys()].map((number) => (
           <Pagination.Item
@@ -330,9 +335,8 @@ const UserGallery = () => {
           </Pagination.Item>
         ))}
       </Pagination>
-
       {selectedImage && (
-        <Offcanvas show={true} onHide={handleCloseOffcanvas} placement="end">
+        <Offcanvas show={true} onHide={handleCloseOffcanvas} placement="end" className="offcanvas">
           <Offcanvas.Header closeButton>
             <Offcanvas.Title className="offcanvas-title">
               {" "}
@@ -372,12 +376,16 @@ const UserGallery = () => {
                 <FontAwesomeIcon icon={faTrashAlt} />
               </Button>
             </div>
-            <strong className="Bold_meta">Description:</strong>{" "}
+            <strong className="Bold_meta">
+              {t("UserGallery:offcanvas:description")}
+            </strong>{" "}
             <p className="p_meta">{selectedImage.description}</p>
             {selectedImage.published && (
               <>
                 <div className="rating-container_star">
-                  <strong className="Bold_meta">Average Rating:</strong>
+                  <strong className="Bold_meta">
+                    {t("UserGallery:offcanvas:averageRating")}
+                  </strong>
 
                   {[...Array(5)].map((star, index) => {
                     const ratingValue = index + 1;
@@ -407,26 +415,36 @@ const UserGallery = () => {
                       : "Not Rated"}
                   </p>
                 </div>
-                <strong className="Bold_meta">Rating Count:</strong>
+                <strong className="Bold_meta">
+                  {t("UserGallery:offcanvas:ratingCount")}
+                </strong>
                 <p className="p_meta">{selectedImage.ratingCount} </p>
               </>
             )}
-            <strong className="Bold_meta">Metadata:</strong>
+            <strong className="Bold_meta">
+              {t("UserGallery:offcanvas:metadata")}
+            </strong>
             <ul className="list_meta">
               <li>
-                Resolution: {selectedImage.metadata.resolution.width} x{" "}
+                {t("UserGallery:offcanvas:resolution")}{" "}
+                {selectedImage.metadata.resolution.width} x{" "}
                 {selectedImage.metadata.resolution.height} pixels
               </li>
-              <li>File Type: {selectedImage.metadata.fileType}</li>
               <li>
-                File Size: {formatFileSize(selectedImage.metadata.fileSize)}
+                {t("UserGallery:offcanvas:fileType")}{" "}
+                {selectedImage.metadata.fileType}
+              </li>
+              <li>
+                {t("UserGallery:offcanvas:fileSize")}{" "}
+                {formatFileSize(selectedImage.metadata.fileSize)}
               </li>{" "}
             </ul>
-            <strong className="Bold_meta">Points:</strong>{" "}
+            <strong className="Bold_meta">
+              {t("UserGallery:offcanvas:points")}
+            </strong>{" "}
             <p className="p_meta">{selectedImage.points} </p>
             <p className="PortalTips">
-              To share an image, select a portal from the dropdown and then
-              click the Publish button.
+              {t("UserGallery:offcanvas:publishTip")}
             </p>
             <div className="card-publish-side">
               <div>
@@ -441,7 +459,10 @@ const UserGallery = () => {
                     })
                   }
                 >
-                  <option value="">Select a Portal</option>
+                  <option value="">
+                    {" "}
+                    {t("UserGallery:offcanvas:selectPortal")}
+                  </option>
                   {portals.map((portal) => (
                     <option key={portal._id} value={portal._id}>
                       {portal.name}
@@ -472,11 +493,12 @@ const UserGallery = () => {
               variant="outline-secondary"
               onClick={() => toggleComments(selectedImage._id)}
             >
-              <FontAwesomeIcon icon={faComment} /> Comments
+              <FontAwesomeIcon icon={faComment} />
+              {t("UserGallery:offcanvas:comments")}
             </Button>
             {expandedComments === selectedImage._id && (
               <div className="comments-section">
-                <h5>Comments:</h5>
+                <h5>{t("UserGallery:offcanvas:comments")}:</h5>
                 {selectedImage.comments.map((comment) => (
                   <p key={comment._id}>
                     <strong>{comment.author.username}:</strong> {comment.text}

@@ -5,7 +5,6 @@
   justify-content: center;
   min-height: 100vh;
   padding: 20px;
- 
 }
 
 .website-description,
@@ -31,11 +30,27 @@
 .privacy-policy ol,
 .additional-section h2,
 .additional-section p {
-  color: var(--text-color); 
+  color: var(--text-color);
 }
-
 
 .about img {
-  box-shadow: var(--shadow-light); 
+  box-shadow: var(--shadow-light);
 }
 
+/* RTL version styles */
+.about-container.rtl,
+.about-container.rtl .website-description,
+.about-container.rtl .community-guidelines,
+.about-container.rtl .privacy-policy,
+.about-container.rtl .additional-section,
+.about-container.rtl .website-description h2,
+.about-container.rtl.community-guidelines h2,
+.about-container.rtl .privacy-policy h2,
+.about-container.rtl .additional-section h2,
+.about-container.rtl .website-description p,
+.about-container.rtl .community-guidelines ol,
+.about-container.rtl .privacy-policy ol,
+.about-container.rtl .additional-section p {
+  direction: rtl;
+  text-align: right;
+}

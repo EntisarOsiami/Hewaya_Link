@@ -5,18 +5,18 @@ const connectDB = async () => {
     await mongoose.connect(process.env.MONGODB_URI);
 
     mongoose.connection.on("connected", () => {
-      console.log(`MongoDB Connected: ${mongoose.connection.host}`);
+      console.log("MongoDB Connected:", mongoose.connection.host);
     });
 
-    mongoose.connection.on("error", (err) => {
-      console.error(`MongoDB Connection Error: ${err.message}`);
+    mongoose.connection.on("error", (error) => {
+      console.error("MongoDB Connection Error:", error.message);
     });
 
     mongoose.connection.on("disconnected", () => {
       console.log("MongoDB Disconnected");
     });
   } catch (error) {
-    console.error(`Error: ${error.message}`);
+    console.error("Error:", error.message);
     process.exit(1);
   }
 };

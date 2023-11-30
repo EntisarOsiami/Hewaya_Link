@@ -1,21 +1,47 @@
 .form-control-date {
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: var(--input-background, #f2f2f2);
-    font-size: 16px;
-    color: var(--text-color, #333);
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--input-background, #f2f2f2);
+  font-size: 16px;
+  color: var(--text-color, #333);
+  outline: none;
+}
+.register-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 50px;
 
-    outline: none;
-  }
-  .register-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 20px;
-    border-radius: 5px;
-    background-color: var(--secondary-color);
-    box-shadow: var(--shadow-dark);
-    
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  padding:30px;
 
-  }
+}
+
+.register-container.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.login-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  width: 100%;
+
+  padding: 150px;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+}
+
+.login-screen.rlt {
+  direction: rtl;
+  text-align: right;
+}

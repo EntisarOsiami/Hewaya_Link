@@ -2,11 +2,11 @@ import asyncHandler from "express-async-handler";
 import {User} from "../models/index.js";
 import generateToken from "../Utils/generateToken.js";
 import { validationResult } from "express-validator";
-// import rateLimit from "express-rate-limit";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 import sendResponse from "../Utils/sendResponse.js";
 
+// import rateLimit from "express-rate-limit";
 // const limiter = rateLimit({
 //   windowMs: 15 * 60 * 1000, // 15 minutes
 //   max: 10, // limit each IP to 10 requests per windowMs
@@ -16,6 +16,7 @@ import sendResponse from "../Utils/sendResponse.js";
 // @desc    Login user
 // @route   POST /api/user/login
 // @access  Public
+
 const loginUser = asyncHandler(async (req, res) => {
 
   const { emailOrUsername, password } = req.body;
@@ -100,12 +101,13 @@ const registerUser = asyncHandler(async (req, res, next) => {
       await user.save();
 
 // send a verification email to the user email address
+
 const transporter = nodemailer.createTransport({
   host: 'smtp.elasticemail.com',
   port: 2525,
   auth: {
     user: process.env.ELASTIC_EMAIL_USERNAME,
-    pass: process.env.ELASTIC_EMAIL_API_KEY,
+    pass: process.env.ELASTIC_EMAIL_PASSWORD,
   },
 });
       const verificationURL = `${process.env.CLIENT_URL}/verify/${emailVerificationToken}`;
@@ -171,7 +173,7 @@ const resendVerificationEmail = asyncHandler(async (req, res, next) => {
       port: 2525,
       auth: {
         user: process.env.ELASTIC_EMAIL_USERNAME,
-        pass: process.env.ELASTIC_EMAIL_API_KEY,
+        pass: process.env.ELASTIC_EMAIL_PASSWORD,
       },
     });
     
@@ -370,7 +372,7 @@ const resetPassword = asyncHandler(async (req, res, next) => {
       port: 2525,
       auth: {
         user: process.env.ELASTIC_EMAIL_USERNAME,
-        pass: process.env.ELASTIC_EMAIL_API_KEY,
+        pass: process.env.ELASTIC_EMAIL_PASSWORD,
       },
     });
     const resetPasswordURL = `${process.env.CLIENT_URL}/reset-password/${passwordResetToken}`;

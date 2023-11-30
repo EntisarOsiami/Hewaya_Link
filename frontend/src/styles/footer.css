@@ -43,3 +43,14 @@
 .footer ul li {
   display: inline; 
   margin-right: 50px; }
+
+
+/* RTL Styles for footer */
+.footer.rtl,
+.footer.rtl .footer-bottom,
+.footer.rtl p,
+.footer.rtl ul,
+.footer.rtl ul li
+ {
+  direction: rtl;
+}

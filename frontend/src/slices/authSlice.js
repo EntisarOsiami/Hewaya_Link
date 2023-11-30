@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initializeStateFromLocalStorage = () => {
-  const savedUserId = localStorage.getItem('userId');
-  const emailVerified = localStorage.getItem('isEmailVerified') === 'true';  
+  const userId = localStorage.getItem('userId');
+  const isEmailVerified = localStorage.getItem('isEmailVerified') === 'true';  
 
   return {
-    isAuthenticated: !!savedUserId,
-    userId: savedUserId || null,
-    isEmailVerified: emailVerified
+    isAuthenticated: Boolean(userId),
+    userId: userId || null,
+    isEmailVerified
   };
 };
 const initialState = initializeStateFromLocalStorage(); 

@@ -35,6 +35,12 @@ const imageGallerySchema = new Schema(
       enum: ["public", "private"],
       default: "private",
     },
+    tags: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Tag",
+      },
+    ],
   
     cloudinaryId: {
       type: String,
