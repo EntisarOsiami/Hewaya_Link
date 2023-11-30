@@ -2,11 +2,11 @@ import asyncHandler from "express-async-handler";
 import {User} from "../models/index.js";
 import generateToken from "../Utils/generateToken.js";
 import { validationResult } from "express-validator";
-// import rateLimit from "express-rate-limit";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 import sendResponse from "../Utils/sendResponse.js";
 
+// import rateLimit from "express-rate-limit";
 // const limiter = rateLimit({
 //   windowMs: 15 * 60 * 1000, // 15 minutes
 //   max: 10, // limit each IP to 10 requests per windowMs
@@ -16,6 +16,7 @@ import sendResponse from "../Utils/sendResponse.js";
 // @desc    Login user
 // @route   POST /api/user/login
 // @access  Public
+
 const loginUser = asyncHandler(async (req, res) => {
 
   const { emailOrUsername, password } = req.body;

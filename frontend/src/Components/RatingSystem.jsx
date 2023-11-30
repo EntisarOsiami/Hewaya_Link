@@ -19,21 +19,18 @@ const RatingSystem = ({ itemId, onModel }) => {
 
   const displayText = modelDisplayText[onModel] || "Rate this item";
 
-  const fetchAverageRating = async () => {
-    setError(null);
-    try {
-      const response = await axios.get(
-        `/api/ratings/average/${onModel}/${itemId}`
-      );
-      if (response.data && response.data.data) {
-        setAverageRating(response.data.data.averageRating);
-        setRatingCount(response.data.data.ratingCount);
-      }
-    } catch (err) {
-      setError("Failed to fetch average rating.");
-      console.error(err);
-    }
-  };
+
+const fetchAverageRating = async () => {
+  try {
+    const { data } = await axios.get(`/api/ratings/average/${onModel}/${itemId}`);
+    const { averageRating, ratingCount } = data.data;
+    setAverageRating(averageRating);
+    setRatingCount(ratingCount);
+  } catch (error) {
+    setError("Failed to fetch average rating.");
+    console.error(error);
+  }
+};
 
   useEffect(() => {
     fetchAverageRating();
@@ -44,21 +41,19 @@ const RatingSystem = ({ itemId, onModel }) => {
     handleSubmit(newRating);
   };
 
-  const handleSubmit = async (newRating) => {
-    setError(null);
-    try {
-      await axios.post(`/api/ratings`, {
-        value: newRating,
-        author: userId,
-        itemId,
-        onModel,
-      });
-      await fetchAverageRating();
-    } catch (err) {
-      setError("Failed to post the rating.");
-      console.error(err);
-    }
-  };
+const handleSubmit = async (newRating) => {
+  try {
+    await axios.post(`/api/ratings`, {
+      value: newRating,
+      author: userId,
+      itemId,
+      onModel,
+    });
+    await fetchAverageRating();
+  } catch (err) {
+    setError("Failed to post the rating.");
+  }
+};
 
   return (
     <div>

@@ -7,10 +7,9 @@ import './styles/index.css';
 
 const App = () => {
   return (
-    <UniversalLayout  key={i18n.language}>
+    <UniversalLayout key={i18n.language}>
       <ToastContainer />
       <Outlet />
-  
     </UniversalLayout>
   );
 };

@@ -11,9 +11,7 @@ const validModels = {
   Portal,
 };
 
-//@ desc Create or update a rating
-//@route POST /api/ratings
-//@access Private
+
 const createRating = async (req, res) => {
   try {
     const { value, author, itemId, onModel } = req.body;
@@ -27,39 +25,21 @@ const createRating = async (req, res) => {
       return sendResponse(res, null, "Item not found.", false);
     }
 
-    // Check if the user has already rated the item
-    let rating = await Rating.findOne({
-      author,
-      item: itemId,
-      onModel,
-    });
+    let rating = await Rating.findOne({ author, item: itemId, onModel });
 
-    // If the user has already rated the item, update the existing rating
     if (rating) {
       rating.value = value;
       await rating.save();
-      return sendResponse(res, rating, "Rating updated successfully.");
+      return sendResponse(res, rating, "Rating updated.");
     }
 
-    // If not, create a new rating
-    const newRating = new Rating({
-      value,
-      author,
-      item: itemId,
-      onModel,
-    });
+    const newRating = new Rating({ value, author, item: itemId, onModel });
 
     await newRating.save();
-    sendResponse(res, newRating, "Rating added successfully.");
+    sendResponse(res, newRating, "Rating added.");
   } catch (error) {
-    // If there's a unique index error, handle it appropriately
     if (error.code === 11000) {
-      return sendResponse(
-        res,
-        null,
-        "You have already rated this item.",
-        false
-      );
+      return sendResponse(res, null, "You have already rated this item.", false);
     }
     console.error(error);
     sendResponse(res, null, "Server error.", false);

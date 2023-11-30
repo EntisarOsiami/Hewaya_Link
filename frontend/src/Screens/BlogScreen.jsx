@@ -14,7 +14,7 @@ const BlogScreen = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortType, setSortType] = useState("dateDesc");
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -117,9 +117,14 @@ const BlogScreen = () => {
   };
   const location = useLocation();
   const isHomePage = location.pathname === '/blog' || location.pathname === '/blog/';
+  const isRtl = () => {
+    const rtlLanguages = ['ar', 'he', 'ur']; 
+    return rtlLanguages.includes(i18n.language);
+  };
 
   return (
-    <div className="app-container">
+        <div className={`app-container ${isRtl() ? 'rtl' : ''}`}> 
+   
       <div className="app-blog-hero">
         <h1>{t("blogScreen:heroTitle")}</h1>
         <p>{t("blogScreen:heroSubtitle")}</p>

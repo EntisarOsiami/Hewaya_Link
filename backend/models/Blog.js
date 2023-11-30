@@ -9,7 +9,15 @@ const blogPostSchema = new Schema({
     required: true 
   }, 
   createdAt: { type: Date, default: Date.now },
-  tags: [String],
+  tags: [{
+    type: Schema.Types.ObjectId, 
+    ref: 'Tag',
+  }],
+  category: {
+    type: Schema.Types.ObjectId, 
+    ref: 'Category',
+    required: true 
+  },
 });
 
 
