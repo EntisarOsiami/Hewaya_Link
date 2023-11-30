@@ -1,23 +1,25 @@
 import { useSelector } from 'react-redux';
-import { Card, Container, Row, Col } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { LinkContainer } from 'react-router-bootstrap';
+import { Container, Row, Col, Card } from 'react-bootstrap';
 
 const Hero = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const { t } = useTranslation();
 
   return (
     <div>
       <div className="hero-section">
         <div className="text-center">
-          <h1 className="mb-4">Hewaya Link</h1>
-          <p className="mb-4">Your gateway to exploring the world of hobbies</p>
+          <h1 className="mb-4">{t('hero:title')}</h1>
+          <p className="mb-4">{t('hero:subtitle')}</p>
           {!isAuthenticated && (
             <div className="d-flex">
               <LinkContainer to="/login">
-                <button className="btn-custom">Sign In</button>
+                <button className="btn-custom">{t('hero:signIn')}</button>
               </LinkContainer>
               <LinkContainer to="/register">
-                <button className="btn-custom">Sign Up</button>
+                <button className="btn-custom">{t('hero:signUp')}</button>
               </LinkContainer>
             </div>
           )}
@@ -29,9 +31,9 @@ const Hero = () => {
           <Col md={3}>
             <Card className="custom-card">
               <Card.Body>
-                <Card.Title>Reduced Stress</Card.Title>
+                <Card.Title>{t('hero:reducedStress')}</Card.Title>
                 <Card.Text>
-                  “Hobbies are a great way to relax and reduce stress in your life.”
+                  {t('hero:stressText')}
                 </Card.Text>
               </Card.Body>
             </Card>
@@ -40,9 +42,9 @@ const Hero = () => {
           <Col md={3}>
             <Card className="custom-card">
               <Card.Body>
-                <Card.Title>Improved Creativity</Card.Title>
+                <Card.Title>{t('hero:improvedCreativity')}</Card.Title>
                 <Card.Text>
-                  “Exploring hobbies can unlock your creativity and inspire new ideas.”
+                  {t('hero:creativityText')}
                 </Card.Text>
               </Card.Body>
             </Card>
@@ -51,9 +53,9 @@ const Hero = () => {
           <Col md={3}>
             <Card className="custom-card">
               <Card.Body>
-                <Card.Title>Enhanced Well-being</Card.Title>
+                <Card.Title>{t('hero:enhancedWellbeing')}</Card.Title>
                 <Card.Text>
-                  “Engaging in hobbies contributes to an overall sense of well-being.”
+                  {t('hero:wellbeingText')}
                 </Card.Text>
               </Card.Body>
             </Card>
@@ -62,9 +64,9 @@ const Hero = () => {
           <Col md={3}>
             <Card className="custom-card">
               <Card.Body>
-                <Card.Title>Social Connections</Card.Title>
+                <Card.Title>{t('hero:socialConnections')}</Card.Title>
                 <Card.Text>
-                  “Many hobbies provide opportunities to connect with others.”
+                  {t('hero:connectionsText')}
                 </Card.Text>
               </Card.Body>
             </Card>
