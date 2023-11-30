@@ -139,6 +139,19 @@
   padding: 0;
   margin-top: 20px;
 }
+.blog-details {
+  display: flex;
+  justify-content: space-between;
+}
+
+.comments-column, .rating-column, .category-tags-column {
+  flex: 1;
+  margin: 0 10px; 
+}
+
+.no-cat-tags .comments-column, .no-cat-tags .rating-column {
+  flex: 1; }
+
 
 .blog-tag-item {
   display: inline-block;
@@ -166,4 +179,10 @@ button:hover {
     margin-left: 0;
     margin-top: 10px;
   }
+}
+
+
+.app-container.rtl{
+  direction: rtl;
+  text-align: right;
 }

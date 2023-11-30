@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import  { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Pagination, Row, Col, Button } from "react-bootstrap";
@@ -9,6 +9,7 @@ import { faComment, faTimes } from "@fortawesome/free-solid-svg-icons";
 import CommentSystem from "./CommentSystem.jsx";
 import Masonry from "react-masonry-css";
 import { useSelector } from "react-redux";
+import BlogCard from "./blogCard.jsx"; 
 
 const PortalDetails = () => {
   const [portal, setPortal] = useState(null);
@@ -29,8 +30,8 @@ const PortalDetails = () => {
       try {
         const response = await axios.get(`/api/portals/${portalId}`);
         setPortal(response.data.data);
+        console.log(response.data.data);
         setIsSubscribed(response.data.data.subscribers.includes(userId));
-        console.log(response.data.data.subscribers.includes(userId));
         setError("");
       } catch (err) {
         setError(err.message);
@@ -41,6 +42,10 @@ const PortalDetails = () => {
 
     fetchPortalDetails();
   }, [portalId, userId]);
+
+
+
+  const blogs = portal?.blog || [];
 
   const breakpointColumnsObj = {
     default: 3,
@@ -148,6 +153,7 @@ const PortalDetails = () => {
         </div>
       )}
 
+      {/* Render blogs and images in a masonry grid */}
       <Masonry
         breakpointCols={breakpointColumnsObj}
         className="my-masonry-grid"
@@ -166,6 +172,14 @@ const PortalDetails = () => {
             />
           </div>
         ))}
+
+        {/* Render blog cards */}
+        {blogs.map((blog) => (
+          <div key={blog._id} className="blog-card-container">
+            <BlogCard blog={blog} />
+          </div>
+        ))}
+
         {Array.from({ length: 18 }, (_, i) => i + currentImages.length).map(
           (dummyId) => (
             <div key={`dummy-${dummyId}`}>

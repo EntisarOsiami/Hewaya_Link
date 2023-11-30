@@ -9,7 +9,7 @@ const PortalController = {
         .populate('Images')
         .populate('categories')
         .populate('tags')
-        console.log('portals', portals);
+        .populate('blog');
       sendResponse(res, portals, 'Portals retrieved successfully');
     } catch (error) {
       console.error('Error fetching portals:', error);
@@ -73,13 +73,13 @@ const PortalController = {
         })
         .populate('categories')
         .populate('tags')
+        .populate('blog');
   
       if (!portal) {
         return sendResponse(res, null, 'Portal not found', false);
       }
   
       sendResponse(res, portal, 'Portal retrieved successfully');
-      console.log('portal', portal);
     } catch (error) {
       console.error('Error fetching portal by ID:', error);
       sendResponse(res, null, 'Failed to fetch portal', false);
@@ -117,7 +117,8 @@ const PortalController = {
       const allPortals = await Portal.find({})
         .populate('Images')
         .populate('categories')
-        .populate('tags');
+        .populate('tags')
+        .populate('blog');
   
         const subscribedPortals = allPortals.filter(portal =>
           portal.subscribers.map(subId => subId.toString()).includes(userId)
