@@ -5,7 +5,6 @@ import { Category, Portal, User,Tag } from "./models";
 import { connectToDB } from "./utils";
 import { redirect } from "next/navigation";
 import bcrypt from "bcrypt";
-import { signIn } from "../auth";
 
 export const addUser = async (formData) => {
   const { username, email, password, disabled, role } =
@@ -261,16 +260,4 @@ export const deleteTag = async (formData) => {
   }
 
   revalidatePath("/dashboard/tags");
-};
-
-export const authenticate = async (prevState, formData) => {
-  const { username, password } = Object.fromEntries(formData);
-
-  try {
-     await signIn("credentials", { username, password});
-
-  } catch (err) {
-    console.log(err.message);
-    return "Wrong Credentials!1";
-  }
 };
