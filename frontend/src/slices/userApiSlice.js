@@ -38,6 +38,13 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+
+    fetchUserRankPoints: builder.query({
+      query: () => ({
+        url: `${USERS_URL}/rank-points`,
+        method: 'GET',
+      }),
+    }),
     verifyEmail: builder.mutation({
       query: (token) => ({
         url: `${USERS_URL}/verify-email`,
@@ -54,3 +61,4 @@ export const useRegisterMutation = userApiSlice.endpoints.register.useMutation;
 export const useGetUserProfileQuery = userApiSlice.endpoints.getUserProfile.useQuery;
 export const useUpdateUserMutation = userApiSlice.endpoints.updateUser.useMutation;
 export const useVerifyEmailMutation = userApiSlice.endpoints.verifyEmail.useMutation;
+export const useFetchUserRankPointsQuery = userApiSlice.endpoints.fetchUserRankPoints.useQuery;

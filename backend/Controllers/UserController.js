@@ -1,5 +1,5 @@
 import asyncHandler from "express-async-handler";
-import {User} from "../models/index.js";
+import {User, Blog, Comment, Rating, Gallery} from "../models/index.js";
 import generateToken from "../Utils/generateToken.js";
 import { validationResult } from "express-validator";
 import nodemailer from "nodemailer";
@@ -14,7 +14,7 @@ import sendResponse from "../Utils/sendResponse.js";
 
 //********************************************************************************************************************************* */
 // @desc    Login user
-// @route   POST /api/user/login
+// @route   POST /api/users/login
 // @access  Public
 
 const loginUser = asyncHandler(async (req, res) => {
@@ -37,7 +37,7 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 // @desc    Register a new user
-// @route   POST /api/user/register
+// @route   POST /api/users/register
 // @access  Public
 
 
@@ -146,7 +146,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // @desc    Resend email verification token
-// @route   POST /api/user/resend-verification
+// @route   POST /api/users/resend-verification
 // @access  Public
 
 const resendVerificationEmail = asyncHandler(async (req, res, next) => {
@@ -159,7 +159,7 @@ const resendVerificationEmail = asyncHandler(async (req, res, next) => {
       return sendResponse(res, null, "User not found", false);
     }
 
-    if (user.email.isVerified) {
+    if (user.email.verified) {
       return sendResponse(res, null, "Email is already verified", false);
     }
 
@@ -206,7 +206,7 @@ const resendVerificationEmail = asyncHandler(async (req, res, next) => {
 
 
 // @desc   verify email
-// @route   POST /api/user/verify-email
+// @route   POST /api/users/verify-email
 // @access  Public
 
 
@@ -244,7 +244,7 @@ const verifyEmail = asyncHandler(async (req, res, next) => {
 
 
 // @desc    Logout user / clear cookie
-// @route   POST /api/user/logout
+// @route   POST /api/users/logout
 // @access  Public
 const logoutUser = (req, res) => {
   try {
@@ -261,23 +261,50 @@ const logoutUser = (req, res) => {
 };
 
 // @desc    Get user profile
-// @route   GET /api/user/profile
+// @route   GET /api/users/profile
 // @access  Private
-const getUserProfile = asyncHandler(async (req, res, next) => {
+const getUserProfile = asyncHandler(async (req, res) => {
   try {
-    const user = await User.findById(req.user._id);
+    const userId = req.user._id;
 
-    if (user) {
-      sendResponse(res, {
-        user: user,
-      }, "User profile retrieved successfully");
-    } else {
+    const user = await User.findById(userId);
+    if (!user) {
       sendResponse(res, null, "User not found", false);
+      return;
     }
+
+    // Rank points calculation logic
+    const commentsMade = await Comment.find({ author: userId }).countDocuments();
+    let rankPoints = commentsMade * 2; 
+
+    const ratingsMade = await Rating.find({ author: userId }).countDocuments();
+    rankPoints += ratingsMade; 
+
+    const userItems = [
+      ...await Blog.find({ author: userId }),
+      ...await Gallery.find({ author: userId }),
+    ];
+
+    for (const item of userItems) {
+      const averageData = await Rating.aggregate([
+        { $match: { item: item._id } },
+        { $group: { _id: "$item", averageRating: { $avg: "$value" } } }
+      ]);
+
+      if (averageData.length > 0) {
+        rankPoints += averageData[0].averageRating * 5; 
+      }
+    }
+
+    user.userRanking = rankPoints;
+    await user.save();
+
+    sendResponse(res, user, "User profile retrieved successfully");
   } catch (error) {
-    next(error);
-  }
+    console.error("Error fetching user profile:", error);
+    sendResponse(res, null, "An error occurred while fetching user profile", false);}
 });
+
 // @desc    update user profile
 // @route   PUT /api/user/profile
 // @access  Private
@@ -428,6 +455,44 @@ const confirmPasswordReset = asyncHandler(async (req, res, next) => {
   }
 });
 
+//@ doc calculate user rank points
+//@route GET /api/users/rank-points
+//@access Private
+
+const calculateUserRankPoints = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.user._id; 
+
+    const commentsMade = await Comment.find({ author: userId }).countDocuments();
+    let rankPoints = commentsMade * 2; 
+
+    const ratingsMade = await Rating.find({ author: userId }).countDocuments();
+    rankPoints += ratingsMade; 
+
+    const userItems = [
+      ...await Blog.find({ author: userId }),
+      ...await Gallery.find({ author: userId }),
+    ];
+
+    for (const item of userItems) {
+      const averageData = await Rating.aggregate([
+        { $match: { item: item._id } },
+        { $group: { _id: "$item", averageRating: { $avg: "$value" } } }
+      ]);
+
+      if (averageData.length > 0) {
+        rankPoints += averageData[0].averageRating * 5; 
+      }
+    }
+
+    await User.findByIdAndUpdate(userId, { rankPoints });
+
+    res.json({ success: true, rankPoints });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Error calculating rank points" });
+  }
+});
+
 
 export {
   loginUser,
@@ -439,4 +504,5 @@ export {
   verifyEmail,
   confirmPasswordReset,
   resendVerificationEmail,
+  calculateUserRankPoints,
 };

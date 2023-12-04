@@ -242,6 +242,7 @@
           "profileDetails": {
             "username": "Username",
             "email": "Email",
+            "rankPoints":"Hobbyist Rank",
             "resetPasswordButton": "Reset Password",
             "updateProfileButton": "Update Profile"
           },

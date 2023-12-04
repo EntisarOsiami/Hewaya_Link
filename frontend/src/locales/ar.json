@@ -245,6 +245,7 @@
                 "profileDetails": {
                   "username": "اسم المستخدم",
                   "email": "البريد الإلكتروني",
+                  "rankPoints": "رتبة الهاوي",
                   "resetPasswordButton": "إعادة تعيين كلمة المرور",
                   "updateProfileButton": "تحديث الملف الشخصي"
                 },
