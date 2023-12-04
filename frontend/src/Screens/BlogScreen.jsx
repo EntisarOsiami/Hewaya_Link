@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
-import { Routes, Route, useNavigate,useLocation } from "react-router-dom";
-import { Card,Form,FormControl } from "react-bootstrap";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { Card, Form, FormControl } from "react-bootstrap";
 import BlogDisplay from "../Components/BlogDisplay.jsx";
 import CreateBlog from "../Components/CreateBlog";
 import { useTranslation } from "react-i18next";
@@ -13,6 +13,8 @@ const BlogScreen = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortType, setSortType] = useState("dateDesc");
+  const [categories, setCategories] = useState([]);
+
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
@@ -35,6 +37,25 @@ const BlogScreen = () => {
     };
     fetchBlogs();
   }, []);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get("/api/categories");
+        const { success, data } = response.data;
+        if (success) {
+          setCategories(data);
+        } else {
+          console.error(
+            "Failed to fetch categories: Invalid data structure from server."
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -43,7 +64,7 @@ const BlogScreen = () => {
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
   };
-
+  
   const handleSortTypeChange = (e) => {
     setSortType(e.target.value);
   };
@@ -74,6 +95,7 @@ const BlogScreen = () => {
         }
       });
   }, [blogs, selectedCategory, searchTerm, sortType]);
+  
 
   const renderBlogCards = () => {
     if (loading) {
@@ -81,7 +103,11 @@ const BlogScreen = () => {
     }
 
     if (error) {
-      return <p>{t("blogList:error")}: {error}</p>;
+      return (
+        <p>
+          {t("blogList:error")}: {error}
+        </p>
+      );
     }
 
     if (!displayedBlogs.length) {
@@ -89,7 +115,7 @@ const BlogScreen = () => {
     }
 
     return displayedBlogs.map((blog) => (
-      <div key={blog._id} >
+      <div key={blog._id}>
         <Card>
           <Card.Img
             variant="top"
@@ -116,20 +142,20 @@ const BlogScreen = () => {
     ));
   };
   const location = useLocation();
-  const isHomePage = location.pathname === '/blog' || location.pathname === '/blog/';
+  const isHomePage =
+    location.pathname === "/blog" || location.pathname === "/blog/";
   const isRtl = () => {
-    const rtlLanguages = ['ar', 'he', 'ur']; 
+    const rtlLanguages = ["ar", "he", "ur"];
     return rtlLanguages.includes(i18n.language);
   };
 
   return (
-        <div className={`app-container ${isRtl() ? 'rtl' : ''}`}> 
-   
+    <div className={`app-container ${isRtl() ? "rtl" : ""}`}>
       <div className="app-blog-hero">
         <h1>{t("blogScreen:heroTitle")}</h1>
         <p>{t("blogScreen:heroSubtitle")}</p>
       </div>
-  
+
       <div className="row">
         {/* Left Column for Controls and Home Button */}
         <div className="col-md-3">
@@ -145,8 +171,7 @@ const BlogScreen = () => {
                   onChange={handleSearchChange}
                 />
               </Form>
-  
-              {/* Category Filter Dropdown */}
+
               <Form.Select
                 className="category-filter"
                 aria-label="Category filter"
@@ -154,9 +179,13 @@ const BlogScreen = () => {
                 onChange={handleCategoryChange}
               >
                 <option value="All">All Categories</option>
-                {/* Dynamically generate category options */}
+                {categories.map((cat) => (
+                  <option key={cat._id} value={cat._id}>
+                    {cat.name}
+                  </option>
+                ))}
               </Form.Select>
-  
+
               {/* Sort Type Dropdown */}
               <Form.Select
                 className="sort-type"
@@ -171,19 +200,24 @@ const BlogScreen = () => {
               </Form.Select>
             </div>
           )}
-  
+
           <button
             className="btn-custom mx-5"
             onClick={() => navigate(isHomePage ? "create" : "/blog")}
           >
-            {isHomePage ? t("blogScreen:navCreateNew") : t("blogScreen:navHome")}
+            {isHomePage
+              ? t("blogScreen:navCreateNew")
+              : t("blogScreen:navHome")}
           </button>
         </div>
-  
+
         {/* Right Column for Blog Display and Create Blog */}
         <div className="col-md-9">
           <Routes>
-            <Route path="/" element={<div className="blog-list">{renderBlogCards()}</div>} />
+            <Route
+              path="/"
+              element={<div className="blog-list">{renderBlogCards()}</div>}
+            />
             <Route path="create" element={<CreateBlog />} />
             <Route path=":blogId" element={<BlogDisplay />} />
           </Routes>
@@ -191,7 +225,6 @@ const BlogScreen = () => {
       </div>
     </div>
   );
-  
 };
 
 export default BlogScreen;
