@@ -16,7 +16,7 @@ import SubscriptionsPortals from './Screens/SubscriptionsScreen.jsx';
 import CombinedVerificationPage from './Screens/VerifyEmailPage.jsx';
 import ResetPassword from './Screens/ResetPasswordScreen.jsx';
 import GalleryScreen from './Screens/GalleryScreen.jsx';
-import AdminScreen from './Screens/AdminScreen.jsx';
+import AdminScreen from './Screens/ModScreen.jsx';
 import BlogScreen from './Screens/BlogScreen.jsx';
 import PortalList from './Components/PortalList.jsx';
 import PortalDetails from './Components/PortalDetails.jsx';

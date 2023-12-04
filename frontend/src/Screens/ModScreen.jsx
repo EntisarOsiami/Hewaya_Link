@@ -7,7 +7,7 @@ import CategoriesManagement from '../Components/AdminComponents/catagoriesManage
 const AdminScreen = () => {
   return (
     <div>
-      <h1>Admin Dashboard</h1>
+      <h1>Moderator Dashboard</h1>
       <div>
         <UserManagement />
       </div>
