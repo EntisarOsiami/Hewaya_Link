@@ -1,0 +1,270 @@
+/* Mod Screen */
+
+.mod-user-management {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 30px;
+  justify-content: center;
+  padding: 50px;
+  margin: 40px;
+
+  background-color: var(--secondary-color-transparent);
+  box-shadow: var(--shadow);
+  border-radius: 8px;
+  border: 2px solid var(--primary-color);
+}
+
+.mod-user-management div {
+  background-color: var(--primary-color-transparent);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.mod-user-management-title {
+  grid-column: 1 / -1;
+  color: var(--text-color);
+  text-align: center;
+  font-weight: var(--bold-text);
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  text-decoration: underline;
+  text-decoration-color: var(--accent-color);
+  text-underline-offset: 10px;
+  text-decoration-thickness: 3px;
+}
+
+.mod-user-name {
+  color: var(--text-color);
+  margin-bottom: 10px;
+  font-weight: var(--bold-text);
+  font-size: 1.3em;
+}
+
+.mod-user-email {
+  color: var(--text-color);
+  margin-bottom: 5px;
+  font-size: 1.1em;
+}
+
+/* Additional style for 'Suspended' status */
+.mod-user-management p:nth-of-type(2) {
+  color: var(--danger-color);
+  font-weight: var(--bold-text);
+}
+
+/* Styles for portals management*/
+
+.mod-portal-management {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 30px;
+  justify-content: center;
+  background-color: var(--secondary-color-transparent);
+  box-shadow: var(--shadow);
+  border-radius: 8px;
+  padding: 50px;
+  margin: 40px;
+  border-radius: 8px;
+  border: 2px solid var(--primary-color);
+}
+
+.mod-portal-management div {
+  background-color: var(--primary-color-transparent);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.mod-portal-details {
+  color: var(--text-color);
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.2em;
+}
+
+.mod-portal-name {
+  color: var(--text-color);
+  margin-bottom: 20px;
+  font-size: 1.2em;
+  padding: 20px;
+  font-weight: bold;
+}
+
+.mod-portal-management-title {
+  grid-column: 1 / -1;
+  color: var(--text-color);
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+  text-decoration: underline;
+  text-decoration-color: var(--accent-color);
+  text-underline-offset: 10px;
+  text-decoration-thickness: 3px;
+  font-weight: bold;
+}
+
+.mod-portal-description {
+  color: var(--text-color);
+  font-size: 1em;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+/* Styles for Category Management*/
+
+.mod-category-management {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 30px;
+  justify-content: center;
+  padding: 50px;
+  margin: 40px;
+
+  background-color: var(--secondary-color-transparent);
+  box-shadow: var(--shadow);
+  border-radius: 8px;
+  border: 2px solid var(--primary-color);
+}
+
+.mod-category-management div {
+  background-color: var(--primary-color-transparent);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.mod-category-management-title {
+  grid-column: 1 / -1;
+  color: var(--text-color);
+  text-align: center;
+  font-weight: var(--bold-text);
+  margin-bottom: 10px;
+  font-size: 1.2em;
+  text-decoration: underline;
+  text-decoration-color: var(--accent-color);
+  text-underline-offset: 10px;
+  text-decoration-thickness: 3px;
+}
+
+.mod-category-management-name {
+  color: var(--text-color);
+  margin-bottom: 20px;
+  font-size: 1.2em;
+  padding: 20px;
+  font-weight: bold;
+}
+
+.mod-category-management-form {
+  grid-column: 1 / -1;
+
+  color: var(--text-color);
+  font-size: 1em;
+  padding: 10px;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+
+/* Styles for Tag Management */
+
+.mod-tag-management {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 30px;
+  justify-content: center;
+  padding: 50px;
+  margin: 40px;
+
+  background-color: var(--secondary-color-transparent);
+  box-shadow: var(--shadow);
+  border-radius: 8px;
+  border: 2px solid var(--primary-color);
+}
+
+.mod-tag-management div {
+  background-color: var(--primary-color-transparent);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.mod-tag-management-title {
+  grid-column: 1 / -1;
+  color: var(--text-color);
+  text-align: center;
+  font-weight: var(--bold-text);
+  margin-bottom: 10px;
+  font-size: 1.2em;
+  text-decoration: underline;
+  text-decoration-color: var(--accent-color);
+  text-underline-offset: 10px;
+  text-decoration-thickness: 3px;
+}
+
+.mod-tag-management-name {
+  color: var(--text-color);
+  margin-bottom: 20px;
+  font-size: 1.2em;
+  padding: 20px;
+  text-align: center;
+
+  font-weight: bold;
+  gap:20px
+}
+
+.mod-tag-management-input{
+  grid-column: 1 / -1;
+
+  color: var(--text-color);
+  font-size: 1em;
+  padding: 10px;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+
+.Link-menu{
+  color: var(--text-color);
+  font-size:1em;
+  padding: 10px;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  text-decoration: none;
+  font-weight: var(--bold-text);
+  
+
+
+}
+
+.container-menu{
+  gap: 30px;
+  justify-content: center;
+  padding: 50px;
+  margin: 40px;
+  
+}

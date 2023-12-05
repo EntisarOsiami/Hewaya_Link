@@ -1,44 +1,46 @@
 /* General container styling */
 .container-subscribed {
   max-width: 1200px;
-  padding: 20px;
-  width: 100%;
+  min-width: 800px;
   margin: 0 auto;
+  padding: 20px;
   background-color: var(--secondary-color-transparent);
   box-shadow: var(--shadow);
   border-radius: 5px;
-
-  display: flex;
+  display: flex; 
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  max-height: 90vh; 
 }
 
-/* Styling for each tab */
-.tab-content {
-  padding: 20px;
-  border-radius: 5px;
-  margin-top: 10px;
-  width: 100%;
-}
+
+
 
 /* Card styling */
+
+/* Card styling - make it more compact */
 .card {
-  margin-bottom: 50px;
   box-shadow: var(--shadow);
   border-radius: 5px;
-  width: 100%;
-  padding: 20px;
+  padding: 20px; 
+  background-color: var(--primary-color-transparent);
+  border: 1px solid var(--primary-color);
+  margin-bottom:30px; 
 }
 
 .card-img {
-  height: 200px;
+  width: 100%;
+  max-height: 400px; 
   object-fit: cover;
-  object-position: top;
+  object-position: center;
 }
 
+
+
+
 .card-body {
-  padding: 10px;
+  padding: 8px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -81,4 +83,11 @@
   margin-top: 10px;
   margin-bottom: 10px;
   padding: 10px 20px;
+}
+/* Styling for each tab */
+.tab-content {
+  padding: 20px;
+  border-radius: 5px;
+  margin-top: 10px;
+  width: 100%;
 }

@@ -1,4 +1,4 @@
-import  { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Pagination, Row, Col, Button } from "react-bootstrap";
@@ -9,7 +9,7 @@ import { faComment, faTimes } from "@fortawesome/free-solid-svg-icons";
 import CommentSystem from "./CommentSystem.jsx";
 import Masonry from "react-masonry-css";
 import { useSelector } from "react-redux";
-import BlogCard from "./blogCard.jsx"; 
+import BlogCard from "./blogCard.jsx";
 
 const PortalDetails = () => {
   const [portal, setPortal] = useState(null);
@@ -42,8 +42,6 @@ const PortalDetails = () => {
 
     fetchPortalDetails();
   }, [portalId, userId]);
-
-
 
   const blogs = portal?.blog || [];
 

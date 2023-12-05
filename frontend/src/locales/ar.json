@@ -245,7 +245,7 @@
                 "profileDetails": {
                   "username": "اسم المستخدم",
                   "email": "البريد الإلكتروني",
-                  "rankPoints": "رتبة الهاوي",
+                  "rank": ":رتبة الهاوي",
                   "resetPasswordButton": "إعادة تعيين كلمة المرور",
                   "updateProfileButton": "تحديث الملف الشخصي"
                 },
@@ -278,7 +278,14 @@
                 },
                 "loader": {
                   "loadingText": "جار التحميل..."
-                }
+                },
+                "ranks": {
+                  "noviceExplorer": "مستكشف مبتدئ",
+                  "enthusiasticHobbyist": "هاوي متحمس",
+                  "skilledArtisan": "حرفي ماهر",
+                  "masterCrafter": "معلم حرفي",
+                  "legendaryCreator": "مبدع أسطوري"
+              }
               }
             }
             

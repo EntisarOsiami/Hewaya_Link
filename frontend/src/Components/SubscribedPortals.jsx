@@ -1,4 +1,4 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { Card, Tabs, Tab, Button } from "react-bootstrap";
@@ -7,7 +7,7 @@ import RatingSystem from "./RatingSystem";
 import CommentSystem from "./CommentSystem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment, faTimes } from "@fortawesome/free-solid-svg-icons";
-import BlogCard from "./blogCard.jsx"; 
+import BlogCard from "./blogCard.jsx";
 
 const SubscribedPortals = ({ userId }) => {
   const [subscribedPortals, setSubscribedPortals] = useState([]);
@@ -71,7 +71,11 @@ const SubscribedPortals = ({ userId }) => {
 
   return (
     <div className="container-subscribed">
-      <Tabs activeKey={activeKey} onSelect={(k) => setActiveKey(k)} className="mb-3">
+      <Tabs
+        activeKey={activeKey}
+        onSelect={(k) => setActiveKey(k)}
+        className="mb-3"
+      >
         {subscribedPortals.map((portal) => (
           <Tab eventKey={portal._id} title={portal.name} key={portal._id}>
             <Button
@@ -82,13 +86,24 @@ const SubscribedPortals = ({ userId }) => {
               {subscriptionStatus[portal._id] ? "Unsubscribe" : "Subscribe"}
             </Button>
 
-            <Scrollbars style={{ height: 800 }}>
+            <Scrollbars
+              style={{ width: "100%", height: "calc(100vh - 300px)" }}
+            >
+              {" "}
               {portal.Images.map((image) => (
-                <Card key={image._id}>
-                  <Card.Img variant="top" src={image.imageUrl} />
-                  <Card.Body>
-                    <Card.Title>{image.imageName}</Card.Title>
-                    <Card.Text>{image.description}</Card.Text>
+                <Card className="card" key={image._id}>
+                  <Card.Img
+                    className="card-img"
+                    variant="top"
+                    src={image.imageUrl}
+                  />
+                  <Card.Body className="card-body">
+                    <Card.Title className="card-title">
+                      {image.imageName}
+                    </Card.Title>
+                    <Card.Text className="card-text">
+                      {image.description}
+                    </Card.Text>
                     <br />
                     <RatingSystem itemId={image._id} onModel="Gallery" />
                     <strong>Metadata:</strong>
@@ -98,11 +113,16 @@ const SubscribedPortals = ({ userId }) => {
                         {image.metadata.resolution.height} pixels
                       </li>
                       <li>File Type: {image.metadata.fileType}</li>
-                      <li>File Size: {formatFileSizeInKBorMB(image.metadata.fileSize)}</li>
+                      <li>
+                        File Size:{" "}
+                        {formatFileSizeInKBorMB(image.metadata.fileSize)}
+                      </li>
                     </ul>
                     <br />
                     <Button onClick={toggleComments} className="btn-custom">
-                      <FontAwesomeIcon icon={showComments ? faTimes : faComment} />
+                      <FontAwesomeIcon
+                        icon={showComments ? faTimes : faComment}
+                      />
                       {showComments ? " Hide Comments" : " Show Comments"}
                     </Button>
                     {showComments && (
@@ -112,7 +132,6 @@ const SubscribedPortals = ({ userId }) => {
                   </Card.Body>
                 </Card>
               ))}
-         
               {/* Render blog cards */}
               {portal.blog.map((blog) => (
                 <div key={blog._id} className="blog-card-container">

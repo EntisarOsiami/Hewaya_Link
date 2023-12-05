@@ -131,6 +131,7 @@ const getBlogCount = async () => {
   return await Blog.countDocuments();
 };
 
+
 //@dec     Update a blog
 //@route   PUT /api/blogs/:id
 //@access  Private

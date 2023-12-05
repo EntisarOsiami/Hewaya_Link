@@ -2,6 +2,7 @@ import { Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
+
 const BlogCard = ({ blog }) => {
   const navigate = useNavigate();
 
@@ -38,9 +39,12 @@ BlogCard.propTypes = {
     blog: PropTypes.shape({
         title: PropTypes.string,
         excerpt: PropTypes.string,
-        author: PropTypes.shape({
+        author: PropTypes.oneOfType([
+          PropTypes.string,
+          PropTypes.shape({
             username: PropTypes.string.isRequired,
-        }).isRequired,
+          })
+        ]).isRequired,
         createdAt: PropTypes.string.isRequired,
         image: PropTypes.string,
         _id: PropTypes.string,
