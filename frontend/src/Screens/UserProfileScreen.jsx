@@ -1,5 +1,13 @@
 import { useState, useEffect } from "react";
-import { Form, Button, Row, Col, Card, Collapse } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  Row,
+  Col,
+  Card,
+  Collapse,
+  ProgressBar,
+} from "react-bootstrap";
 import Loader from "../Components/Loader.jsx";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
@@ -43,7 +51,7 @@ const UserProfileScreen = () => {
       setSelectedAvatar(user.profilePicture);
     }
   }, [user]);
-  
+
   const fetchUserProfile = async () => {
     try {
       const response = await axios.get("/api/users/profile");
@@ -53,6 +61,31 @@ const UserProfileScreen = () => {
       toast.error("Failed to fetch profile data");
     }
   };
+
+  const getRankInfo = (points) => {
+    const ranks = [
+        { name: t("userProfileScreen:ranks:noviceExplorer"), minPoints: 0, nextRankPoints: 25 },
+        { name: t("userProfileScreen:ranks:enthusiasticHobbyist"), minPoints: 25, nextRankPoints: 100 },
+        { name: t("userProfileScreen:ranks:skilledArtisan"), minPoints: 100, nextRankPoints: 250 },
+        { name: t("userProfileScreen:ranks:masterCrafter"), minPoints: 250, nextRankPoints: 500 },
+        { name: t("userProfileScreen:ranks:legendaryCreator"), minPoints: 500, nextRankPoints: Infinity },
+    ];
+
+    const currentRank = ranks.find((rank) => points < rank.nextRankPoints);
+    const progress =
+      ((points - currentRank.minPoints) /
+        (currentRank.nextRankPoints - currentRank.minPoints)) *
+      100;
+
+    return {
+      rankName: currentRank.name,
+      progress: isNaN(progress) ? 100 : Math.min(progress, 100),
+    };
+  };
+
+  const rankInfo = user
+    ? getRankInfo(user.userRanking)
+    : { rankName: "", progress: 0 };
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -103,10 +136,13 @@ const UserProfileScreen = () => {
                 </strong>{" "}
                 {email}
                 <br />
-                <strong>
-                  {t("userProfileScreen:profileDetails.rankPoints")}:
-                </strong>{" "}
-                {user?.userRanking || 0}
+                <div>
+                  <strong>{t("userProfileScreen:profileDetails:rank")}</strong> {rankInfo.rankName}
+                  <ProgressBar
+                    now={rankInfo.progress}
+                    label={`${rankInfo.progress.toFixed(0)}%`}
+                  />
+                </div>
                 <br />
                 <Button
                   variant="link"

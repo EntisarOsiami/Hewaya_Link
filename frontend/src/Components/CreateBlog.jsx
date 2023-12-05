@@ -53,19 +53,21 @@ function CreateBlog() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <input
+      <form className="m-5" onSubmit={handleSubmit}>
+        <input 
           type="text"
+          className="form-control mb-3"
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
         <BlogEditor onEditorContentChange={onEditorContentChange} />
-        <p>Author: {authorName}</p>
-        <p>Category:</p>
-        <select
+        <p className="text-muted m-3">Author: {authorName}</p>
+        <p className="text-muted m-3">Category:</p>
+        <select 
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
+          className="m-5"
         >
           <option value="">Select a Category</option>
           {categories.map((category) => (
@@ -74,7 +76,7 @@ function CreateBlog() {
             </option>
           ))}
         </select>
-        <button type="submit">Submit</button>
+        <button className="btn-custom" type="submit">Submit</button>
       </form>
     </div>
   );

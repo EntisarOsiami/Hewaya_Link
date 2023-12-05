@@ -27,32 +27,32 @@ from '../Controllers/adminController.js';
 const router = express.Router();
 //app.use('/api/admin', adminRoutes);
 // users related apis
-router.put('/disable/:_id', disableUser);
-router.put('/enable/:_id', enableUser);
+router.put('/disable/:userId', disableUser);
+router.put('/enable/:userId', enableUser);
 router.get('/users', getAllUsers);
-router.get('/users/:_id', getOneUser);
+router.get('/users/:userId', getOneUser);
 
 // portal apis
 router.get('/portals/', getAllPortals);
 router.post('/portals/', createPortal);
-router.put('/portals/:_id', editPortal);
+router.patch('/portals/:_id', editPortal);
 router.delete('/portals/:_id', deletePortal);
 router.get('/portals/:_id', getOnePortal);
 
 // tag related apis
-router.get('/tags/:_id/', getOneTag);
+router.get('/tags/:id/', getOneTag);
 router.get('/tags/', getAllTags);
 router.post('/tags/', createTag);
-router.put('/tags/:_id/', editTag);
-router.delete('/tags/:_id/', deleteTag);
+router.patch('/tags/:id/', editTag);
+router.delete('/tags/:id/', deleteTag);
 router.get('/tags:_id/', createTag);
 
 // category related apis
-router.get('/category/:_id/', getOneCategory);
+router.get('/category/:id/', getOneCategory);
 router.get('/category/', getAllCategories);
 router.post('/category/', createCategory);
-router.put('/category/:_id/', editCategory);
-router.delete('/category/:_id/', deleteCategory);
+router.put('/category/:id/', editCategory);
+router.delete('/category/:id/', deleteCategory);
 router.get('/category/', getOneCategory);
 
 

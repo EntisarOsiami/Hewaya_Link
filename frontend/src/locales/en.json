@@ -242,7 +242,7 @@
           "profileDetails": {
             "username": "Username",
             "email": "Email",
-            "rankPoints":"Hobbyist Rank",
+            "rank":"Hobbyist Rank:",
             "resetPasswordButton": "Reset Password",
             "updateProfileButton": "Update Profile"
           },
@@ -275,9 +275,19 @@
           },
           "loader": {
             "loadingText": "Loading..."
-          }
+          },
+          
+            "ranks": {
+                "noviceExplorer": "Novice Explorer",
+                "enthusiasticHobbyist": "Enthusiastic Hobbyist",
+                "skilledArtisan": "Skilled Artisan",
+                "masterCrafter": "Master Crafter",
+                "legendaryCreator": "Legendary Creator"
+            }
         }
-      }
+        
+        }
+      
       
     
     

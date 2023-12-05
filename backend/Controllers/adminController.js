@@ -4,7 +4,7 @@ import { Tag, Category } from "../models/index.js";
 
 export const disableUser = async (req, res) => {
   try {
-    const user = await User.findById(req.params._id);
+    const user = await User.findById(req.params.userId);
     if (!user) {
       return sendResponse(res, null, "User not found", false);
     }
@@ -18,7 +18,7 @@ export const disableUser = async (req, res) => {
 
 export const enableUser = async (req, res) => {
   try {
-    const user = await User.findById(req.params._id);
+    const user = await User.findById(req.params.userId);
     if (!user) {
       return sendResponse(res, null, "User not found", false);
     }
@@ -47,7 +47,7 @@ export const getAllPortals = async (req, res) => {
     }
     return sendResponse(res, portals, "Portals fetched successfully");
   } catch (error) {
-    return sendResponse(res, null, "Internal server error",     false);
+    return sendResponse(res, null, "Internal server error", false);
   }
 };
 
@@ -57,19 +57,23 @@ export const editPortal = async (req, res) => {
     if (!portal) {
       return sendResponse(res, null, "Portal not found", false);
     }
-    portal.name = req.body.name;
-    portal.description = req.body.description;
-    portal.category = req.body.category;
+
+    portal.name = req.body.name || portal.name;
+    portal.description = req.body.description || portal.description;
+    portal.category = req.body.category || portal.category;
+
     await portal.save();
-    return sendResponse(res, null, "Portal updated successfully", portal);
+
+    return sendResponse(res, portal, "Portal updated successfully", true);
   } catch (error) {
-    return sendResponse(res, null, "Internal server error"), false;
+    console.error("Error updating portal:", error);
+    return sendResponse(res, null, "Internal server error", false);
   }
 };
 
 export const deletePortal = async (req, res) => {
   try {
-    const portal = await Portal.findById(req.params._id);
+    const portal = await Portal.findById(req.params.id);
     if (!portal) {
       return sendResponse(res, null, "Portal not found", false);
     }
@@ -89,23 +93,27 @@ export const createPortal = async (req, res) => {
   }
 };
 
-export const getAllCategories = async (req, res) => {
+export async function getAllCategories(req, res) {
   try {
-    const categories = await Category.find();
-    return sendResponse(res, categories, "Categories fetched successfully");
+    const allCategories = await Category.find();
+    sendResponse(res, allCategories, "Categories fetched successfully");
   } catch (error) {
-    return sendResponse(res, null, "Internal server error");
+    sendResponse(res, null, "Internal server error");
   }
-};
-
+}
 export const editCategory = async (req, res) => {
   try {
-    const category = await Category.findById(req.params._id);
+    const categoryId = req.params.id;
+    const updatedName = req.body.name;
+
+    const category = await Category.findById(categoryId);
     if (!category) {
       return sendResponse(res, null, "Category not found", false);
     }
-    category.name = req.body.name;
+
+    category.name = updatedName;
     await category.save();
+
     return sendResponse(res, category, "Category updated successfully");
   } catch (error) {
     return sendResponse(res, null, "Internal server error");
@@ -116,7 +124,7 @@ export const deleteCategory = async (req, res) => {
   try {
     const category = await Category.findById(req.params._id);
     if (!category) {
-      return sendResponse(res, null, "Category not found",false);
+      return sendResponse(res, null, "Category not found", false);
     }
     await Category.deleteOne({ _id: req.params._id });
     return sendResponse(res, null, "Category deleted successfully");
@@ -172,10 +180,19 @@ export const deleteTag = async (req, res) => {
 
 export const createTag = async (req, res) => {
   try {
+    if (!req.body.name || req.body.name.trim() === "") {
+      return sendResponse(res, null, "Tag name is required", false);
+    }
+
     const tag = await Tag.create(req.body);
-    return sendResponse(res, tag, "Tag created successfully");
+    return sendResponse(res, tag, "Tag created successfully", true);
   } catch (error) {
-    return sendResponse(res, null, "Internal server error");
+    if (error.code === 11000) {
+      return sendResponse(res, null, "Tag name already exists", false);
+    }
+
+    console.error("Error creating tag:", error);
+    return sendResponse(res, null, "Internal server error", false);
   }
 };
 

@@ -1,50 +1,100 @@
-import  { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const CategoriesManagement = () => {
-    const [categories, setCategories] = useState([]);
+  const [allCategories, setAllCategories] = useState([]);
+  const [currentCategory, setCurrentCategory] = useState({ name: "" });
+  const [isEditing, setIsEditing] = useState(false);
 
-    useEffect(() => {
-        fetchCategories();
-    }, []);
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
-    const fetchCategories = async () => {
-        const response = await axios.get('/api/admin/category/');
-        setCategories(response.data.data);
-    };
-    
-    const createCategory = async (category) => {
-        const response = await axios.post('/api/admin/category/', category);
-        console.log(response.data);
-        fetchCategories(); 
-    };
-    
-    const editCategory = async (id, updatedCategory) => {
-        const response = await axios.put(`/api/admin/category/${id}/`, updatedCategory);
-        console.log(response.data);
-        fetchCategories(); 
-    };
-    
-    const deleteCategory = async (id) => {
-        const response = await axios.delete(`/api/admin/category/${id}/`);
-        console.log(response.data);
-        fetchCategories(); 
-    };
-    
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get("/api/admin/category/");
+      setAllCategories(response.data.data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
 
-    return (
-        <div>
-            <h1>Categories Management</h1>
-            <button onClick={createCategory}>Create Category</button>
-            {categories.map(category => (
-                <div key={category._id}>
-                    <h2>{category.name}</h2>
-                    <button onClick={() => editCategory(category._id)}>Edit</button>
-                    <button onClick={() => deleteCategory(category._id)}>Delete</button>
-                </div>
-            ))}
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isEditing) {
+      await editCategory(currentCategory._id, currentCategory);
+    } else {
+      await createCategory(currentCategory);
+    }
+    resetForm();
+  };
+
+  const resetForm = () => {
+    setCurrentCategory({ name: "" });
+    setIsEditing(false);
+  };
+
+  const createCategory = async (category) => {
+    try {
+      await axios.post("/api/admin/category/", category);
+      fetchCategories();
+    } catch (error) {
+      console.error("Error creating category:", error);
+    }
+  };
+
+  const editCategory = async (id, updatedCategory) => {
+    try {
+      await axios.put(`/api/admin/category/${id}/`, updatedCategory);
+      fetchCategories();
+    } catch (error) {
+      console.error("Error editing category:", error);
+    }
+  };
+
+  const handleEditClick = (category) => {
+    setCurrentCategory(category);
+    setIsEditing(true);
+  };
+
+  const handleChange = (e) => {
+    setCurrentCategory({ ...currentCategory, name: e.target.value });
+  };
+
+  return (
+    <div className="mod-category-management">
+      <h1 className="mod-category-management-title">Categories Management</h1>
+
+      <form className="mod-category-management-form" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={currentCategory.name}
+          onChange={handleChange}
+          placeholder="Category Name"
+        />
+        <button className="btn-custom" type="submit">
+          {isEditing ? "Update Category" : "Create Category"}
+        </button>
+        {isEditing && (
+          <button className="btn-custom" onClick={resetForm}>
+            Cancel
+          </button>
+        )}
+      </form>
+
+      {allCategories.map((category) => (
+        <div key={category._id}>
+          <h2 className="mod-category-management-name">{category.name}</h2>
+          <button
+            className="btn-custom"
+            onClick={() => handleEditClick(category)}
+          >
+            Edit
+          </button>
         </div>
-    );
+      ))}
+    </div>
+  );
 };
 
 export default CategoriesManagement;
