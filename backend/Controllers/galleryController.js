@@ -75,7 +75,7 @@ export const getAllImages = async (req, res) => {
   const userId = req.user._id;
 
   const DEFAULT_PAGE = 1;
-  const DEFAULT_PAGE_SIZE = 10;
+  const DEFAULT_PAGE_SIZE = 20;
 
   const page = parseInt(req.query.page, 10) || DEFAULT_PAGE;
   const pageSize = parseInt(req.query.pageSize, 10) || DEFAULT_PAGE_SIZE;
