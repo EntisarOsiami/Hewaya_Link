@@ -36,7 +36,7 @@ This is a monorepo with three apps:
 ## Getting started
 
 ```bash
-git clone https://github.com/EntisarOsiami/Hewaya_Link.git
+git clone https://github.com/intisar-alosaimi/Hewaya_Link.git
 cd Hewaya_Link
 npm install
 cp .env.example .env   # fill in real values, see below
@@ -84,5 +84,5 @@ npm run dev
 
 Originally built by:
 
-- **[انتصار العصيمي](https://github.com/EntisarOsiami)**
+- **[انتصار العصيمي](https://github.com/intisar-alosaimi)**
 - **[Adel Alotaibi](https://github.com/AdelAlotaibi050)**
