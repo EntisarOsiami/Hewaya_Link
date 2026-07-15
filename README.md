@@ -84,5 +84,5 @@ npm run dev
 
 Originally built by:
 
-- **[انتصار العتيبي](https://github.com/EntisarOsiami)**
+- **[انتصار العصيمي](https://github.com/EntisarOsiami)**
 - **[Adel Alotaibi](https://github.com/AdelAlotaibi050)**
