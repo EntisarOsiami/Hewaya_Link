@@ -1,71 +1,88 @@
 # Hewaya Link
 
-Hewaya Link is a dynamic website designed for hobbyists. Built using the MERN stack (MongoDB, Express.js, React, and Node.js), it provides a platform where hobby enthusiasts can connect, share, and explore their interests.
+**"Hewaya" (هواية) means "hobby" in Arabic.** Hewaya Link is a MERN social platform for hobbyists — a place to write about a hobby, share photos of it, join a community built around it, and rate/discuss what other people share, instead of that content being scattered across general-purpose social apps.
 
-# Prerequisites
+## Features
 
-Before you begin, ensure you have met the following requirements:
+- Blog posts with a rich text editor (TinyMCE)
+- Photo gallery with a masonry layout
+- **Portals** — hobby-specific community groups users can subscribe to
+- Ratings and comments on shared content
+- Role-based accounts (admin / moderator / user) with a dedicated moderation view
+- Built-in FAQ chatbot
+- Bilingual UI (Arabic/English) via i18next, with a dark/light theme toggle
+- Email verification and password reset (via Elastic Email)
+- Cloudinary-hosted image uploads
+- A separate admin dashboard for managing users, categories, tags, and portals
 
-- Node.js: Version 20.8.0. If you don't have Node.js installed, download and install it from the Node.js official website.
+## Structure
 
-# Setting Up
+This is a monorepo with three apps:
 
-To set up Hewaya Link for development, follow these steps:
+| Folder | What it is |
+|---|---|
+| `backend/` | Express + MongoDB API |
+| `frontend/` | React (Vite) user-facing site |
+| `Hewaya-admin/` | Separate Next.js 14 admin dashboard |
 
-  Clone the repository:
+## Tech stack
 
+**Backend:** Node.js, Express, MongoDB/Mongoose, JWT auth, bcrypt, Cloudinary + Multer (uploads), Elastic Email (transactional email), express-validator/Joi
 
-    git clone https://github.com/EntisarOsiami/Hewaya_Link.git
-    
+**Frontend:** React 18, Redux Toolkit, React Router, Bootstrap/react-bootstrap, TinyMCE, i18next, react-chatbot-kit, react-masonry-css
 
-Navigate to the project directory:
+**Admin dashboard:** Next.js 14, Recharts — bootstrapped from a public Next.js dashboard tutorial and adapted with this project's own data (users, categories, tags, portals)
 
-    cd hewaya_link
-    
+## Getting started
 
-Install the dependencies:
+```bash
+git clone https://github.com/EntisarOsiami/Hewaya_Link.git
+cd Hewaya_Link
+npm install
+cp .env.example .env   # fill in real values, see below
+npm run dev             # runs backend + frontend together
+```
 
-    npm install
-    
+The admin dashboard runs separately:
 
-# Usage
+```bash
+cd Hewaya-admin
+npm install
+cp .env.example .env
+npm run dev
+```
 
-After installation , you can run both server and client with this:
+## Environment variables
 
-    npm run dev
-    
-    
-# Contributing to Hewaya Link
+**Root `.env` (backend):**
 
-Interested in contributing to Hewaya Link? That's great! Follow these steps:
+| Variable | Purpose |
+|---|---|
+| `PORT` | Port the API listens on |
+| `MONGODB_URI` | MongoDB connection string |
+| `JWT_SECRET` | Secret used to sign auth tokens |
+| `CLIENT_URL` | URL of the frontend, used for CORS/redirects |
+| `CLOUDINARY_CLOUD_NAME` / `CLOUDINARY_API_KEY` / `CLOUDINARY_API_SECRET` | Cloudinary credentials for image uploads |
+| `ELASTIC_EMAIL_USERNAME` / `ELASTIC_EMAIL_PASSWORD` | Elastic Email credentials for verification/reset emails |
+| `NODE_ENV` | `development` or `production` |
 
-- Fork this repository.
+**`Hewaya-admin/.env`:**
 
-- Create a branch:
+| Variable | Purpose |
+|---|---|
+| `MONGODB_URI` | Same MongoDB connection string as the backend |
 
-      git checkout -b [branch_name].
-    
-              
-- Make your changes and commit them:
+## What I'd improve
 
-      git commit -m '[commit_message]'.
+- Add a test suite — there currently isn't one
+- The admin dashboard depends on `next-auth` but doesn't actually use it (login is a custom form) — either wire it up properly or drop the dependency
+- Root `package.json` mixes backend and frontend dependencies together even though `frontend/` has its own `package.json` — worth splitting cleanly
+- Update dependencies — several (Next.js 14, Vite 4, a few transitive packages) are behind on security patches
+- Add proper API documentation
 
-    
-- Push to the original branch: 
+## Team
 
-      git push origin hewaya_link/[location].
-    
-    
-- Create the pull request.
-    
+Originally built by:
 
-Alternatively, see the GitHub documentation on creating a pull request.
-
-
-# Contributors
-
-Thank you to all the individuals who have already contributed to this project Hewaya Link!
-
-# Contact
-
-If you want to reach out, contact me at Hewaya.link@gmail.com.
+- **[انتصار العتيبي](https://github.com/EntisarOsiami)**
+- **[Adel Alotaibi](https://github.com/AdelAlotaibi050)**
